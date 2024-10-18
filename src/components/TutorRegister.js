@@ -454,7 +454,7 @@ const TutorRegister = ({ setIsSubmitted }) => {
   useEffect(() => {
     const availableTimings = generateTimings();
     setTimings(availableTimings);
-    console.log(availableTimings); // To log the available timings in IST format
+    // console.log(availableTimings); // To log the available timings in IST format
   }, []);
 
   const [isModalOpen, setIsModalOpen] = useState(false); // State for controlling modal
