@@ -7,19 +7,16 @@ function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  // Function to toggle the dropdown visibility
   const handleToggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
 
-  // Function to close the dropdown if clicked outside
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setShowDropdown(false);
     }
   };
 
-  // useEffect to add event listener for outside clicks
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -28,13 +25,11 @@ function Header() {
   }, []);
 
   const handleMouseEnter = () => setShowDropdown(true);
-
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
-
   const handleLinkClick = () => setIsMobileMenuOpen(false);
 
   return (
-    <header className="bg-white shadow-md fixed top-0 w-full z-10">
+    <header className="bg-white shadow-md fixed top-0 w-full z-20 pr-40">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo */}
         <NavLink to="/" onClick={handleLinkClick}>
@@ -65,8 +60,8 @@ function Header() {
                 to="/"
                 className={({ isActive }) =>
                   isActive
-                    ? "text-cyan-500 font-semibold ml-2" // Add left margin
-                    : "text-gray-800 hover:text-cyan-500 ml-2" // Add left margin
+                    ? "text-cyan-500 font-semibold ml-2"
+                    : "text-gray-800 hover:text-cyan-500 ml-2"
                 }
                 onClick={handleLinkClick}
               >
@@ -78,8 +73,8 @@ function Header() {
                 to="/about-us"
                 className={({ isActive }) =>
                   isActive
-                    ? "text-cyan-500 font-semibold ml-2" // Add left margin
-                    : "text-gray-800 hover:text-cyan-500 ml-2" // Add left margin
+                    ? "text-cyan-500 font-semibold ml-2"
+                    : "text-gray-800 hover:text-cyan-500 ml-2"
                 }
                 onClick={handleLinkClick}
               >
@@ -109,32 +104,34 @@ function Header() {
               className="relative"
             >
               <span
-                onClick={handleToggleDropdown} // Toggle dropdown on click
+                onClick={handleToggleDropdown}
                 className="cursor-pointer text-gray-800 hover:text-cyan-500"
               >
                 Register
               </span>
+              
 
               {showDropdown && (
-                <ul className="absolute left-0 mt-2 bg-white shadow-lg rounded-md py-2 w-40">
+                <ul className="absolute left-4 mt-2 items-center bg-white shadow-lg rounded-md py-4 w-40 mr-20 ">
                   <li>
                     <NavLink
                       to="/register/student"
-                      className="block px-4 py-2 hover:bg-gray-100"
+                      className="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-md"
                       onClick={() => setShowDropdown(false)}
                     >
                       Student Register
                     </NavLink>
                   </li>
-                  <li>
+                  {/* <li>
                     <NavLink
                       to="/register/tutor"
-                      className="block px-4 py-2 hover:bg-gray-100"
+                      className="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-md"
                       onClick={() => setShowDropdown(false)}
                     >
                       Tutor Register
                     </NavLink>
-                  </li>
+                  </li> */}
+                  
                 </ul>
               )}
             </li>

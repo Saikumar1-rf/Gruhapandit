@@ -28,11 +28,11 @@ const StudentRegister = ({ setIsSubmitted }) => {
   const [showModal, setShowModal] = useState(false);
 
   // Handle the Create Password button click inside the modal
-  const handleCreatePassword = () => {
-    // Close the modal and navigate to the Create Password page
-    setShowModal(false);
-    navigate("/create-password"); // Adjust the route as per your app structure
-  };
+  // const handleCreatePassword = () => {
+  //   // Close the modal and navigate to the Create Password page
+  //   setShowModal(false);
+  //   navigate("/create-password"); // Adjust the route as per your app structure
+  // };
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   //Mobile Number Validation//
@@ -161,7 +161,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
   useEffect(() => {
     const availableTimings = generateTimings();
     setTimings(availableTimings);
-    console.log(availableTimings); // To log the available timings in IST format
+    // console.log(availableTimings); // To log the available timings in IST format
   }, []);
 
   //Date of Birth
@@ -194,6 +194,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
 
     const newErrors = validate();
     if (Object.keys(newErrors).length === 0) {
+      setIsSubmitting(true); // Set submitting state
       try {
         // Create FormData to handle file and other data
         const formDataToSend = new FormData();
@@ -206,10 +207,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
         formDataToSend.append("gender", formData.gender);
         formDataToSend.append("dob", formData.dob);
         formDataToSend.append("studentClass", formData.studentClass);
-        formDataToSend.append(
-          "subjectsLookingFor",
-          formData.subjectsLookingFor
-        );
+        formDataToSend.append("subjectsLookingFor", formData.subjectsLookingFor);
         formDataToSend.append("affordablity", formData.affordablity);
         formDataToSend.append("institution", formData.institution);
         formDataToSend.append("board", formData.board);
@@ -220,31 +218,33 @@ const StudentRegister = ({ setIsSubmitted }) => {
 
         console.log("form submit", formDataToSend);
 
-        // Axios POST request
+        // Axios POST request with proper headers for FormData
         const response = await axios.post(
           "https://hrms-repository-gruhabase.onrender.com/tuition-application/student/create",
           formDataToSend,
           {
             headers: {
-              "Content-Type": "application/json",
+              "Content-Type": "application/json", //when we want to send images/vides
             },
           }
         );
 
         // Handle response
+        navigate("/create-password"); // Navigate only after successful API call
         console.log("Form submitted successfully", response.data);
 
         // If successful, set the submission state and navigate to the success page
         setIsSubmitted(true);
-        navigate("/success");
+        console.log('navigated');        
       } catch (error) {
         // Handle error
-        console.error("Error submitting form", error);
+        // console.error("Error submitting form", error);
+        setIsSubmitting(false); // Reset submitting state on error
       }
     } else {
-      setErrors(newErrors);
+      setErrors(newErrors); // Show validation errors if any
     }
-  };
+};
 
  
 
@@ -986,9 +986,9 @@ const StudentRegister = ({ setIsSubmitted }) => {
             </div>
             <div className="flex justify-end mb-4">
               <button
-                type="button"
+                type="submit"
                 className="w-full mt-10 bg-cyan-600 text-white font-bold py-2 rounded-lg  hover:bg-blue-500"
-                onClick={handleCreatePassword}
+                // onClick={handleCreatePassword}
                 disabled={isSubmitting}
               >
                 {isSubmitting ? "Submitting..." : "Save"}
