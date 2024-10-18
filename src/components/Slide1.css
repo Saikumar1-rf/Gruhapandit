@@ -1,0 +1,22 @@
+.home-tuition {
+  background-image: url('https://images.unsplash.com/photo-1462536943532-57a629f6cc60?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+  background-size: cover;      
+  background-position: center;  
+  background-repeat: no-repeat; 
+  height: 100vh;                 
+  width: 100%;                  
+  opacity: 0.9; 
+  z-index: -1;
+}
+.home-head {
+  font-size: 80px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  padding-top: 150px;
+}
+.home-para {
+  color: white;
+  font-size: 20px;
+
+}
