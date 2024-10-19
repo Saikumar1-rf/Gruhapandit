@@ -10,6 +10,7 @@ import Slide6 from './components/Slide6';
 import TutorRegister from './components/TutorRegister';
 import Forgotpass from './components/ForgotPassword';
 import CreatePassword from './components/CreatePassword';
+import Payment from './components/Payment';
 import Admin from './components/Admin';
 import Postsdash from './components/Postsdash';
 import CreatePosts from './components/CreatePosts';
@@ -17,6 +18,7 @@ import Allposts from './components/Allposts';
 import UserDashboard from './components/UserDashboard';
 import { AuthProvider } from './components/authContext'; 
 import ProtectedRoute from './components/ProtectedRoutes'; 
+
 
 function App() {
   return (
@@ -38,7 +40,8 @@ function App() {
               <Route path='/postsdash' element={<Postsdash />} />
               <Route path='/dashboard' element={<CreatePosts />} />
               <Route path='/allposts' element={<Allposts />} />
-              <Route 
+              <Route path='/payment'element={<Payment/>}></Route>
+              <Route
                 path='/userDashboard' 
                 element={
                   <ProtectedRoute>

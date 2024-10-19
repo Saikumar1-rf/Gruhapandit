@@ -92,7 +92,7 @@ const CreatePassword = () => {
         }
       );
       if (response.status === 200) {
-        setSuccessMessage("Signup successful! Welcome, " + emailId + "!");
+        setSuccessMessage("Signup successful! Please Continue with payment to move forward");
         setemailId("");
         setPassword("");
         setConfirmPassword("");
