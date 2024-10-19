@@ -4,6 +4,7 @@ import { BiTimer } from "react-icons/bi";
 import { FaBookReader } from "react-icons/fa";
 import { FaGraduationCap } from "react-icons/fa6";
 
+
 const Slide2 = () => {
   return (
     <>
@@ -91,6 +92,7 @@ const Slide2 = () => {
             </div>
           </div>
         </div>
+        
       </div>
     </>
   );
