@@ -189,7 +189,7 @@ const SignUpAsTutor = () => {
     }
   };
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 mt-[120px]">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-lg p-8 bg-white shadow-md rounded-lg"
