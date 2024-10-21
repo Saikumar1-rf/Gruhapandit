@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaEnvelope, FaBell, FaCog } from "react-icons/fa";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import {  useNavigate } from "react-router-dom"; // Import useNavigate
 import gradi from "../Asserts/Step (1).jpg";
 import grad from "../Asserts/gruhapandit.png";
 import axiosInstance from "./AxiosInstance";
@@ -41,9 +41,12 @@ const TutorDash = () => {
     localStorage.removeItem("jwtToken");
     navigate("/"); // Navigate to Logout component
   };
+  const handleClick=()=>{
+    navigate('/register/term')
+  }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-gray-50 mt-[120px]">
       <header className="bg-cyan-700 flex items-center h-16 justify-between px-4 md:px-10 py-2 shadow-md relative">
         <img src={grad} alt="Gruha Pandit" className="w-20 md:w-24" />
 
@@ -64,9 +67,11 @@ const TutorDash = () => {
                   <li className="px-4 py-2 hover:bg-blue-100 cursor-pointer">
                     Profile
                   </li>
-                  <li className="px-4 py-2 hover:bg-blue-100 cursor-pointer">
+                  
+                  <li className="px-4 py-2 hover:bg-blue-100 cursor-pointer" onClick={handleClick}>
                     Policy
                   </li>
+                  
                   <li
                     className="px-4 py-2 hover:bg-red-500 cursor-pointer"
                     onClick={handleLogout} // Use handleLogout

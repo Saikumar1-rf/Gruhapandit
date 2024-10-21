@@ -2,7 +2,7 @@ import React from "react";
 
 const Slide6 = () => {
   return (
-    <div className="max-w-4xl mx-auto my-10 p-8 bg-white shadow-lg rounded-lg">
+    <div className="max-w-4xl mx-auto my-10 p-8 bg-white shadow-lg rounded-lg mt-[100px]">
       {/* Terms and Conditions Section */}
       <div className="mb-10">
         <h2 className="bg-blue-600 text-white text-xl font-bold py-3 px-4 rounded-t-md">

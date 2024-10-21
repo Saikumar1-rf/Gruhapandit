@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaEnvelope, FaBell, FaArrowLeft } from "react-icons/fa";
 import { IoSettings } from "react-icons/io5";
@@ -6,17 +6,32 @@ import { IoSettings } from "react-icons/io5";
 const Postsdash = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const dropdownRef = useRef(null);
+
 
   const toggleDropdown = () => {
-    setIsOpen(prev => !prev);
+    setIsOpen((prev) => !prev);
   };
 
   const closeDropdown = () => {
     setIsOpen(false);
   };
 
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      closeDropdown();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="h-screen flex">
+    <div className="h-screen flex mt-[120px]">
       <div className="bg-cyan-800 w-1/5 min-h-screen text-white">
         <div className="p-4">          
           <h2 className="text-2xl font-bold mb-6">Admin Dashboard</h2>
@@ -42,17 +57,23 @@ const Postsdash = () => {
             <FaEnvelope className="text-white w-4 h-4" />
             <FaBell className="text-white w-4 h-4" />
           </div>
-          <div className="relative flex items-center">
-            <IoSettings
-              className="text-lime-400 h-4 w-4 cursor-pointer"
-              onClick={toggleDropdown}
-            />
+          <div className="relative flex items-center" ref={dropdownRef}>
+      <IoSettings
+        className="text-lime-400 h-4 w-4 cursor-pointer"
+        onClick={toggleDropdown}
+      />
             {isOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
-                <Link to="/profile" className="block px-4 py-2 text-black hover:bg-gray-200" onClick={closeDropdown}>Profile</Link>
-                <Link to="/policy" className="block px-4 py-2 text-black hover:bg-gray-200" onClick={closeDropdown}>Policy</Link>
-                <Link to="/logout" className="block px-4 py-2 text-black hover:bg-gray-200" onClick={closeDropdown}>Logout</Link>
-              </div>
+              <div className="absolute right-0 mt-20 w-48 bg-white rounded-md shadow-lg z-10">
+              <Link to="/profile" className="block px-4 py-2 hover:bg-blue-100" onClick={closeDropdown}>
+                Profile
+              </Link>
+              <Link to="/register/term" className="block px-4 py-2 hover:bg-blue-100" onClick={closeDropdown}>
+                Policy
+              </Link>
+              <Link to="/logout" className="block px-4 py-2 hover:bg-blue-100" onClick={closeDropdown}>
+                Logout
+              </Link>
+            </div>
             )}
           </div>
         </header>

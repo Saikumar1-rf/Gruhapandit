@@ -604,7 +604,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
                 type="emailId"
                 id="emailId"
                 name="emailId"
-                maxLength={30}
+                maxLength={40}
                 value={formData.emailId}
                 onChange={handleChange}
                 onInput={handleInput}

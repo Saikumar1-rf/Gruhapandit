@@ -14,7 +14,7 @@ const SignUpAsTutor = () => {
     highestQualification: "", // Changed from qualification
     subjectsYouAreExpertAt: "", // Changed from subjects
     modeOfTeaching: "",
-    chargesPerHour: 0, // chargesPerHour is expected as a number
+    chargesPerHour: "", // chargesPerHour is expected as a number
     nationalIdType: "",
     nationalIdNum: "",
     availableTimings: "", // Changed from availableTimeSlots
@@ -190,304 +190,218 @@ const SignUpAsTutor = () => {
   };
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 mt-[120px]">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-lg p-8 bg-white shadow-md rounded-lg"
-      >
-        <h2 className="text-2xl font-bold text-center mb-8">
-          Sign Up as a Tutor
-        </h2>
-        <div className="flex flex-wrap -mx-2">
-          <div className="w-full sm:w-1/2 px-2 mb-4">
-            <label className="block text-gray-700 font-bold">First Name</label>
-            <input
-              type="text"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleChange}
-              minLength={4}
-              maxLength={20}
-              className="w-full px-3 py-2 border rounded"
-            />
-            {errors.firstName && (
-              <p className="text-red-400 text-base mt-1">{errors.firstName}</p>
-            )}
-          </div>
-          <div className="w-full sm:w-1/2 px-2 mb-4">
-            <label className="block text-gray-700 font-bold">Last Name</label>
-            <input
-              type="text"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleChange}
-              minLength={4}
-              maxLength={20}
-              className="w-full px-3 py-2 border rounded"
-            />
-            {errors.lastName && (
-              <p className="text-red-400 text-base mt-1">{errors.lastName}</p>
-            )}
-          </div>
+    <form onSubmit={handleSubmit} className="w-full max-w-lg p-8 bg-white shadow-md rounded-lg">
+      <h2 className="text-2xl font-bold text-center mb-8">Sign Up as a Tutor</h2>
+      <div className="flex flex-wrap -mx-2 mb-4">
+        <div className="w-full sm:w-1/2 px-2">
+          <label className="block text-gray-700 font-bold">First Name</label>
+          <input
+            type="text"
+            name="firstName"
+            value={formData.firstName}
+            onChange={handleChange}
+            minLength={4}
+            maxLength={20}
+            className="w-full px-3 py-2 border rounded"
+          />
+          {errors.firstName && <p className="text-red-400 text-base mt-1">{errors.firstName}</p>}
         </div>
-        <div className="w-full sm:w-1/2 px-2 mb-4">
-            <label className="block text-gray-700 font-bold">Email Id</label>
-            <input
-              type="text"
-              name="emailId"
-              value={formData.emailId}
-              onChange={handleChange}
-              minLength={4}
-              maxLength={20}
-              className="w-full px-3 py-2 border rounded"
-            />
-            {errors.emailId && (
-              <p className="text-red-400 text-base mt-1">{errors.emailId}</p>
-            )}
-          </div>
-        
-        <div className="flex flex-wrap -mx-2 mb-4">
-          <div className="w-full sm:w-1/2 px-2 mb-4">
-            <label
-              htmlFor="countryCode"
-              className="block text-gray-700 font-bold"
-            >
-              Country Code:
-            </label>
-            <select
-              name="countryCode"
-              id="countryCode"
-              value={formData.countryCode}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border rounded"
-            >
-              <option value="+91">+91 (INDIA)</option>
-              <option value="+1">+1 (USA)</option>
-              <option value="+44">+44 (UK)</option>
-              <option value="+61">+61 (AUSTRALIA)</option>
-              <option value="+64">+64 (NEW ZEALAND)</option>
-              <option value="+27">+27 (SOUTH AFRICA)</option>
-              <option value="+977">+977 (NEPAL)</option>
-              <option value="+94">+94 (SRILANKA)</option>
-              <option value="+60">+60 (MALAYSIA)</option>
-              <option value="+65">+65 (SINGAPORE)</option>
-            </select>
-          </div>
-          <div className="w-full sm:w-1/2 px-2 mb-4">
-            <label
-              htmlFor="mobileNumber"
-              className="block text-gray-700 font-bold"
-            >
-              Mobile Number:
-            </label>
-            <input
-              type="tel"
-              name="phoneNumber"
-              value={formData.mobileNumber}
-              onChange={handleChange}
-              minLength={10}
-              maxLength={10}
-              className="w-full px-3 py-2 border rounded"
-              placeholder="Enter your Mobile Number"
-              onFocus={() =>
-                setErrors((prevErrors) => ({ ...prevErrors, mobileNumber: "" }))
-              }
-            />
-            {errors.mobileNumber && (
-              <p className="text-red-400 text-base mt-1">
-                {errors.mobileNumber}
-              </p>
-            )}
-          </div>
+        <div className="w-full sm:w-1/2 px-2">
+          <label className="block text-gray-700 font-bold">Last Name</label>
+          <input
+            type="text"
+            name="lastName"
+            value={formData.lastName}
+            onChange={handleChange}
+            minLength={4}
+            maxLength={20}
+            className="w-full px-3 py-2 border rounded"
+          />
+          {errors.lastName && <p className="text-red-400 text-base mt-1">{errors.lastName}</p>}
         </div>
-        <div className="flex flex-wrap -mx-2">
-        <div className="w-full sm:w-1/2 px-2 mb-4">
-            <label className="block text-gray-700 font-bold">Location</label>
-            <input
-              type="text"
-              name="location"
-              value={formData.location}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border rounded"
-              placeholder="Your location will be detected"
-              disabled={isLocationDetected} // Disable if location is detected
-            />
-            {errors.location && (
-              <p className="text-red-400 text-base mt-1">{errors.location}</p>
-            )}
-          </div>
+      </div>
 
-          <div className="w-full sm:w-1/2 px-2 mb-4">
-            <label className="block text-gray-700 font-bold">Gender</label>
-            <select
-              name="gender"
-              value={formData.gender}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border rounded"
-            >
-              <option value="">Select Gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
-            {errors.gender && (
-              <p className="text-red-400 text-base mt-1">{errors.gender}</p>
-            )}
-          </div>
+      <div className="flex flex-wrap -mx-2 mb-4">
+        <div className="w-full sm:w-1/2 px-2">
+          <label className="block text-gray-700 font-bold">Email Id</label>
+          <input
+            type="text"
+            name="emailId"
+            value={formData.emailId}
+            onChange={handleChange}
+            minLength={4}
+            maxLength={40}
+            className="w-full px-3 py-2 border rounded"
+          />
+          {errors.emailId && <p className="text-red-400 text-base mt-1">{errors.emailId}</p>}
         </div>
-        <div className="flex flex-wrap -mx-2">
-          <div className="w-full sm:w-1/2 px-2 mb-4">
-            <label className="block text-gray-700 font-bold">
-              Date of Birth
-            </label>
-            <input
-              type="date"
-              name="dob"
-              value={formData.dateOfBirth}
-              onChange={handleChange}
-              onKeyDown={(e) => e.preventDefault()}
-              className="w-full px-3 py-2 border rounded"
-            />
-            {errors.dateOfBirth && (
-              <p className="text-red-400 text-base mt-1">
-                {errors.dateOfBirth}
-              </p>
-            )}
-          </div>
-          <div className="w-full sm:w-1/2 px-2 mb-4">
-            <label className="block text-gray-700 font-bold">
-              Highest Qualification
-            </label>
-            <input
-              type="text"
-              name="highestQualification"
-              value={formData.qualification}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border rounded"
-            />
-            {errors.qualification && (
-              <p className="text-red-400 text-base mt-1">
-                {errors.qualification}
-              </p>
-            )}
-          </div>
+        <div className="w-full sm:w-1/2 px-2">
+          <label htmlFor="countryCode" className="block text-gray-700 font-bold">Country Code:</label>
+          <select
+            name="countryCode"
+            id="countryCode"
+            value={formData.countryCode}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded"
+          >
+            <option value="+91">+91 (INDIA)</option>
+            <option value="+1">+1 (USA)</option>
+            <option value="+44">+44 (UK)</option>
+            <option value="+61">+61 (AUSTRALIA)</option>
+          </select>
         </div>
-        <div className="flex flex-wrap -mx-2">
-          <div className="w-full sm:w-1/2 px-2 mb-4">
-            <label className="block text-gray-700 font-bold">
-              Subjects You Are Expert At
-            </label>
-            <input
-              type="text"
-              name="subjectsYouAreExpertAt"
-              value={formData.subjects}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border rounded"
-            />
-            {errors.subjects && (
-              <p className="text-red-400 text-base mt-1">{errors.subjects}</p>
-            )}
-            
-          </div>
-          <div className="w-full sm:w-1/2 px-2 mb-4">
-            <label className="block text-gray-700 font-bold">
-              Mode of Teaching
-            </label>
-            <select
-              name="modeOfTeaching"
-              value={formData.modeOfTeaching}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border rounded"
-            >
-              <option value="">Select Mode</option>
-              <option value="online">Online</option>
-              <option value="offline">Offline</option>
-              <option value="virtual">Virtual</option>
-            </select>
-            {errors.modeOfTeaching && (
-              <p className="text-red-400 text-base mt-1">
-                {errors.modeOfTeaching}
-              </p>
-            )}
-          </div>
+      </div>
+
+      <div className="flex flex-wrap -mx-2 mb-4">
+        <div className="w-full sm:w-1/2 px-2">
+          <label className="block text-gray-700 font-bold">Phone Number</label>
+          <input
+            type="tel"
+            name="phoneNumber"
+            value={formData.phoneNumber}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded"
+          />
+          {errors.phoneNumber && <p className="text-red-400 text-base mt-1">{errors.phoneNumber}</p>}
         </div>
-        <div className="flex flex-wrap -mx-2">
-          <div className="w-full sm:w-1/2 px-2 mb-4">
-            <label className="block text-gray-700 font-bold">
-              Charges Per Hour
-            </label>
-            <input
-              type="text"
-              name="chargesPerHour"
-              value={formData.chargesPerHour}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border rounded"
-            />
-            {errors.chargesPerHour && (
-              <p className="text-red-400 text-base mt-1">
-                {errors.chargesPerHour}
-              </p>
-            )}
-          </div>
-          <div className="w-full sm:w-1/2 px-2 mb-4">
-            <label className="block text-gray-700 font-bold">
-              National Id Type
-            </label>
-            <input
-              type="text"
-              name="nationalIdType"
-              value={formData.nationalIdType}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border rounded"
-            />
-            {errors.nationalIdType && (
-              <p className="text-red-400 text-base mt-1">
-                {errors.nationalIdType}
-              </p>
-            )}
-          </div>
-          <div className="w-full sm:w-1/2 px-2 mb-4">
-            <label className="block text-gray-700 font-bold">
-              National Id Number
-            </label>
-            <input
-              type="text"
-              name="nationalIdNum"
-              value={formData.nationalIdNum}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border rounded"
-            />
-            {errors.nationalIdNum && (
-              <p className="text-red-400 text-base mt-1">
-                {errors.nationalIdNum}
-              </p>
-            )}
-          </div>
-          <div className="w-full sm:w-1/2 px-2 mb-4">
-            <label className="block text-gray-700 font-bold">
-              Available Time Slots
-            </label>
-            <select
-              name="availableTimings"
-              value={formData.availableTimeSlots}
-              onChange={handleChange}
-              className={`w-full py-2 border rounded ${
-                errors.availableTimeSlots ? "border-red-500" : ""
-              }`}
-            >
-              <option value="">Select Available Timing</option>
-              {availableTime.map((timing, index) => (
-                <option key={index} value={timing}>
-                  {timing}
-                </option>
-              ))}
-            </select>
-            {errors.availableTimeSlots && (
-              <p className="text-red-400 text-base mt-1">
-                {errors.availableTimeSlots}
-              </p>
-            )}
-          </div>
+        <div className="w-full sm:w-1/2 px-2">
+          <label className="block text-gray-700 font-bold">Location</label>
+          <input
+            type="text"
+            name="location"
+            value={formData.location}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded"
+            readOnly={isLocationDetected}
+          />
+          {errors.location && <p className="text-red-400 text-base mt-1">{errors.location}</p>}
         </div>
-        <div className="mb-4">
+      </div>
+
+      <div className="flex flex-wrap -mx-2 mb-4">
+        <div className="w-full sm:w-1/2 px-2">
+          <label className="block text-gray-700 font-bold">Gender</label>
+          <select
+            name="gender"
+            value={formData.gender}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded"
+          >
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+          {errors.gender && <p className="text-red-400 text-base mt-1">{errors.gender}</p>}
+        </div>
+        <div className="w-full sm:w-1/2 px-2">
+          <label className="block text-gray-700 font-bold">Date of Birth</label>
+          <input
+            type="date"
+            name="dob"
+            value={formData.dob}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded"
+          />
+          {errors.dob && <p className="text-red-400 text-base mt-1">{errors.dob}</p>}
+        </div>
+      </div>
+
+      <div className="flex flex-wrap -mx-2 mb-4">
+        <div className="w-full sm:w-1/2 px-2">
+          <label className="block text-gray-700 font-bold">Highest Qualification</label>
+          <input
+            type="text"
+            name="highestQualification"
+            value={formData.highestQualification}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded"
+          />
+          {errors.highestQualification && <p className="text-red-400 text-base mt-1">{errors.highestQualification}</p>}
+        </div>
+        <div className="w-full sm:w-1/2 px-2">
+          <label className="block text-gray-700 font-bold">Subjects of Expertise</label>
+          <input
+            type="text"
+            name="subjectsYouAreExpertAt"
+            value={formData.subjectsYouAreExpertAt}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded"
+          />
+          {errors.subjectsYouAreExpertAt && <p className="text-red-400 text-base mt-1">{errors.subjectsYouAreExpertAt}</p>}
+        </div>
+      </div>
+
+      <div className="flex flex-wrap -mx-2 mb-4">
+        <div className="w-full sm:w-1/2 px-2">
+          <label className="block text-gray-700 font-bold">Mode of Teaching</label>
+          <input
+            type="text"
+            name="modeOfTeaching"
+            value={formData.modeOfTeaching}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded"
+          />
+          {errors.modeOfTeaching && <p className="text-red-400 text-base mt-1">{errors.modeOfTeaching}</p>}
+        </div>
+        <div className="w-full sm:w-1/2 px-2">
+          <label className="block text-gray-700 font-bold">Charges Per Hour</label>
+          <input
+            type="number"
+            name="chargesPerHour"
+            value={formData.chargesPerHour}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded"
+          />
+          {errors.chargesPerHour && <p className="text-red-400 text-base mt-1">{errors.chargesPerHour}</p>}
+        </div>
+      </div>
+
+      <div className="flex flex-wrap -mx-2 mb-4">
+        <div className="w-full sm:w-1/2 px-2">
+          <label className="block text-gray-700 font-bold">National Id Type</label>
+          <input
+            type="text"
+            name="nationalIdType"
+            value={formData.nationalIdType}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded"
+          />
+          {errors.nationalIdType && <p className="text-red-400 text-base mt-1">{errors.nationalIdType}</p>}
+        </div>
+        <div className="w-full sm:w-1/2 px-2">
+          <label className="block text-gray-700 font-bold">National Id Number</label>
+          <input
+            type="text"
+            name="nationalIdNum"
+            value={formData.nationalIdNum}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded"
+          />
+          {errors.nationalIdNum && <p className="text-red-400 text-base mt-1">{errors.nationalIdNum}</p>}
+        </div>
+      </div>
+
+      <div className="flex flex-wrap -mx-2 mb-4">
+        <div className="w-full sm:w-1/2 px-2">
+          <label className="block text-gray-700 font-bold">Available Timings</label>
+          <select
+            name="availableTimings"
+            value={formData.availableTimings}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded"
+          >
+            <option value="">Select Available Timing</option>
+            {availableTime.map((timing, index) => (
+              <option key={index} value={timing}>{timing}</option>
+            ))}
+          </select>
+          {errors.availableTimings && <p className="text-red-400 text-base mt-1">{errors.availableTimings}</p>}
+        </div>
+      {/* </div> */}
+
+      {/* <div className="flex flex-wrap -mx-2 mb-4"> */}
+        <div className="w-full sm:w-1/2 px-2">
           <label className="block text-gray-700 font-bold">Category</label>
           <input
             type="text"
@@ -495,20 +409,22 @@ const SignUpAsTutor = () => {
             value={formData.category}
             onChange={handleChange}
             className="w-full px-3 py-2 border rounded"
-            placeholder="Enter the category"
           />
-          {errors.category && (
-            <p className="text-red-400 text-base mt-1">{errors.category}</p>
-          )}
+          {errors.category && <p className="text-red-400 text-base mt-1">{errors.category}</p>}
         </div>
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-        >
-          Save
-        </button>
-      </form>
-    </div>
+      </div>
+
+      <div className="flex flex-wrap -mx-2 mb-4">
+        <div className="w-full px-2">
+          <button type="submit" className="w-full px-4 py-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-700">
+            Submit
+          </button>
+        </div>
+      </div>
+
+      {errors.apiError && <p className="text-red-400 text-base text-center mt-4">{errors.apiError}</p>}
+    </form>
+  </div>
   );
 };
 export default SignUpAsTutor;
