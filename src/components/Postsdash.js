@@ -43,7 +43,7 @@ const Postsdash = () => {
               <Link to="/allposts" className="hover:text-gray-300">All Posts</Link>
             </li>
             <li>
-              <Link to="/create-posts" className="hover:text-gray-300">Create Posts</Link>
+              <Link to="/dashboard" className="hover:text-gray-300">Create Posts</Link>
             </li>
           </ul>
         </div>
