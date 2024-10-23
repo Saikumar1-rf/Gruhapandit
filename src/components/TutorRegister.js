@@ -87,7 +87,7 @@ const SignUpAsTutor = () => {
       try {
         // Update the API endpoint with the correct URL
         const response = await axios.post(
-          "https://hrms-repository-gruhabase.onrender.com/tuition-application/tutor/create",
+          "https://tution-application.onrender.com/tuition-application/tutor/create",
           formData, // formData already contains all required fields
           {
             headers: {
@@ -99,11 +99,28 @@ const SignUpAsTutor = () => {
         navigate("/create-password");
         console.log("Form submitted successfully:", response.data);
       } catch (error) {
+        if(error.response && error.response.status===400){
+          const serverErrors=error.response.data.errors;
+          let errorMessages={};
+
+
+          if(serverErrors){
+            if(serverErrors.emailId){
+                errorMessages.emailId="Your email already exists";
+            }
+           if(serverErrors.phoneNumber){
+            errorMessages.phoneNumber="Your phone number already exists";
+           }
+          }
+
+        setErrors(errorMessages);
+      }else {
         console.error("Error submitting the form:", error.response?.data || error.message);
         setErrors({ apiError: "An error occurred while submitting the form." });
       }
     }
-  };
+  }
+};
   
   const generateTimings = () => {
     const timings = [];

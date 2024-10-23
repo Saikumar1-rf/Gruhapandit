@@ -11,7 +11,7 @@ const DashHeader = () => {
   const [showProfile, setShowProfile] = useState(false); // State for showing the profile page
 
   return (
-    <header className="bg-cyan-700 flex items-center h-16 justify-between px-4 md:px-10 py-2 shadow-md relative">
+    <header className="bg-cyan-700 flex items-center h-16 justify-between px-4 md:px-10 py-2 shadow-md relative mt-36">
       <img src={grad} alt="Gruha Pandit" className="w-20 md:w-24" />
 
       <div className="flex items-center space-x-4 text-white">
