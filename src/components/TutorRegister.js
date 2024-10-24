@@ -78,69 +78,71 @@ const SignUpAsTutor = () => {
 
     return errors;
   };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const validationErrors = validateForm();
-    setErrors(validationErrors);
-
-    if (Object.keys(validationErrors).length === 0) {
-      try {
-        // Attempt to register the user
-        const response = await axios.post(
-          "https://hrms-repository-gruhabase.onrender.com/tuition-application/tutor/create",
-          formData,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        // If registration is successful, navigate to the next page
-        navigate("/create-password");
-        console.log("Form submitted successfully:", response.data);
-      } catch (error) {
-        if (error.response?.status === 409) {
-          // Assuming the server responds with a 409 status code for conflicts
-          setErrors((prevErrors) => ({
-            ...prevErrors,
-            emailId:"emailId already used",
-            apiError: "Email or Phone Number is already registered.",
-          }));
-        } else {
-          console.error("Error submitting the form:", error.response?.data || error.message);
-          setErrors({ apiError: "Email or Phone Number is already registered." });
-        }
-      }
-    }
-  };
-
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
   //   const validationErrors = validateForm();
   //   setErrors(validationErrors);
-  
+
   //   if (Object.keys(validationErrors).length === 0) {
   //     try {
-  //       // Update the API endpoint with the correct URL
+  //       // Attempt to register the user
   //       const response = await axios.post(
-  //         "https://hrms-repository-gruhabase.onrender.com/tuition-application/tutor/create",
-  //         formData, // formData already contains all required fields
+  //         // "https://hrms-repository-gruhabase.onrender.com/tuition-application/tutor/create",
+  //         "https://tution-application.onrender.com/tuition-application/tutor/create",
+  //         formData,
   //         {
   //           headers: {
   //             "Content-Type": "application/json",
-
   //           },
   //         }
   //       );
+
+  //       // If registration is successful, navigate to the next page
   //       navigate("/create-password");
   //       console.log("Form submitted successfully:", response.data);
   //     } catch (error) {
-  //       console.error("Error submitting the form:", error.response?.data || error.message);
-  //       setErrors({ apiError: "An error occurred while submitting the form." });
+  //       if (error.response?.status === 409) {
+  //         // Assuming the server responds with a 409 status code for conflicts
+  //         setErrors((prevErrors) => ({
+  //           ...prevErrors,
+  //           emailId:"emailId already used",
+  //           apiError: "Email or Phone Number is already registered.",
+  //         }));
+  //       } else {
+  //         console.error("Error submitting the form:", error.response?.data || error.message);
+  //         setErrors({ apiError: "Email or Phone Number is already registered." });
+  //       }
   //     }
   //   }
   // };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const validationErrors = validateForm();
+    setErrors(validationErrors);
+  
+    if (Object.keys(validationErrors).length === 0) {
+      try {
+        // Update the API endpoint with the correct URL
+        const response = await axios.post(
+          "https://hrms-repository-gruhabase.onrender.com/tuition-application/tutor/create",
+          
+          formData, // formData already contains all required fields
+          {
+            headers: {
+              "Content-Type": "application/json",
+
+            },
+          }
+        );
+        navigate("/create-password");
+        console.log("Form submitted successfully:", response.data);
+      } catch (error) {
+        console.error("Error submitting the form:", error.response?.data || error.message);
+        setErrors({ apiError: "An error occurred while submitting the form." });
+      }
+    }
+  };
   
   const generateTimings = () => {
     const timings = [];

@@ -221,7 +221,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
         // Axios POST request with proper headers for FormData
         const response = await axios.post(
           "https://hrms-repository-gruhabase.onrender.com/tuition-application/student/create",
-          // "https://tution-application.onrender.com/tuition-application/student/create",
+          
           formDataToSend,
           {
             headers: {

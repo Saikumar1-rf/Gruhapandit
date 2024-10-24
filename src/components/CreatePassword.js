@@ -83,7 +83,8 @@ const CreatePassword = () => {
     setLoading(true); // Start loading
     try {
       const response = await axios.post(
-        "https://hrms-repository-gruhabase.onrender.com/tuition-application/authenticate/register",
+         "https://hrms-repository-gruhabase.onrender.com/tuition-application/authenticate/register",
+        
         requestData,
         {
           headers: {
