@@ -85,7 +85,7 @@ const Forgotpass = () => {
       console.log("Verified: ", emailId);
 
       try {
-        const response = await axios.post(`https://hrms-repository-gruhabase.onrender.com/tuition-application/authenticate/forgotPassword?emailId=rsaikumar147@gmail.com`, {
+        const response = await axios.post(`https://hrms-repository-gruhabase.onrender.com/tuition-application/authenticate/forgotPassword?emailId=${emailId}`, {
           
           emailId: emailId, // Send the email in the request body
         });
