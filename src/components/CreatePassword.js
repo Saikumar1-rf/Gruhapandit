@@ -83,7 +83,7 @@ const CreatePassword = () => {
     setLoading(true); // Start loading
     try {
       const response = await axios.post(
-        "https://hrms-repository-gruhabase.onrender.com/tuition-application/authenticate/register",
+        "https://tution-application.onrender.com/tuition-application/authenticate/register",
         requestData,
         {
           headers: {
@@ -135,7 +135,7 @@ const CreatePassword = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen  bg-gray-100 bg-gradient-to-r from-gray-200 to-blue-300 ">
       <div className="w-full max-w-md p-8 bg-white shadow-md rounded-lg">
         <h1 className="text-2xl font-bold mb-6 text-center text-cyan-500">
           Create Password
@@ -152,6 +152,7 @@ const CreatePassword = () => {
             <input
               type="text"
               id="emailId"
+              maxLength={45}
               value={emailId}
               onChange={(e) => setemailId(e.target.value)}
               required
@@ -176,7 +177,8 @@ const CreatePassword = () => {
               type={showPassword ? "text" : "password"}
               id="password"
               value={password}
-              maxLength={8}
+              minLength={8}
+              maxLength={15}
               onChange={handlePasswordChange}
               required
               className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm ${
@@ -216,7 +218,8 @@ const CreatePassword = () => {
               type={showConfirmPassword ? "text" : "password"}
               id="confirm-password"
               value={confirmPassword}
-              maxLength={8}
+              minLength={8}
+              maxLength={45}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
               className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm ${

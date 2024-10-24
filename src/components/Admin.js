@@ -241,15 +241,9 @@ useEffect(() => {
   return (
     <>
         <Postsdash/>
-    <div className="flex flex-col items-center -mt-[600px]">
+    <div className="flex flex-col items-center mt-[-500px] ml-10">
       
       {errorMessage && <p className="text-red-500">{errorMessage}</p>} {/* Display error */}
-      
-      <div className="border-1 shadow-md hover:bg-slate-500 border-black rounded-lg h-14 w-30 flex mr-[-80%] justify-center p-4 bg-blue-600 text-white">
-        <Link to="/Postsdash">
-          <button className="border-none rounded-xl">Create Post</button>
-        </Link>
-      </div>
 
       {/* Tutor Section */}
       <div className="w-full text-left mb-4 ml-[40%]">

@@ -221,6 +221,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
         // Axios POST request with proper headers for FormData
         const response = await axios.post(
           "https://hrms-repository-gruhabase.onrender.com/tuition-application/student/create",
+          // "https://tution-application.onrender.com/tuition-application/student/create",
           formDataToSend,
           {
             headers: {
@@ -526,27 +527,28 @@ const StudentRegister = ({ setIsSubmitted }) => {
 
   return (
     <>
-      <div className="w-[650px]  mx-auto border border-gray-400 mt-[150px] p-4">
+    <div className="bg-gray-100 mt-22 pt-20 bg-gradient-to-r from-gray-200 to-blue-300 ...">
+      <div className="w-[650px]  mx-auto  border border-gray-400  p-4  mt-9">
         <div>
           <p>
-            <strong className="text-red-500">Note: </strong>
+            <strong className="text-red-500 text-shadow-default">Note: </strong>
             <a
-              className="text-blue-600 hover:underline cursor-pointer"
+              className="text-blue-600 text-shadow-default hover:underline cursor-pointer"
               onClick={handleOpenModal} // Open modal on click
             >
               Terms and Conditions
             </a>
           </p>
         </div>
-        <h2 className="text-2xl font-bold text-center mt-8 text-cyan-600 mb-6">
-          Sign Up as a Student
+        <h2 className="text-2xl font-bold text-center mt-8 text-gray-800 text-shadow-default mb-6">
+          Student Registration
         </h2>
 
         <form onSubmit={handleSubmit}>
           <div className="flex ">
             {/* ---------first Name------------ */}
             <div className="my-2 relative">
-              <label className="float-start text-sm font-medium text-gray-700">
+              <label className="float-start text-sm font-medium text-gray-900 text-shadow-default">
                 First Name
               </label>
               <input
@@ -559,7 +561,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
                 onKeyDown={handleNameChar}
                 value={formData.firstName}
                 placeholder="Enter your First Name"
-                className={`w-[300px] py-2 px-2 mr-6 border border-gray-500 outline-none  ${
+                className={`w-[300px] py-2  px-2 mt-2 bg-transparent mr-6 border border-gray-500 outline-none  ${
                   errors.firstName ? "border-red-500" : ""
                 }`}
               ></input>
@@ -571,7 +573,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
             {/* ------------Last Name--------------- */}
 
             <div className="my-2">
-              <label className="float-start text-sm font-medium text-gray-700">
+              <label className="float-start text-sm font-medium text-gray-900 text-shadow-default">
                 Last Name
               </label>
               <input
@@ -584,7 +586,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
                 onKeyDown={handleNameChar}
                 value={formData.lastName}
                 placeholder="Enter your Last Name"
-                className={`w-[300px] py-2 px-2 mr-6 border border-gray-500 outline-none  ${
+                className={`w-[300px] py-2 px-2 mt-2 bg-transparent mr-6 border border-gray-500 outline-none  ${
                   errors.lastName ? "border-red-500" : ""
                 }`}
               ></input>
@@ -597,19 +599,19 @@ const StudentRegister = ({ setIsSubmitted }) => {
           <div className="flex gap-6">
             {/* --------------Email-------------------- */}
             <div className="my-2">
-              <label className="float-start text-sm font-medium text-gray-700">
+              <label className="float-start text-sm font-medium text-gray-900 text-shadow-default">
                 Email Id
               </label>
               <input
                 type="emailId"
                 id="emailId"
                 name="emailId"
-                maxLength={40}
+                maxLength={45}
                 value={formData.emailId}
                 onChange={handleChange}
                 onInput={handleInput}
                 placeholder="Enter your Email Id"
-                className={`w-[300px] py-2 px-2 border border-gray-500 outline-none  ${
+                className={`w-[300px] py-2 mt-2 bg-transparent px-2 border border-gray-500 outline-none  ${
                   errors.emailId ? "border-red-500" : ""
                 }`}
               ></input>
@@ -620,7 +622,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
 
             {/* --------------Phone Number---------------------- */}
             <div className="pr-3 mt-2">
-              <label className=" float-start  text-sm font-medium text-gray-700">
+              <label className=" float-start  text-sm font-medium text-gray-900 text-shadow-default">
                 Mobile Number
               </label>
               <div className="flex float-start">
@@ -657,6 +659,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
                       ...provided,
                       minWidth: "60px",
                       height: "40px",
+                      backgroundColor:'transparent',                    
                     }),
                     dropdownIndicator: (provided) => ({
                       ...provided,
@@ -664,7 +667,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
                     }),
                     indicatorSeparator: () => null,
                   }}
-                  className="border border-gray-500 outline-none"
+                  className="border mt-2 bg-transparent border-gray-500  outline-none"
                 />
 
                 <input
@@ -692,7 +695,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
                     setPersonInfo({ ...personInfo, phone: inputValue });
                     setFormData({ ...formData, phoneNumber: inputValue });
                   }}
-                  className={`w-[225px] px-4 py-4 border border-gray-500 outline-none   ${
+                  className={`w-[225px] mt-2 bg-transparent px-4 py-4 border border-gray-500 outline-none   ${
                     selectedCountry && personInfo.phone
                       ? !validateStartDigits(personInfo.phone, selectedCountry)
                         ? "border-red-500"
@@ -715,7 +718,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
           {/* ------------Date of birth------------------ */}
           <div className="flex gap-6">
             <div className="my-2">
-              <label className="float-start text-sm font-medium text-gray-700">
+              <label className="float-start text-sm font-medium text-gray-900 text-shadow-default">
                 Date of Birth
               </label>
               <input
@@ -739,7 +742,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
                     .split("T")[0]
                 } 
                 onChange={handleChange}
-                className={`w-[300px] py-2 px-2 border border-gray-500 outline-none  ${
+                className={`w-[300px] py-2 px-2 mt-2 bg-transparent border border-gray-500 outline-none  ${
                   errors.dob ? "border-red-500" : ""
                 }`}
                 onKeyDown={(e) => e.preventDefault()}
@@ -751,7 +754,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
 
             {/* -----------------Location-------------------------- */}
             <div className="my-2">
-              <label className="float-start text-sm font-medium text-gray-700">
+              <label className="float-start text-sm font-medium text-gray-900 text-shadow-default">
                 Location
               </label>
               <input
@@ -762,7 +765,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
                 onChange={handleChange}
                 onFocus={handleFocus}
                 placeholder="Enter your Current Location"
-                className={`w-[300px] py-2 px-2 border border-gray-500 outline-none  ${
+                className={`w-[300px] py-2 px-2 mt-2 bg-transparent border border-gray-500 outline-none  ${
                   errors.location ? "border-red-500" : ""
                 }`}
               ></input>
@@ -775,14 +778,14 @@ const StudentRegister = ({ setIsSubmitted }) => {
           <div className="flex gap-6">
             {/* ----------Gender------------ */}
             <div className="my-2">
-              <label className="float-start text-sm font-medium text-gray-700">
+              <label className="float-start text-sm font-medium text-gray-900 text-shadow-default">
                 Gender
               </label>
               <select
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
-                className="w-[300px] py-2 border border-gray-500 outline-none "
+                className="w-[300px] py-2 border mt-2 bg-transparent border-gray-500 outline-none "
               >
                 <option value="">Select Gender</option>
                 <option value="Male">Male</option>
@@ -795,7 +798,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
 
             {/* ----------Studying class--------------- */}
             <div className="my-2">
-              <label className="float-start text-sm font-medium text-gray-700">
+              <label className="float-start text-sm font-medium text-gray-900 text-shadow-default">
                 Studying Class
               </label>
               <input
@@ -805,7 +808,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
                 value={formData.studentClass}
                 onChange={handleStudyingClassChange}
                 placeholder="Enter your Standard/Class"
-                className={`w-[300px] py-2 px-2 border border-gray-500 outline-none  ${
+                className={`w-[300px] py-2 px-2 mt-2 bg-transparent border border-gray-500 outline-none  ${
                   errors.studentClass ? "border-red-500" : ""
                 }`}
               ></input>
@@ -820,7 +823,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
           {/* -----------------Board and School/College------------------------- */}
           <div className="flex gap-6">
             <div className="my-2">
-              <label className="float-start text-sm font-medium text-gray-700">
+              <label className="float-start text-sm font-medium text-gray-900 text-shadow-default">
                 Board
               </label>
               <input
@@ -833,7 +836,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
                 maxLength={30}
                 onKeyDown={handleNameChar}
                 placeholder="Enter your Board"
-                className={`w-[300px] py-2 px-2 border border-gray-500 outline-none  ${
+                className={`w-[300px] py-2 px-2 border mt-2 bg-transparent border-gray-500 outline-none  ${
                   errors.board ? "border-red-500" : ""
                 }`}
               ></input>
@@ -843,7 +846,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
             </div>
             {/* --------school--------- */}
             <div className="my-2">
-              <label className="float-start  text-sm font-medium text-gray-700">
+              <label className="float-start  text-sm font-medium text-gray-900 text-shadow-default">
                 School/institution
               </label>
               <input
@@ -855,7 +858,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
                 onKeyDown={handleNameChar}
                 onChange={handleChange}
                 placeholder="Enter your School/institution"
-                className={`w-[300px] py-2 px-2 border border-gray-500 outline-none  ${
+                className={`w-[300px] py-2 px-2 mt-2 bg-transparent border border-gray-500 outline-none  ${
                   errors.institution ? "border-red-500" : ""
                 }`}
               ></input>
@@ -870,7 +873,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
           {/* ---------------Subject and Teaching--------------------- */}
           <div className="flex gap-6">
             <div className="my-2">
-              <label className="float-start text-sm font-medium text-gray-700">
+              <label className="float-start text-sm font-medium text-gray-900 text-shadow-default">
                 Subjects tuition looking for
               </label>
               <input
@@ -881,7 +884,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
                 maxLength={50}
                 onChange={handleSubjectChange}
                 // onKeyDown={handleNameChar}
-                className={`w-[300px] py-2 px-2 border border-gray-500 outline-none  ${
+                className={`w-[300px] py-2 px-2 mt-2 bg-transparent border border-gray-500 outline-none  ${
                   errors.subjectsLookingFor ? "border-red-500" : ""
                 }`}
               />
@@ -893,14 +896,14 @@ const StudentRegister = ({ setIsSubmitted }) => {
             </div>
             {/* ----------mode of teaching----------- */}
             <div className="my-2">
-              <label className="float-start text-sm font-medium text-gray-700">
+              <label className="float-start text-sm font-medium text-gray-900 text-shadow-default">
                 Mode of Teaching
               </label>
               <select
                 name="modeOfTeaching"
                 value={formData.modeOfTeaching}
                 onChange={handleChange}
-                className="w-[300px] py-2 border border-gray-500 outline-none "
+                className="w-[300px] py-2 border border-gray-700 mt-2 bg-transparent text-gray-900 text-shadow-default outline-none "
               >
                 <option value="">Select Mode</option>
                 <option value="Student Home">Student Home</option>
@@ -918,7 +921,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
           {/* -------------affordability and timings----------------- */}
           <div className="flex gap-6">
             <div className="my-2">
-              <label className="float-start text-sm font-medium text-gray-700">
+              <label className="float-start text-sm font-medium text-gray-900 text-shadow-default">
                 Your Affordability per month
               </label>
               <input
@@ -929,7 +932,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
                 onChange={handleAffordChange}
                 onKeyDown={handleKeyDown}
                 maxLength={7}
-                className={`w-[300px] py-2 px-2 border border-gray-500 outline-none  ${
+                className={`w-[300px] py-2 px-2 mt-2 bg-transparent border border-gray-500 outline-none  ${
                   errors.affordablity ? "border-red-500" : ""
                 }`}
               />
@@ -942,14 +945,14 @@ const StudentRegister = ({ setIsSubmitted }) => {
 
             {/* timing slots */}
             <div className="my-3">
-              <label className="float-start text-sm font-medium text-gray-700">
+              <label className="float-start text-sm font-medium text-gray-900 text-shadow-default">
                 Available Time slots
               </label>
               <select
                 name="availableTimings"
                 value={formData.availableTimings}
                 onChange={handleChange}
-                className={`w-[300px] py-1.5 border border-gray-500 outline-none  ${
+                className={`w-[300px] py-1.5 mt-2 bg-transparent border border-gray-500 outline-none  ${
                   errors.availableTimings ? "border-red-500" : ""
                 }`}
               >
@@ -969,7 +972,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
           </div>
           <div>
             <div>
-              <label className="float-start text-sm font-medium text-gray-700">
+              <label className="float-start text-sm font-medium text-gray-900 text-shadow-default">
                 Category
               </label>
               <input
@@ -979,7 +982,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
                 value={formData.category}
                 onChange={handleChange}
                 maxLength={30}
-                className={`w-[300px]  mr-[1000px] py-2 px-2 border border-gray-500 outline-none  ${
+                className={`w-[300px]  mr-[1000px] mt-2 bg-transparent py-2 px-2 border border-gray-500 outline-none  ${
                   errors.category ? "border-red-500" : ""
                 }`}
               />
@@ -987,7 +990,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
             <div className="flex justify-end mb-4">
               <button
                 type="submit"
-                className="w-full mt-10 bg-cyan-600 text-white font-bold py-2 rounded-lg  hover:bg-blue-500"
+                className="w-full mt-10 bg-cyan-600 text-gray-900 text-shadow-defaultfont-bold py-2 rounded-lg  hover:bg-blue-500"
                 // onClick={handleCreatePassword}
                 disabled={isSubmitting}
               >
@@ -1006,11 +1009,12 @@ const StudentRegister = ({ setIsSubmitted }) => {
               >
                 X
               </button>
-              <Slide6 />
+              <Slide6  />
             </div>
           </div>
         )}
       </div>
+    </div>
     </>
   );
 };

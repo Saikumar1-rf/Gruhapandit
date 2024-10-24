@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axiosInstance from "./AxiosInstance";
+import Postsdash from './Postsdash';
 
 function Allposts() {
   const [tutorData, setTutorData] = useState(null);
@@ -35,7 +36,9 @@ function Allposts() {
   };
 
   return (
-    <div className="container mx-auto mt-[150px] p-6">
+    <>
+    <Postsdash/>
+    <div className="container mx-auto -mt-96 p-6">
       <h1 className="text-3xl font-bold text-center mb-6">All Posts</h1>
 
       {/* Buttons to fetch data */}
@@ -111,6 +114,7 @@ function Allposts() {
         </div>
       )}
     </div>
+    </>
   );
 }
 
