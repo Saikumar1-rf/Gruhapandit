@@ -36,7 +36,12 @@ function App() {
               <Route path='/create-password' element={<CreatePassword />} />
               <Route path='/register/term' element={<Slide6 />} />
               <Route path='/register/tutor' element={<TutorRegister />} /> 
-              <Route path='/posts' element={<Admin />} />
+              <Route path='/posts' element= {
+                <ProtectedRoute>
+                  <Admin />
+                </ProtectedRoute>
+              }   
+                />
               <Route path='/postsdash' element={<Postsdash />} />
               <Route path='/dashboard' element={<CreatePosts />} />
               <Route path='/allposts' element={<Allposts />} />

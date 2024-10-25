@@ -112,7 +112,7 @@ function Header() {
               Register
             </span>
             {showDropdown && (
-              <ul className="absolute right-[-9rem] mt-4 items-center bg-white shadow-lg rounded-md py-4 w-40 mr-24">
+              <ul className="absolute right-[-9rem] mt-4 items-center bg-white shadow-lg rounded-md py-4 w-40 mr-32">
                 <li>
                   <NavLink
                     to="/register/student"
