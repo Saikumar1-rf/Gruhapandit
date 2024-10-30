@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Slide6 from "./Slide6";
 
-const SignUpAsTutor = () => {
+const TutorRegister = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    emailId: "", // Changed from email
-    phoneNumber: "", // Changed from mobileNumber
+    emailId: "",
+    phoneNumber: "",
     location: "",
     gender: "",
-    dob: "", // Changed from dateOfBirth
-    highestQualification: "", // Changed from qualification
-    subjectsYouAreExpertAt: "", // Changed from subjects
+    dob: "",
+    highestQualification: "",
+    subjectsYouAreExpertAt: "",
     modeOfTeaching: "",
-    chargesPerHour: "", // chargesPerHour is expected as a number
+    chargesPerHour: "",
     nationalIdType: "",
     nationalIdNum: "",
-    availableTimings: "", // Changed from availableTimeSlots
+    availableTimings: "",
     category: "",
-    countryCode: "+1", // Same as before
+    countryCode: "+1",
   });
   const navigate = useNavigate();
 
@@ -29,29 +29,34 @@ const SignUpAsTutor = () => {
   const [isLocationDetected, setIsLocationDetected] = useState(false);
 
   useEffect(() => {
-    const timings = generateTimings(); // Generate timings on component mount
+    const timings = generateTimings();
     setAvailableTime(timings);
-    detectLocation(); // Call detectLocation on mount
+    detectLocation();
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    const newValue = value.trimStart();
+    setFormData({ ...formData, [name]: newValue });
   };
 
   const validateForm = () => {
     let errors = {};
+    const emailRegex = /^[^\s][a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!formData.firstName) errors.firstName = "First Name is required";
     if (!formData.lastName) errors.lastName = "Last Name is required";
-    if (!formData.emailId) errors.emailId = "Email is required";
+    if (!formData.emailId) {
+      errors.emailId = "Email ID is required";
+    } else if (!emailRegex.test(formData.emailId)) {
+      errors.emailId = "Enter a valid Email ID";
+    }
 
     const { phoneNumber } = formData;
     const allSameDigits = /^(\d)\1*$/.test(phoneNumber);
     if (!phoneNumber) {
       errors.phoneNumber = "Phone Number is required";
+    } else if (phoneNumber.length !== 10) {
+      errors.phoneNumber = "Phone Number must be exactly 10 digits";
     } else if (phoneNumber.startsWith("0")) {
       errors.phoneNumber = "Phone Number cannot start with 0";
     } else if (allSameDigits) {
@@ -78,56 +83,17 @@ const SignUpAsTutor = () => {
 
     return errors;
   };
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const validationErrors = validateForm();
-  //   setErrors(validationErrors);
-
-  //   if (Object.keys(validationErrors).length === 0) {
-  //     try {
-  //       // Attempt to register the user
-  //       const response = await axios.post(
-  //         // "https://hrms-repository-gruhabase.onrender.com/tuition-application/tutor/create",
-  //         "https://tution-application.onrender.com/tuition-application/tutor/create",
-  //         formData,
-  //         {
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //         }
-  //       );
-
-  //       // If registration is successful, navigate to the next page
-  //       navigate("/create-password");
-  //       console.log("Form submitted successfully:", response.data);
-  //     } catch (error) {
-  //       if (error.response?.status === 409) {
-  //         // Assuming the server responds with a 409 status code for conflicts
-  //         setErrors((prevErrors) => ({
-  //           ...prevErrors,
-  //           emailId:"emailId already used",
-  //           apiError: "Email or Phone Number is already registered.",
-  //         }));
-  //       } else {
-  //         console.error("Error submitting the form:", error.response?.data || error.message);
-  //         setErrors({ apiError: "Email or Phone Number is already registered." });
-  //       }
-  //     }
-  //   }
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validateForm();
     setErrors(validationErrors);
-  
+
     if (Object.keys(validationErrors).length === 0) {
       try {
-        // Update the API endpoint with the correct URL
         const response = await axios.post(
           "https://hrms-repository-gruhabase.onrender.com/tuition-application/tutor/create",
-          
-          formData, // formData already contains all required fields
+          formData,
           {
             headers: {
               "Content-Type": "application/json",
@@ -138,24 +104,25 @@ const SignUpAsTutor = () => {
         navigate("/create-password");
         console.log("Form submitted successfully:", response.data);
       } catch (error) {
-        console.error("Error submitting the form:", error.response?.data || error.message);
+        console.error(
+          "Error submitting the form:",
+          error.response?.data || error.message
+        );
         setErrors({ apiError: "An error occurred while submitting the form." });
       }
     }
   };
-  
+
   const generateTimings = () => {
     const timings = [];
-    const startHour = 0; // 00:00 (12 AM in 24-hour format)
-    const endHour = 23; // 23:00 (11 PM in 24-hour format)
-    const interval = 45; // 45 minutes
+    const startHour = 0;
+    const endHour = 23;
+    const interval = 45;
 
     let hour = startHour;
     let minute = 0;
     while (hour < endHour || (hour === endHour && minute <= 15)) {
-      // Adjust condition to allow more intervals
       const startTime = formatTime(hour, minute);
-      // Increment time by 45 minutes to get the end time of the slot
       let endHour = hour;
       let endMinute = minute + interval;
 
@@ -164,15 +131,14 @@ const SignUpAsTutor = () => {
         endHour++;
       }
 
-      if (endHour > 23) break; // Prevent exceeding the 23:00 hour
+      if (endHour > 23) break;
 
       const endTime = formatTime(endHour, endMinute);
       timings.push(`${startTime} to ${endTime} IST`);
 
-      // Update the current time for the next slot
       minute += interval;
       if (minute >= 60) {
-        minute -= 60; // Reset minutes and increment hour
+        minute -= 60;
         hour++;
       }
     }
@@ -180,22 +146,21 @@ const SignUpAsTutor = () => {
   };
 
   const formatTime = (hour, minute) => {
-    const amPm = hour < 12 || hour === 24 ? "AM" : "PM"; // Handle AM/PM correctly
-    const formattedHour = hour % 12 || 12; // Convert 0 and 24 hour to 12 for display
-    const formattedMinute = minute < 10 ? `0${minute}` : minute; // Add leading zero for minutes
-    return `${formattedHour}:${formattedMinute} ${amPm}`; // Return in HH:mm AM/PM format
+    const amPm = hour < 12 || hour === 24 ? "AM" : "PM";
+    const formattedHour = hour % 12 || 12;
+    const formattedMinute = minute < 10 ? `0${minute}` : minute;
+    return `${formattedHour}:${formattedMinute} ${amPm}`;
   };
 
-  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
-    setIsModalOpen(true); 
+    setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-
 
   const detectLocation = () => {
     if (navigator.geolocation) {
@@ -238,16 +203,19 @@ const SignUpAsTutor = () => {
       }));
     }
   };
+
   return (
     <div className="flex py-20 justify-center items-center min-h-screen bg-gray-100 mt-2 bg-gradient-to-r from-gray-200 to-blue-300">
-      <div className="w-[650px]  mx-auto   p-4  mt-9">
+      <div className="w-[650px] mx-auto p-4 mt-9">
         <form
           onSubmit={handleSubmit}
           className="w-full max-w-2xl border border-gray-400 p-8 bg-transparent bg-gradient-to-r from-gray-200 to-blue-300 shadow-md rounded-lg"
         >
           <div>
             <p>
-              <strong className="text-red-500 text-shadow-default">Note: </strong>
+              <strong className="text-red-500 text-shadow-default">
+                Note:{" "}
+              </strong>
               <a
                 className="text-blue-600 text-shadow-default hover:underline cursor-pointer"
                 onClick={handleOpenModal}
@@ -261,7 +229,9 @@ const SignUpAsTutor = () => {
           </h2>
           <div className="flex flex-wrap -mx-2 mb-4">
             <div className="w-full sm:w-1/2 px-2">
-              <label className="block text-gray-800 text-shadow-default font-bold">First Name</label>
+              <label className="block text-gray-800 text-shadow-default font-bold">
+                First Name
+              </label>
               <input
                 type="text"
                 name="firstName"
@@ -273,11 +243,15 @@ const SignUpAsTutor = () => {
                 className="w-full px-3 mt-2 bg-transparent border-gray-400 py-2 border rounded"
               />
               {errors.firstName && (
-                <p className="text-red-400 text-base mt-1">{errors.firstName}</p>
+                <p className="text-red-400 text-base mt-1">
+                  {errors.firstName}
+                </p>
               )}
             </div>
             <div className="w-full sm:w-1/2 px-2">
-              <label className="block text-gray-800 text-shadow-default font-bold">Last Name</label>
+              <label className="block text-gray-800 text-shadow-default font-bold">
+                Last Name
+              </label>
               <input
                 type="text"
                 name="lastName"
@@ -295,13 +269,14 @@ const SignUpAsTutor = () => {
           </div>
           <div className="flex flex-wrap -mx-2 mb-4">
             <div className="w-full sm:w-1/2 px-2">
-              <label className="block text-gray-800 text-shadow-default font-bold">Email Id</label>
+              <label className="block text-gray-800 text-shadow-default font-bold">
+                Email ID
+              </label>
               <input
                 type="email"
                 name="emailId"
-                placeholder="Enter Email Id"
+                placeholder="Enter Email ID"
                 value={formData.emailId}
-                maxLength={40}
                 onChange={handleChange}
                 className="w-full px-3 outline-none py-2 border rounded mt-2 bg-transparent border-gray-400"
               />
@@ -310,30 +285,36 @@ const SignUpAsTutor = () => {
               )}
             </div>
             <div className="w-full sm:w-1/2 px-2">
-              <label className="block text-gray-800 text-shadow-default font-bold">Phone Number</label>
+              <label className="block text-gray-800 text-shadow-default font-bold">
+                Phone Number
+              </label>
               <input
-                type="tel"
+                type="text"
                 name="phoneNumber"
                 placeholder="Enter Phone Number"
                 value={formData.phoneNumber}
                 onChange={handleChange}
+                maxLength={10}
                 className="w-full px-3 outline-none py-2 border rounded mt-2 bg-transparent border-gray-400"
               />
               {errors.phoneNumber && (
-                <p className="text-red-400 text-base mt-1">{errors.phoneNumber}</p>
+                <p className="text-red-400 text-base mt-1">
+                  {errors.phoneNumber}
+                </p>
               )}
             </div>
           </div>
           <div className="flex flex-wrap -mx-2 mb-4">
             <div className="w-full sm:w-1/2 px-2">
-              <label className="block text-gray-800 text-shadow-default font-bold">Location</label>
+              <label className="block text-gray-800 text-shadow-default font-bold">
+                Location
+              </label>
               <input
                 type="text"
                 name="location"
                 placeholder="Enter Location"
                 value={formData.location}
                 onChange={handleChange}
-                readOnly={isLocationDetected}
                 className="w-full px-3 outline-none py-2 border rounded mt-2 bg-transparent border-gray-400"
               />
               {errors.location && (
@@ -341,7 +322,9 @@ const SignUpAsTutor = () => {
               )}
             </div>
             <div className="w-full sm:w-1/2 px-2">
-              <label className="block text-gray-800 text-shadow-default font-bold">Gender</label>
+              <label className="block text-gray-800 text-shadow-default font-bold">
+                Gender
+              </label>
               <select
                 name="gender"
                 value={formData.gender}
@@ -349,9 +332,9 @@ const SignUpAsTutor = () => {
                 className="w-full px-3 outline-none py-2 border rounded mt-2 bg-transparent border-gray-400"
               >
                 <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
               </select>
               {errors.gender && (
                 <p className="text-red-400 text-base mt-1">{errors.gender}</p>
@@ -360,7 +343,9 @@ const SignUpAsTutor = () => {
           </div>
           <div className="flex flex-wrap -mx-2 mb-4">
             <div className="w-full sm:w-1/2 px-2">
-              <label className="block text-gray-800 text-shadow-default font-bold">Date of Birth</label>
+              <label className="block text-gray-800 text-shadow-default font-bold">
+                Date of Birth
+              </label>
               <input
                 type="date"
                 name="dob"
@@ -373,23 +358,29 @@ const SignUpAsTutor = () => {
               )}
             </div>
             <div className="w-full sm:w-1/2 px-2">
-              <label className="block text-gray-800 text-shadow-default font-bold">Highest Qualification</label>
+              <label className="block text-gray-800 text-shadow-default font-bold">
+                Highest Qualification
+              </label>
               <input
                 type="text"
                 name="highestQualification"
-                placeholder="Enter Highest Qualification"
+                placeholder="Enter Qualification"
                 value={formData.highestQualification}
                 onChange={handleChange}
                 className="w-full px-3 outline-none py-2 border rounded mt-2 bg-transparent border-gray-400"
               />
               {errors.highestQualification && (
-                <p className="text-red-400 text-base mt-1">{errors.highestQualification}</p>
+                <p className="text-red-400 text-base mt-1">
+                  {errors.highestQualification}
+                </p>
               )}
             </div>
           </div>
           <div className="flex flex-wrap -mx-2 mb-4">
             <div className="w-full sm:w-1/2 px-2">
-              <label className="block text-gray-800 text-shadow-default font-bold">Subjects You Are Expert At</label>
+              <label className="block text-gray-800 text-shadow-default font-bold">
+                Subjects You Are Expert At
+              </label>
               <input
                 type="text"
                 name="subjectsYouAreExpertAt"
@@ -399,43 +390,53 @@ const SignUpAsTutor = () => {
                 className="w-full px-3 outline-none py-2 border rounded mt-2 bg-transparent border-gray-400"
               />
               {errors.subjectsYouAreExpertAt && (
-                <p className="text-red-400 text-base mt-1">{errors.subjectsYouAreExpertAt}</p>
+                <p className="text-red-400 text-base mt-1">
+                  {errors.subjectsYouAreExpertAt}
+                </p>
               )}
             </div>
             <div className="w-full sm:w-1/2 px-2">
-              <label className="block text-gray-800 text-shadow-default font-bold">Mode of Teaching</label>
-              <select
+              <label className="block text-gray-800 text-shadow-default font-bold">
+                Mode of Teaching
+              </label>
+              <input
+                type="text"
                 name="modeOfTeaching"
+                placeholder="Enter Mode of Teaching"
                 value={formData.modeOfTeaching}
                 onChange={handleChange}
                 className="w-full px-3 outline-none py-2 border rounded mt-2 bg-transparent border-gray-400"
-              >
-                <option value="">Select Mode of Teaching</option>
-                <option value="Online">Online</option>
-                <option value="Offline">Offline</option>
-              </select>
+              />
               {errors.modeOfTeaching && (
-                <p className="text-red-400 text-base mt-1">{errors.modeOfTeaching}</p>
+                <p className="text-red-400 text-base mt-1">
+                  {errors.modeOfTeaching}
+                </p>
               )}
             </div>
           </div>
           <div className="flex flex-wrap -mx-2 mb-4">
             <div className="w-full sm:w-1/2 px-2">
-              <label className="block text-gray-800 text-shadow-default font-bold">Charges Per Hour</label>
+              <label className="block text-gray-800 text-shadow-default font-bold">
+                Charges Per Hour
+              </label>
               <input
-                type="number"
+                type="text"
                 name="chargesPerHour"
-                placeholder="Enter Charges Per Hour"
+                placeholder="Enter Charges"
                 value={formData.chargesPerHour}
                 onChange={handleChange}
                 className="w-full px-3 outline-none py-2 border rounded mt-2 bg-transparent border-gray-400"
               />
               {errors.chargesPerHour && (
-                <p className="text-red-400 text-base mt-1">{errors.chargesPerHour}</p>
+                <p className="text-red-400 text-base mt-1">
+                  {errors.chargesPerHour}
+                </p>
               )}
             </div>
             <div className="w-full sm:w-1/2 px-2">
-              <label className="block text-gray-800 text-shadow-default font-bold">National ID Type</label>
+              <label className="block text-gray-800 text-shadow-default font-bold">
+                National ID Type
+              </label>
               <input
                 type="text"
                 name="nationalIdType"
@@ -445,13 +446,17 @@ const SignUpAsTutor = () => {
                 className="w-full px-3 outline-none py-2 border rounded mt-2 bg-transparent border-gray-400"
               />
               {errors.nationalIdType && (
-                <p className="text-red-400 text-base mt-1">{errors.nationalIdType}</p>
+                <p className="text-red-400 text-base mt-1">
+                  {errors.nationalIdType}
+                </p>
               )}
             </div>
           </div>
           <div className="flex flex-wrap -mx-2 mb-4">
             <div className="w-full sm:w-1/2 px-2">
-              <label className="block text-gray-800 text-shadow-default font-bold">National ID Number</label>
+              <label className="block text-gray-800 text-shadow-default font-bold">
+                National ID Number
+              </label>
               <input
                 type="text"
                 name="nationalIdNum"
@@ -461,32 +466,40 @@ const SignUpAsTutor = () => {
                 className="w-full px-3 outline-none py-2 border rounded mt-2 bg-transparent border-gray-400"
               />
               {errors.nationalIdNum && (
-                <p className="text-red-400 text-base mt-1">{errors.nationalIdNum}</p>
+                <p className="text-red-400 text-base mt-1">
+                  {errors.nationalIdNum}
+                </p>
               )}
             </div>
             <div className="w-full sm:w-1/2 px-2">
-              <label className="block text-gray-800 text-shadow-default font-bold">Available Timings</label>
+              <label className="block text-gray-800 text-shadow-default font-bold">
+                Available Timings
+              </label>
               <select
                 name="availableTimings"
                 value={formData.availableTimings}
                 onChange={handleChange}
                 className="w-full px-3 outline-none py-2 border rounded mt-2 bg-transparent border-gray-400"
               >
-                <option value="">Select Available Timings</option>
-                {availableTime.map((time, index) => (
-                  <option key={index} value={time}>
-                    {time}
+                <option value="">Select Timing</option>
+                {availableTime.map((timing, index) => (
+                  <option key={index} value={timing}>
+                    {timing}
                   </option>
                 ))}
               </select>
               {errors.availableTimings && (
-                <p className="text-red-400 text-base mt-1">{errors.availableTimings}</p>
+                <p className="text-red-400 text-base mt-1">
+                  {errors.availableTimings}
+                </p>
               )}
             </div>
           </div>
-          <div className="flex flex-wrap -mx-2 mb-4">
-            <div className="w-full sm:w-1/2 px-2">
-              <label className="block text-gray-800 text-shadow-default font-bold">Category</label>
+          <div className="flex flex-wrap -mx-2 mb-4 ">
+            <div className="w-full sm:w-1/2 px-2 ">
+              <label className="block text-gray-800 text-shadow-default font-bold">
+                Category
+              </label>
               <input
                 type="text"
                 name="category"
@@ -500,33 +513,34 @@ const SignUpAsTutor = () => {
               )}
             </div>
           </div>
-          {errors.apiError && (
-            <p className="text-red-400 text-base text-center">{errors.apiError}</p>
-          )}
-          <div className="flex justify-center mb-6">
-            <button
-              type="submit"
-              className="w-full mt-10 bg-cyan-600 text-gray-900 text-shadow-defaultfont-bold py-2 rounded-lg  hover:bg-blue-500"
-            >
-              Save
-            </button>
+
+          <div className="flex flex-wrap -mx-2 mb-4">
+            <div className="w-full px-2">
+              <button
+                type="submit"
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200"
+              >
+                Submit
+              </button>
+            </div>
           </div>
         </form>
-      </div>
-      {isModalOpen && (
-        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-          <div className="relative bg-white shadow-lg rounded-lg max-w-4xl w-full mx-auto h-[90vh] overflow-y-auto p-8">
-            <button
-              className="absolute top-3 right-3 text-red-700 font-bold hover:text-red-500"
-              onClick={handleCloseModal}
-            >
-              X
-            </button>
-            <Slide6 />
+        {isModalOpen && (
+          <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+            <div className="relative bg-white shadow-lg rounded-lg max-w-4xl w-full mx-auto h-[90vh] overflow-y-auto p-8">
+              <button
+                className="absolute top-3 right-3 text-red-700 font-bold hover:text-red-500 "
+                onClick={handleCloseModal}
+              >
+                X
+              </button>
+              <Slide6 />
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
-export default SignUpAsTutor;
+
+export default TutorRegister;

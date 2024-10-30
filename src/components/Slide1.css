@@ -1,13 +1,16 @@
 .home-tuition {
   background-image: url('https://images.unsplash.com/photo-1462536943532-57a629f6cc60?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
-  background-size: cover;      
-  background-position: center;  
-  background-repeat: no-repeat; 
+  background-size: cover;         
+  background-position: center;   
+  background-repeat: no-repeat;  
+  background-attachment: fixed;   
   height: 100vh;                 
-  width: 100%;                  
+  width: 100vw;                  
   opacity: 0.9; 
-  z-index: -1;
+  position: relative;            
+  z-index: 0;                   
 }
+
 .home-head {
   font-size: 80px;
   color: white;
@@ -15,8 +18,66 @@
   text-align: center;
   padding-top: 150px;
 }
+
 .home-para {
   color: white;
   font-size: 20px;
-
 }
+
+/* @media (max-width: 1440px)  */
+  .home-head {
+    font-size: 72px;
+    padding-top: 130px;
+  }
+
+  .home-para {
+    font-size: 18px;
+  }
+
+
+/* @media (max-width: 576px) { / Mobile S screens / */
+  .home-head {
+    font-size: 28px;
+    padding-top: 50px;
+  }
+
+  .home-para {
+    font-size: 12px;
+  }
+
+  .apply-btn {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+  @media (max-width: 860px) {
+    .home-head {
+      font-size: 60px;
+      padding-top: 120px;
+    }
+  
+    .home-para {
+      font-size: 18px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .home-head {
+      font-size: 40px;
+      padding-top: 80px;
+    }
+  
+    .home-para {
+      font-size: 16px;
+    }
+  }
+  
+  @media (max-width: 640px) {
+    .home-head {
+      font-size: 32px;
+      padding-top: 60px;
+    }
+  
+    .home-para {
+      font-size: 14px;
+    }
+  }

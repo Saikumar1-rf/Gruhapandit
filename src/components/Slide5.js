@@ -4,117 +4,102 @@ import { FaCog } from "react-icons/fa";
 const Slide5 = () => {
   return (
     <>
-      <div>
-        <div
-          className="slide3-container relative h-[400px] sm:h-[500px] md:h-[600px] bg-white"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1517673132405-a56a62b18caf?q=80&w=1776&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
-            alt: "Choose",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            opacity: "0.7",
-          }}
-        >
-          <div className="slide3-content absolute inset-0 flex flex-col justify-center items-center text-center bg-black bg-opacity-50">
-            <h1 className="slide3-title text-white text-2xl sm:text-3xl md:text-4xl font-bold mb-10">
-              Why Choose Gruhapandit Tuitions?
-            </h1>
-            <div className="flex flex-wrap justify-center my-4 text-white">
-              <div className="flex flex-wrap justify-center space-x-4">
-                <div className="border border-gray-100 bg-slate-100 w-[300px] h-[160px] text-start  px-4 py-2 text-gray-900 shadow-lg rounded-md transition transform hover:scale-105 hover:shadow-2xl hover:-translate-y-1 duration-300 ease-in-out">
-                  <strong className="text-black text-lg">
-                    Experienced Tutors:
-                  </strong>{" "}
-                  Our team of highly qualified tutors specializes in providing
-                  effective tuitions for students in various subjects, including
-                  Math, Science, English, and more.
-                </div>
-
-                <div className="border border-gray-100 bg-slate-100 w-[300px] h-[160px] text-start  px-4 py-2 text-gray-900 shadow-lg rounded-md transition transform hover:scale-105 hover:shadow-2xl hover:-translate-y-1 duration-300 ease-in-out">
-                  <strong className="text-black text-lg">
-                    Online Learning:
-                  </strong>{" "}
-                  With our interactive online courses, gain knowledge from the
-                  comfort of your home, providing flexibility and ease of
-                  access.
-                </div>
-
-                <div className="border border-gray-100 bg-slate-100 w-[300px] h-[160px] text-start  px-4 py-2  text-gray-900 shadow-lg rounded-md transition transform hover:scale-105 hover:shadow-2xl hover:-translate-y-1 duration-300 ease-in-out">
-                  <strong className="text-black text-lg">
-                    Offline Tuitions:
-                  </strong>{" "}
-                  Prefer in-person learning? We also offer offline tuition in
-                  certain locations, where you can interact with experienced
-                  tutors.
-                </div>
+      {/* {/ Background Image Section /} */}
+      <div
+        className="relative bg-cover bg-center h-[1200px] sm:h-[850px] md:h-[1800px] lg:h-[800px] max-h-[1000px] overflow-auto"
+        style={{
+          backgroundImage:
+            "url('https://images.unsplash.com/photo-1517673132405-a56a62b18caf?q=80&w=1776&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
+        }}
+      >
+        <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center text-center px-4">
+          <h1 className="text-white font-bold text-xl sm:text-3xl md:text-4xl lg:text-5xl mb-5 sm:mb-7 lg:mb-12 overflow-auto">
+            Why Choose Gruhapandit Tuitions?
+          </h1>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-white w-full max-w-6xl px-3 sm:px-0 ">
+            {[
+              {
+                title: "Experienced Tutors",
+                description:
+                  "Our team of highly qualified tutors specializes in various subjects, including Math, Science, and English.",
+              },
+              {
+                title: "Online Learning",
+                description:
+                  "Gain knowledge from home with our interactive online courses, offering flexibility and access.",
+              },
+              {
+                title: "Offline Tuitions",
+                description:
+                  "We offer in-person tuition in certain locations for hands-on learning.",
+              },
+              {
+                title: "Exam Preparation",
+                description:
+                  "Our tutors provide exam-focused tuition to help you excel.",
+              },
+              {
+                title: "Doubt Clearing Sessions",
+                description:
+                  "Our tutors are available for doubt-clearing sessions to keep you on track.",
+              },
+              {
+                title: "Progress Tracking",
+                description:
+                  "Regular assessments help track your progress toward success.",
+              },
+            ].map((item, index) => (
+              <div
+                key={index}
+                className="bg-slate-100 text-gray-900 p-4 shadow-lg rounded-md transition-transform transform hover:scale-105 duration-300 ease-in-out text-xs sm:text-sm md:text-base"
+              >
+                <strong className="text-black block text-center text-sm sm:text-lg md:text-xl">
+                  {item.title}
+                </strong>
+                <p className="text-xs sm:text-sm md:text-base mt-2 text-center">
+                  {item.description}
+                </p>
               </div>
-
-              <div className="flex flex-wrap justify-center space-x-4 mt-10">
-                <div className="border border-gray-100 bg-slate-100 w-[300px] h-[160px] text-start  px-4 py-2 text-gray-900 shadow-lg rounded-md transition transform hover:scale-105 hover:shadow-2xl hover:-translate-y-1 duration-300 ease-in-out">
-                  <strong className="text-black text-lg">
-                    Exam Preparation:
-                  </strong>{" "}
-                  Preparing for board exams, competitive exams, or school
-                  assessments? Our tutors offer exam-focused tuition to help you
-                  excel.
-                </div>
-
-                <div className="border border-gray-100 bg-slate-100 w-[300px] h-[160px] text-start  px-4 py-2 text-gray-900 shadow-lg rounded-md transition transform hover:scale-105 hover:shadow-2xl hover:-translate-y-1 duration-300 ease-in-out">
-                  <strong className="text-black text-lg">
-                    Doubt Clearing Sessions:
-                  </strong>{" "}
-                  Got stuck on a tough topic? Our tutors are always available to
-                  offer doubt-clearing sessions to keep you on track.
-                </div>
-
-                <div className="border border-gray-100 bg-slate-100 w-[300px] h-[160px] text-start  px-4 py-2 text-gray-900 shadow-lg rounded-md transition transform hover:scale-105 hover:shadow-2xl hover:-translate-y-1 duration-300 ease-in-out">
-                  <strong className="text-black text-lg">
-                    Progress Tracking:
-                  </strong>{" "}
-                  Regular assessments and feedback help track your progress and
-                  keep you on the path to success.
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
 
-      <div className="border border-gray-300 p-6 rounded-lg  mt-10">
-        <div className="flex flex-col md:flex-row justify-evenly my-[100px] items-start space-y-8 md:space-y-0 md:space-x-8">
-          <div className="flex border border-gray-400 w-full   md:w-[500px] h-[300px] p-4 shadow-lg rounded-lg transition transform hover:scale-105 hover:shadow-2xl hover:-translate-y-1 duration-300 ease-in-out">
-            <div className="mt-4 md:mt-10 flex-shrink-0">
-              <FaCog className="text-cyan-500 text-2xl mt-16 md:text-4xl mr-2 md:mr-4 w-[60px] md:w-[70px] h-[60px] md:h-[70px]" />
+      {/* {/ Vision and Mission Section /} */}
+      <div className="border border-gray-300 p-5 sm:p-7 md:p-10 rounded-lg mt-6 lg:mt-12 max-w-6xl mx-auto">
+        <h2 className="text-center text-cyan-500 font-bold text-xl sm:text-3xl md:text-4xl mb-5">
+          Our Vision & Mission
+        </h2>
+        <div className="flex flex-col sm:flex-row justify-center items-stretch space-y-6 sm:space-y-0 sm:space-x-5 lg:space-x-7">
+          {[
+            {
+              title: "Vision",
+              description:
+                "Our vision is to build a learning community where knowledge is shared freely, fostering growth for students and tutors.",
+            },
+            {
+              title: "Mission",
+              description:
+                "Our mission is to democratize education, making it accessible for everyone, creating a learning community where knowledge flows freely.",
+            },
+          ].map((item, index) => (
+            <div
+              key={index}
+              className="flex flex-col items-center w-full sm:w-[380px] lg:w-[450px] border border-gray-400 p-5 shadow-lg rounded-lg transition-transform transform hover:scale-105 duration-300 ease-in-out"
+            >
+              <div className="flex-shrink-0 flex justify-center items-center w-[50px] sm:w-[60px] md:w-[70px] h-[50px] sm:h-[60px] md:h-[70px] bg-cyan-500 rounded-full mb-3">
+                <FaCog className="text-white text-lg sm:text-xl md:text-2xl" />
+              </div>
+              <div className="flex-1 text-center">
+                <h3 className="text-cyan-500 font-bold text-lg sm:text-xl md:text-2xl">
+                  {item.title}
+                </h3>
+                <p className="text-gray-800 mt-2 sm:mt-3 text-sm sm:text-base md:text-lg">
+                  {item.description}
+                </p>
+              </div>
             </div>
-            <div className="flex-1">
-              <h1 className="text-cyan-500 text-center mr-36  font-bold text-2xl md:text-4xl mt-2 md:mt-4">
-                Vision
-              </h1>
-              <p className="font-bold text-gray-800 leading-7 md:leading-8 mt-4">
-                Our vision is to build a learning community where knowledge is
-                shared freely and efficiently, fostering growth and development
-                for both students and tutors.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex border border-gray-400 w-full md:w-[500px] h-[300px] p-4 shadow-lg rounded-lg transition transform hover:scale-105 hover:shadow-2xl hover:-translate-y-1 duration-300 ease-in-out">
-            <div className="mt-4 md:mt-20 flex-shrink-0">
-              <FaCog className="text-cyan-500 text-2xl mt-6 md:text-4xl mr-2 md:mr-4 w-[60px] md:w-[70px] h-[50px] md:h-[70px]" />
-            </div>
-            <div className="flex-1">
-              <h1 className="text-cyan-500 text-center mr-36 font-bold text-2xl md:text-4xl mt-2 md:mt-4">
-                Mission
-              </h1>
-              <p className="font-bold text-gray-800 leading-7 md:leading-8 mt-4">
-                At Gruhapandit Tuitions, we are committed to democratizing
-                education by making it accessible and flexible for everyone. Our
-                mission is to nurture a learning community where knowledge flows
-                freely between students and tutors.
-              </p>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </>

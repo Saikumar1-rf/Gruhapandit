@@ -83,10 +83,10 @@ const Forgotpass = () => {
     } else {
       setErrors({});
       console.log("Verified: ", emailId);
-
+  
       try {
         const response = await axios.post(`https://hrms-repository-gruhabase.onrender.com/tuition-application/authenticate/forgotPassword?emailId=${emailId}`, {
-          
+  
           emailId: emailId, // Send the email in the request body
         });
         
@@ -331,7 +331,7 @@ const Forgotpass = () => {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   minLength={8}
-                  maxLength={45}
+                  maxLength={15}
                   className="mt-1 w-[100%] px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                   style={{
                     WebkitTextSecurity: showConfirmPassword ? "none" : "disc",

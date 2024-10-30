@@ -39,7 +39,7 @@ function App() {
               <Route path='/posts' element= {
                 <ProtectedRoute>
                   <Admin />
-                </ProtectedRoute>
+                 </ProtectedRoute>
               }   
                 />
               <Route path='/postsdash' element={<Postsdash />} />

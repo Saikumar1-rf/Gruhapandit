@@ -220,7 +220,7 @@ const CreatePassword = () => {
               id="confirm-password"
               value={confirmPassword}
               minLength={8}
-              maxLength={45}
+              maxLength={15}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
               className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm ${

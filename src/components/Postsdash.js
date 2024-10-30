@@ -32,7 +32,7 @@ const Postsdash = () => {
 
   return (
     <div className="h-screen flex mt-[62px] ">
-      <div className="bg-gray-200 w-1/5 min-h-screen text-black">
+      <div className="bg-gray-200 w-1/5 max-h-screen text-black w-44">
         <div className="p-4">          
           <h2 className="text-2xl font-bold mb-6">Admin Dashboard</h2>
           <ul className="space-y-4">
@@ -64,9 +64,6 @@ const Postsdash = () => {
       />
             {isOpen && (
               <div className="absolute right-0 mt-20 w-48 bg-white rounded-md shadow-lg z-10">
-              <Link to="/profile" className="block px-4 py-2 hover:bg-blue-100" onClick={closeDropdown}>
-                Profile
-              </Link>
               <Link to="/register/term" className="block px-4 py-2 hover:bg-blue-100" onClick={closeDropdown}>
                 Policy
               </Link>
