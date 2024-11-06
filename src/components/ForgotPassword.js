@@ -75,7 +75,7 @@ const Forgotpass = () => {
     }
 
     try {
-      const url = `https://tution-application.onrender.com/tuition-application/authenticate/resetPassword?emailId=${emailId}&password=${password}&otp=${otp}`;
+      const url = `https://hrms-repository-gruhabase.onrender.com/tuition-application/authenticate/resetPassword?emailId=${emailId}&password=${password}&otp=${otp}`;
 
       await axios.patch(
         url,
