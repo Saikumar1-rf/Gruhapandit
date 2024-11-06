@@ -34,7 +34,6 @@ function Header() {
   return (
     <header className="bg-white shadow-md fixed top-0 w-full h-[10vh] z-20 bg-gradient-to-r from-gray-200 to-blue-300">
       <div className="container mx-auto flex justify-between items-center h-full px-4 sm:px-8">
-        {/* Logo */}
         <NavLink to="/">
           <img
             src={gruhapandit}
@@ -43,7 +42,6 @@ function Header() {
           />
         </NavLink>
 
-        {/* Hamburger Menu Icon for Mobile */}
         <button
           className="text-3xl sm:hidden focus:outline-none"
           onClick={toggleMobileMenu}
@@ -51,13 +49,12 @@ function Header() {
           &#9776;
         </button>
 
-        {/* Navigation Links */}
         <nav
           className={`${
             isMobileMenuOpen ? "block" : "hidden"
-          } sm:flex sm:items-center sm:space-x-6 absolute sm:relative top-[10vh] left-0 w-full sm:w-auto bg-white sm:bg-transparent shadow-lg sm:shadow-none p-4 sm:p-0 sm:-mt-28`}
+          } sm:flex sm:items-center sm:space-x-6 absolute sm:relative top-[10vh] left-0 w-full  sm:w-auto bg-white sm:bg-transparent shadow-lg sm:shadow-none p-4 sm:p-0 sm:-mt-28`}
         >
-          <ul className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6 mt-4 sm:mt-0">
+          <ul className="flex flex-col sm:flex-row justify-between space-y-4 sm:space-y-0 sm:space-x-6  sm:mt-0 ">
             <li>
               <NavLink
                 to="/"
@@ -97,7 +94,6 @@ function Header() {
                 Login
               </NavLink>
             </li>
-            {/* Dropdown for Register */}
             <li
               ref={dropdownRef}
               onMouseEnter={handleMouseEnter}
@@ -115,7 +111,7 @@ function Header() {
                     <NavLink
                       to="/register/student"
                       className="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-md"
-                      onClick={() => setShowDropdown(false)}
+                      onClick={handleLinkClick} // Close dropdown on click
                     >
                       Student Register
                     </NavLink>
@@ -124,7 +120,7 @@ function Header() {
                     <NavLink
                       to="/register/tutor"
                       className="block px-4 py-2 text-gray-800 hover:bg-gray-100 rounded-md"
-                      onClick={() => setShowDropdown(false)}
+                      onClick={handleLinkClick} // Close dropdown on click
                     >
                       Tutor Register
                     </NavLink>

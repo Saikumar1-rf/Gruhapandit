@@ -38,7 +38,7 @@ const Admin = () => {
   useEffect(() => {
     const fetchAdminDashboardData = async () => {
       try {
-        const response = await axiosInstance.get('https://hrms-repository-gruhabase.onrender.com/tuition-application/admin/getAdminPageData');
+        const response = await axiosInstance.get('/tuition-application/admin/getAdminPageData');
         if (response && response.data) {
           const { students, teachers } = response.data;
           setTutors(teachers || []);

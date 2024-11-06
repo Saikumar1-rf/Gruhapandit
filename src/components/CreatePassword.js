@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+// import axiosInstance from "./AxiosInstance";
 import axios from "axios";
-import { Link } from "react-router-dom";
 
 const CreatePassword = () => {
-  const [emailId, setemailId] = useState("");
+  const location = useLocation();
+  const [emailId, setemailId] = useState(location.state?.emailId || "");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -12,14 +14,17 @@ const CreatePassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const [showPopup, setShowPopup] = useState(false); // State for showing the popup
   const [loading, setLoading] = useState(false); // Loading state
   const [passwordStrength, setPasswordStrength] = useState("");
   const [passwordStrengthColor, setPasswordStrengthColor] = useState("");
   const [showPasswordStrength, setShowPasswordStrength] = useState(false);
+  const navigate = useNavigate();
+
   const bannedemailIds = new Set([
-    "admin@example.com",
-    "user@example.com",
-    "test@example.com",
+    "mailto:admin@example.com",
+    "mailto:user@example.com",
+    "mailto:test@example.com",
   ]);
   const profanityList = new Set(["badword1", "badword2"]);
 
@@ -33,6 +38,12 @@ const CreatePassword = () => {
       emailIdPattern.test(input)
     );
   };
+
+  useEffect(() => {
+    if (location.state?.emailId) {
+      setemailId(location.state.emailId);
+    }
+  }, [location.state]);
 
   const validatePassword = (input) => {
     const passwordPattern =
@@ -83,8 +94,7 @@ const CreatePassword = () => {
     setLoading(true); // Start loading
     try {
       const response = await axios.post(
-         "https://hrms-repository-gruhabase.onrender.com/tuition-application/authenticate/register",
-        
+        "https://hrms-repository-gruhabase.onrender.com/tuition-application/authenticate/register",
         requestData,
         {
           headers: {
@@ -93,10 +103,14 @@ const CreatePassword = () => {
         }
       );
       if (response.status === 200) {
-        setSuccessMessage("Signup successful! Please Continue with payment to move forward");
+        setShowPopup(true); // Show popup on successful signup
         setemailId("");
         setPassword("");
         setConfirmPassword("");
+        setTimeout(() => {
+          setShowPopup(false); // Hide popup after delay
+          navigate("/payment"); // Redirect to payment page
+        }, 2000);
       }
     } catch (error) {
       if (error.response) {
@@ -136,13 +150,13 @@ const CreatePassword = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen  bg-gray-100 bg-gradient-to-r from-gray-200 to-blue-300 ">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 bg-gradient-to-r from-gray-200 to-blue-300">
       <div className="w-full max-w-md p-8 bg-white shadow-md rounded-lg">
         <h1 className="text-2xl font-bold mb-6 text-center text-cyan-500">
           Create Password
         </h1>
         <form onSubmit={handleSubmit}>
-          {/* Email Input */}
+          {/* {/ Email Input /} */}
           <div className="mb-4">
             <label
               htmlFor="emailId"
@@ -153,8 +167,9 @@ const CreatePassword = () => {
             <input
               type="text"
               id="emailId"
-              maxLength={45}
+              maxLength={40}
               value={emailId}
+              readOnly
               onChange={(e) => setemailId(e.target.value)}
               required
               className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm ${
@@ -166,7 +181,7 @@ const CreatePassword = () => {
             )}
           </div>
 
-          {/* Password Input */}
+          {/* {/ Password Input /} */}
           <div className="mb-4 relative">
             <label
               htmlFor="password"
@@ -207,7 +222,7 @@ const CreatePassword = () => {
             )}
           </div>
 
-          {/* Confirm Password Input */}
+          {/* {/ Confirm Password Input /} */}
           <div className="mb-4 relative">
             <label
               htmlFor="confirm-password"
@@ -236,26 +251,36 @@ const CreatePassword = () => {
             </button>
           </div>
 
-          {/* Success Message */}
-          {successMessage && (
-            <p className="text-green-500 text-sm mt-1">{successMessage}</p>
+          {/* {/ Success Popup /} */}
+          {showPopup && (
+            <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+              <div className="bg-white p-6 rounded shadow-md text-center">
+                <h2 className="text-xl font-bold text-green-500 mb-4">
+                  Create Password Successful
+                </h2>
+              </div>
+            </div>
           )}
 
-          {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-cyan-500 hover:bg-blue-500 text-white font-bold py-2 rounded mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-            disabled={loading} // Disable button during loading
+            className={`w-full py-2 px-4 rounded-md text-white font-semibold mt-4 ${
+              loading ? "bg-gray-500 cursor-not-allowed" : "bg-indigo-500"
+            }`}
+            disabled={loading}
           >
-            {loading ? "Signing Up..." : "CreatePassword"}
+            {loading ? "Loading..." : "Create Password"}
           </button>
 
-          <Link
-              to="/payment"
-              className="text-blue-500 hover:text-blue-500  ml-[150px] font-medium hover:underline"
+          <p className="text-center mt-4 text-gray-500">
+            Already have an account?{" "}
+            <Link
+              to="/login"
+              className="text-indigo-500 font-semibold hover:underline"
             >
-              Make Payment
+              Login
             </Link>
+          </p>
         </form>
       </div>
     </div>
@@ -263,3 +288,4 @@ const CreatePassword = () => {
 };
 
 export default CreatePassword;
+ 

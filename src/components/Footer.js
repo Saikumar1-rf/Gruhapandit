@@ -41,7 +41,7 @@ const Footer = () => {
             </li>
             <li className="flex items-center">
               <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
-              <span>gruhapandittuitions@gmail.com</span>
+             <a href='mailto:gruhapandittuitions@gmail.com'><span>gruhapandittuitions@gmail.com</span></a> 
             </li>
           </ul>
         </div>

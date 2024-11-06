@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Slide6 from "./Slide6";
+import { countries } from "./Countries";
+import Select from "react-select";
 
 const TutorRegister = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +11,7 @@ const TutorRegister = () => {
     lastName: "",
     emailId: "",
     phoneNumber: "",
+    countryCode: "",
     location: "",
     gender: "",
     dob: "",
@@ -20,7 +23,6 @@ const TutorRegister = () => {
     nationalIdNum: "",
     availableTimings: "",
     category: "",
-    countryCode: "+1",
   });
   const navigate = useNavigate();
 
@@ -36,21 +38,116 @@ const TutorRegister = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const newValue = value.trimStart();
-    setFormData({ ...formData, [name]: newValue });
+  
+    // Prevent the first character from being a space
+    if (value.startsWith(" ")) return;
+  
+    if (name === "nationalIdNum") {
+      if (formData.nationalIdType === "Aadhar Card") {
+        // Allow only numeric input for Aadhaar and limit to 12 digits
+        const formattedValue = value.replace(/[^0-9]/g, "").slice(0, 12);
+        setFormData({ ...formData, [name]: formattedValue });
+  
+        if (formattedValue.length === 12) {
+          setErrors({ ...errors, nationalIdNum: "" });
+        } else {
+          setErrors({ ...errors, nationalIdNum: "Aadhar must be exactly 12 digits." });
+        }
+      } else if (formData.nationalIdType === "Pan Card") {
+        let formattedValue = value.toUpperCase();
+  
+        // Allow only uppercase letters in the first 5 characters
+        if (formattedValue.length <= 5) {
+          formattedValue = formattedValue.replace(/[^A-Z]/g, "");
+        }
+        // Allow only numbers in the next 4 characters
+        else if (formattedValue.length <= 9) {
+          formattedValue = formattedValue.slice(0, 5) + formattedValue.slice(5).replace(/[^0-9]/g, "");
+        }
+        // Allow only an uppercase letter in the 10th character
+        else if (formattedValue.length === 10) {
+          formattedValue = formattedValue.slice(0, 9) + formattedValue[9].replace(/[^A-Z]/g, "");
+        } else {
+          formattedValue = formattedValue.slice(0, 10); // Limit input to 10 characters
+        }
+  
+        setFormData({ ...formData, [name]: formattedValue });
+  
+        // Validate full PAN format after reaching 10 characters
+        if (formattedValue.length === 10) {
+          if (/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(formattedValue)) {
+            setErrors({ ...errors, nationalIdNum: "" });
+          } else {
+            setErrors({
+              ...errors,
+              nationalIdNum: "PAN must be in the format ABCDE1234F.",
+            });
+          }
+        } else {
+          setErrors({ ...errors, nationalIdNum: "" });
+        }
+      }
+    } else if (name === "nationalIdType") {
+      setFormData({
+        ...formData,
+        [name]: value,
+        nationalIdNum: "", // Reset the ID number field when the type changes
+      });
+      setErrors({ ...errors, nationalIdNum: "" });
+    } else if (name === "emailId") {
+      // Remove spaces and convert to lowercase for emailId
+      const noSpaceValue = value.replace( `^\S$|^\S[\s\S]*\S$
+` ).toLowerCase();
+      setFormData({ ...formData, [name]: noSpaceValue });
+  
+      // Check if spaces were originally present
+      if (/\s/.test(value)) {
+        setErrors({
+          ...errors,
+          emailId: "Email should not contain spaces.",
+        });
+      } else {
+        setErrors({ ...errors, emailId: "" });
+      }
+    } else if (name === "chargesPerHour") {
+      // Allow only numeric values for charges per hour
+      if (/^\d*\.?\d*$/.test(value)) { // Regular expression for numbers (optional decimal)
+        setFormData({ ...formData, [name]: value });
+        setErrors({ ...errors, chargesPerHour: "" });
+      } else {
+        setErrors({ ...errors, chargesPerHour: "Charges per hour must be a number." });
+      }
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
+  };
+  
+
+  //Mobile Number Validation//
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [personInfo, setPersonInfo] = useState({
+    phone: "",
+  });
+
+  const countryOptions = countries.map((country) => ({
+    value: country.code,
+    label: `+${country.phone} ${country.label}`, // Corrected template literal
+    country,
+  }));
+
+  const validateStartDigits = (value, country) => {
+    if (!country || !country.validStartDigits.length) {
+      return true; // No restrictions on starting digits for this country
+    }
+    return country.validStartDigits.some((digit) => value.startsWith(digit));
   };
 
   const validateForm = () => {
     let errors = {};
-    const emailRegex = /^[^\s][a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    // const emailRegex = /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/;
     if (!formData.firstName) errors.firstName = "First Name is required";
     if (!formData.lastName) errors.lastName = "Last Name is required";
-    if (!formData.emailId) {
-      errors.emailId = "Email ID is required";
-    } else if (!emailRegex.test(formData.emailId)) {
-      errors.emailId = "Enter a valid Email ID";
-    }
-
+    if(!formData.emailId) errors.emailId="EmailId is required"
     const { phoneNumber } = formData;
     const allSameDigits = /^(\d)\1*$/.test(phoneNumber);
     if (!phoneNumber) {
@@ -97,12 +194,11 @@ const TutorRegister = () => {
           {
             headers: {
               "Content-Type": "application/json",
-
             },
           }
         );
-        navigate("/create-password");
-        console.log("Form submitted successfully:", response.data);
+        navigate("/create-password", { state: { emailId: formData.emailId } });
+        // console.log("Form submitted successfully:", response.data);
       } catch (error) {
         console.error(
           "Error submitting the form:",
@@ -113,16 +209,19 @@ const TutorRegister = () => {
     }
   };
 
-  const generateTimings = () => {
+    const generateTimings = () => {
     const timings = [];
-    const startHour = 0;
-    const endHour = 23;
-    const interval = 45;
+    const startHour = 0; // 00:00 (12 AM in 24-hour format)
+    const endHour = 23; // 23:00 (11 PM in 24-hour format)
+    const interval = 45; // 45 minutes
 
     let hour = startHour;
     let minute = 0;
-    while (hour < endHour || (hour === endHour && minute <= 15)) {
+
+    while (hour < endHour || (hour === endHour && minute === 15)) {
       const startTime = formatTime(hour, minute);
+
+      // Increment time by 45 minutes to get the end time of the slot
       let endHour = hour;
       let endMinute = minute + interval;
 
@@ -131,19 +230,19 @@ const TutorRegister = () => {
         endHour++;
       }
 
-      if (endHour > 23) break;
-
       const endTime = formatTime(endHour, endMinute);
       timings.push(`${startTime} to ${endTime} IST`);
 
+      // Update the current time for the next slot
       minute += interval;
       if (minute >= 60) {
-        minute -= 60;
+        minute -= 60; // Reset minutes and increment hour
         hour++;
       }
     }
+
     return timings;
-  };
+  }; 
 
   const formatTime = (hour, minute) => {
     const amPm = hour < 12 || hour === 24 ? "AM" : "PM";
@@ -238,7 +337,7 @@ const TutorRegister = () => {
                 placeholder="Enter First Name"
                 value={formData.firstName}
                 onChange={handleChange}
-                minLength={4}
+                minLength={3}
                 maxLength={20}
                 className="w-full px-3 mt-2 bg-transparent border-gray-400 py-2 border rounded"
               />
@@ -258,7 +357,7 @@ const TutorRegister = () => {
                 placeholder="Enter Last Name"
                 value={formData.lastName}
                 onChange={handleChange}
-                minLength={4}
+                minLength={3}
                 maxLength={20}
                 className="w-full px-3 outline-none py-2 border rounded mt-2 bg-transparent border-gray-400"
               />
@@ -269,38 +368,101 @@ const TutorRegister = () => {
           </div>
           <div className="flex flex-wrap -mx-2 mb-4">
             <div className="w-full sm:w-1/2 px-2">
-              <label className="block text-gray-800 text-shadow-default font-bold">
-                Email ID
-              </label>
+              <label className="block text-gray-800 font-bold">Email ID</label>
               <input
                 type="email"
                 name="emailId"
                 placeholder="Enter Email ID"
                 value={formData.emailId}
+                maxLength={40}
                 onChange={handleChange}
-                className="w-full px-3 outline-none py-2 border rounded mt-2 bg-transparent border-gray-400"
+                className="w-full px-3 mt-2 bg-transparent border border-gray-400 py-2 rounded"
               />
               {errors.emailId && (
                 <p className="text-red-400 text-base mt-1">{errors.emailId}</p>
               )}
             </div>
-            <div className="w-full sm:w-1/2 px-2">
-              <label className="block text-gray-800 text-shadow-default font-bold">
-                Phone Number
+            <div className="w-full sm:w-1/2 px-2 mt-2">
+              <label className="block text-gray-800 font-bold">
+                Mobile Number
               </label>
-              <input
-                type="text"
-                name="phoneNumber"
-                placeholder="Enter Phone Number"
-                value={formData.phoneNumber}
-                onChange={handleChange}
-                maxLength={10}
-                className="w-full px-3 outline-none py-2 border rounded mt-2 bg-transparent border-gray-400"
-              />
+              <div className="flex">
+                <Select
+                  name="countryCode"
+                  options={countryOptions}
+                  onChange={(selectedOption) => {
+                    setSelectedCountry(selectedOption.country);
+                    setPersonInfo({
+                      ...personInfo,
+                      countryCode: `+${selectedOption.country.phone}`,
+                    });
+                    setFormData({
+                      ...formData,
+                      countryCode: `+${selectedOption.country.phone}`,
+                    });
+                  }}
+                  value={
+                    selectedCountry
+                      ? {
+                          value: selectedCountry.code,
+                          label: `+${selectedCountry.phone} ${selectedCountry.label}`,
+                        }
+                      : null
+                  }
+                  isSearchable
+                  styles={{
+                    control: (provided) => ({
+                      ...provided,
+                      minWidth: "60px",
+                      height: "40px",
+                      background:"transparent"
+                    }),
+                    dropdownIndicator: () => ({ display: "none" }),
+                  }}
+                  className="w-1/4 border border-gray-500 rounded-l-md"
+                />
+                                <input
+                  maxLength={10}
+                  type="tel"
+                  name="phoneNumber"
+                  placeholder="Enter your Mobile Number"
+                  value={personInfo.phone || ""}
+                  disabled={!selectedCountry}
+                  onChange={(e) => {
+                    const inputvalue = e.target.value.replace(/[^0-9]/g, "");
+                    setPersonInfo({ ...personInfo, phone: inputvalue });
+                    setFormData({ ...formData, phoneNumber: inputvalue });
+                  }}
+                  onInput={(e) => {
+                    const inputValue = e.target.value.replace(/[^0-9]/g, "");
+
+                    if (
+                      selectedCountry &&
+                      !validateStartDigits(inputValue, selectedCountry)
+                    ) {
+                      e.target.value = "";
+                    }
+
+                    setPersonInfo({ ...personInfo, phone: inputValue });
+                    setFormData({ ...formData, phoneNumber: inputValue });
+                  }}
+                  className={`w-[225px] px-4 py-4 border border-gray-500  bg-transparent outline-none   ${
+                    selectedCountry && personInfo.phone
+                      ? !validateStartDigits(personInfo.phone, selectedCountry)
+                        ? "border-red-500"
+                        : ""
+                      : ""
+                  }`}
+                  style={{
+                    height: "42px",
+                    background:"transparent"
+                  }}
+                />
+              </div>
               {errors.phoneNumber && (
-                <p className="text-red-400 text-base mt-1">
+                <span className="text-red-500 text-sm">
                   {errors.phoneNumber}
-                </p>
+                </span>
               )}
             </div>
           </div>
@@ -350,8 +512,23 @@ const TutorRegister = () => {
                 type="date"
                 name="dob"
                 value={formData.dob}
+                // max={
+                //   new Date(
+                //     new Date().setFullYear(new Date().getFullYear() - 16) - 1
+                //   )
+                //     .toISOString()
+                //     .split("T")[0]
+                // }
+                min={
+                  new Date(
+                    new Date().setFullYear(new Date().getFullYear() - 100)
+                  )
+                    .toISOString()
+                    .split("T")[0]
+                }
                 onChange={handleChange}
                 className="w-full px-3 outline-none py-2 border rounded mt-2 bg-transparent border-gray-400"
+                onKeyDown={(e) => e.preventDefault()}
               />
               {errors.dob && (
                 <p className="text-red-400 text-base mt-1">{errors.dob}</p>
@@ -359,7 +536,7 @@ const TutorRegister = () => {
             </div>
             <div className="w-full sm:w-1/2 px-2">
               <label className="block text-gray-800 text-shadow-default font-bold">
-                Highest Qualification
+                Higher Qualification
               </label>
               <input
                 type="text"
@@ -395,26 +572,30 @@ const TutorRegister = () => {
                 </p>
               )}
             </div>
-            <div className="w-full sm:w-1/2 px-2">
+            <div className="w-full sm:w-1/2 px-2 mt-0">
               <label className="block text-gray-800 text-shadow-default font-bold">
                 Mode of Teaching
               </label>
-              <input
-                type="text"
+              <select
                 name="modeOfTeaching"
-                placeholder="Enter Mode of Teaching"
                 value={formData.modeOfTeaching}
                 onChange={handleChange}
-                className="w-full px-3 outline-none py-2 border rounded mt-2 bg-transparent border-gray-400"
-              />
+                className="w-full px-3  outline-none py-2 border rounded mt-2 bg-transparent border-gray-400 "
+              >
+                <option value="">Select Mode</option>
+                <option value="Student Home">Student Home</option>
+                <option value="Tutor Home">Tutor Home</option>
+                <option value="Virtual Mode">Virtual Mode</option>
+              </select>
               {errors.modeOfTeaching && (
-                <p className="text-red-400 text-base mt-1">
+                <span className="text-red-500 text-sm">
                   {errors.modeOfTeaching}
-                </p>
+                </span>
               )}
             </div>
           </div>
           <div className="flex flex-wrap -mx-2 mb-4">
+          
             <div className="w-full sm:w-1/2 px-2">
               <label className="block text-gray-800 text-shadow-default font-bold">
                 Charges Per Hour
@@ -425,6 +606,7 @@ const TutorRegister = () => {
                 placeholder="Enter Charges"
                 value={formData.chargesPerHour}
                 onChange={handleChange}
+                maxLength={5}
                 className="w-full px-3 outline-none py-2 border rounded mt-2 bg-transparent border-gray-400"
               />
               {errors.chargesPerHour && (
@@ -433,44 +615,8 @@ const TutorRegister = () => {
                 </p>
               )}
             </div>
-            <div className="w-full sm:w-1/2 px-2">
-              <label className="block text-gray-800 text-shadow-default font-bold">
-                National ID Type
-              </label>
-              <input
-                type="text"
-                name="nationalIdType"
-                placeholder="Enter National ID Type"
-                value={formData.nationalIdType}
-                onChange={handleChange}
-                className="w-full px-3 outline-none py-2 border rounded mt-2 bg-transparent border-gray-400"
-              />
-              {errors.nationalIdType && (
-                <p className="text-red-400 text-base mt-1">
-                  {errors.nationalIdType}
-                </p>
-              )}
-            </div>
-          </div>
-          <div className="flex flex-wrap -mx-2 mb-4">
-            <div className="w-full sm:w-1/2 px-2">
-              <label className="block text-gray-800 text-shadow-default font-bold">
-                National ID Number
-              </label>
-              <input
-                type="text"
-                name="nationalIdNum"
-                placeholder="Enter National ID Number"
-                value={formData.nationalIdNum}
-                onChange={handleChange}
-                className="w-full px-3 outline-none py-2 border rounded mt-2 bg-transparent border-gray-400"
-              />
-              {errors.nationalIdNum && (
-                <p className="text-red-400 text-base mt-1">
-                  {errors.nationalIdNum}
-                </p>
-              )}
-            </div>
+
+         
             <div className="w-full sm:w-1/2 px-2">
               <label className="block text-gray-800 text-shadow-default font-bold">
                 Available Timings
@@ -495,6 +641,57 @@ const TutorRegister = () => {
               )}
             </div>
           </div>
+
+          <div className="flex flex-wrap -mx-2 mb-4">
+            <div className="w-full sm:w-1/2 px-2">
+              <label className="block text-gray-800 text-shadow-default font-bold">
+                National ID Type
+              </label>
+              <select
+                name="nationalIdType"
+                value={formData.nationalIdType}
+                onChange={handleChange}
+                className="w-full px-3 outline-none py-2 border rounded mt-2 bg-transparent border-gray-400"
+              >
+                <option value="">Select ID Type</option>
+                <option value="Aadhar Card">Aadhar Card</option>
+                <option value="Pan Card">PAN Card</option>
+              </select>
+              {errors.nationalIdType && (
+                <p className="text-red-400 text-base mt-1">
+                  {errors.nationalIdType}
+                </p>
+              )}
+            </div>
+
+      
+            <div className="w-full sm:w-1/2 px-2">
+              <label className="block text-gray-800 font-bold">
+                {formData.nationalIdType} Number
+              </label>
+              <input
+                type="text"
+                name="nationalIdNum"
+                value={formData.nationalIdNum}
+                onChange={handleChange}
+                maxLength={formData.nationalIdType === "Aadhar Card" ? 12 : 10}
+                minLength={formData.nationalIdType === "Aadhar Card" ? 12 : 10}
+              
+                className="w-full px-3 outline-none py-2 border rounded mt-2 bg-transparent border-gray-400"
+                placeholder={
+                  formData.nationalIdType === "Aadhar Card"
+                    ? "Enter 12-digit Aadhar Number"
+                    : "Enter 10-character PAN"
+                }
+                />
+              {errors.nationalIdNum && (
+                 <p className="text-red-400 text-base mt-1">
+                  {errors.nationalIdNum}
+                </p>
+              )}
+            </div>
+          </div>
+
           <div className="flex flex-wrap -mx-2 mb-4 ">
             <div className="w-full sm:w-1/2 px-2 ">
               <label className="block text-gray-800 text-shadow-default font-bold">
@@ -518,7 +715,7 @@ const TutorRegister = () => {
             <div className="w-full px-2">
               <button
                 type="submit"
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200"
+                className="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700 transition duration-200"
               >
                 Submit
               </button>

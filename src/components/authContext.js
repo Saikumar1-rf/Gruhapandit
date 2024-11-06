@@ -10,6 +10,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
+    localStorage.removeItem("jwtToken");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userType");
     setIsAuthenticated(false);
     localStorage.clear();
   };

@@ -13,7 +13,7 @@ const TutorDash = () => {
   const [userType, setUserType] = useState(localStorage.getItem("userType"));
   const [editMode, setEditMode] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
-  const [isProfileOpen,setIsProfileOpen]=useState(false);
+  // const [isProfileOpen,setIsProfileOpen]=useState(false);
 
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
@@ -50,8 +50,8 @@ const TutorDash = () => {
       try {
         const url =
           userType === "student"
-            ? `https://hrms-repository-gruhabase.onrender.com/tuition-application/student/${userId}`
-            : `https://hrms-repository-gruhabase.onrender.com/tuition-application/tutor/${userId}`;
+            ? `/tuition-application/student/${userId}`
+            : `/tuition-application/tutor/${userId}`;
 
         console.log("Fetching user data from:", url);
 
@@ -101,7 +101,7 @@ const TutorDash = () => {
       const url = userType === "student"
         ? "/tuition-application/student/update"
         : "/tuition-application/tutor/update";
-
+ 
       await axiosInstance.patch(url, userData, {
         headers: { Authorization: `Bearer ${token}` },
       });

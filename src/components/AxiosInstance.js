@@ -3,14 +3,14 @@ import axios from 'axios';
 // Create an Axios instance
 const axiosInstance = axios.create({
   // baseURL: 'http://192.168.0.120:8080/',
-  baseURL: 'https://hrms-repository-gruhabase.onrender.com',
+  baseURL: 'https://hrms-repository-gruhabase.onrender.com/',
   // baseURL:'https://tution-application.onrender.com',
 });
 
 // Set up an interceptor to add the token to each request
 axiosInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem('jwtToken');
-  console.log('Sending token:', token); // Make sure this logs the token
+  // console.log('Sending token:', token); // Make sure this logs the token
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;

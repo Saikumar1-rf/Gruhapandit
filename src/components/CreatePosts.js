@@ -4,8 +4,7 @@ import { FaEnvelope, FaBell } from "react-icons/fa";
 import { IoSettings } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import axiosInstance from "./AxiosInstance";
-import DashHeader from "./DashHeader";
-import Postsdash from "./Postsdash";
+
 
 const CreatePosts = () => {
   const [showPopup, setShowPopup] = useState(false);

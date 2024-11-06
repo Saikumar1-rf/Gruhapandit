@@ -85,11 +85,11 @@ const StudentRegister = ({ setIsSubmitted }) => {
     const { name, value } = e.target;
     let errorMessage = "";
 
-    const validInputPattern = /^[a-zA-Z0-9\s,]*$/;
+    const validInputPattern = /^.*$/;
 
     if (!validInputPattern.test(value)) {
       errorMessage =
-        "Special characters are not allowed except for commas to separate subjects.";
+      "The input contains invalid characters.";
     }
 
     setErrors((prevErrors) => ({
@@ -211,7 +211,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
         formDataToSend.append("availableTimings", formData.availableTimings);
         // formDataToSend.append("file", formData.file); // Add the file if needed
 
-        console.log("form submit", formDataToSend);
+        // console.log("form submit", formDataToSend);
 
         // Axios POST request with proper headers for FormData
         const response = await axios.post(
@@ -224,13 +224,13 @@ const StudentRegister = ({ setIsSubmitted }) => {
           }
         );
 
-        console.log(response.data);
+        // console.log(response.data);
 
         const { id } = response.data;
         localStorage.setItem("id", id);
 
-        navigate("/create-password");
-        console.log("Form submitted successfully", response.data);
+        navigate("/create-password",{ state: { emailId: formData.emailId } });
+        // console.log("Form submitted successfully");
 
         setIsSubmitted(true);
         console.log("navigated");
@@ -292,41 +292,66 @@ const StudentRegister = ({ setIsSubmitted }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    let newValue = value.trimStart();
+    let newValue = value;
+  
+    // Remove leading space if present, but allow spaces after the first character
+    if (value.startsWith(" ")) {
+      newValue = value.trimStart(); // Trim leading spaces
+    }
+  
     const today = new Date();
     const CurrentYear = today.getFullYear();
     const [year, month, day] = value.split("-");
     let errorMsg = "";
-
+  
+    // Handle the date logic
     if (year && (year.length !== 4 || parseInt(year) > CurrentYear)) {
-      errorMsg =
-        "Year should be 4 digits and not greater than the current year.";
+      errorMsg = "Year should be 4 digits and not greater than the current year.";
     }
     if (month && (parseInt(month) < 1 || parseInt(month) > 12)) {
       errorMsg = "Month should be between 1 and 12.";
     }
-
+  
     const maxDays = getDaysInMonth(month, year);
     if (day && (parseInt(day) < 1 || parseInt(day) > maxDays)) {
       errorMsg = `Day should be between 1 and ${maxDays} for the selected month and year.`;
     }
-
-    if (name === "email") {
-      newValue = value.replace(/\s+/g, "").toLowerCase();
+  
+    // Email input handling
+    if (name === "emailId") {
+      // Convert the value to lowercase and remove spaces
+      const lowerCaseValue = value.replace(/\s+/g, "").toLowerCase(); // Remove spaces and convert to lowercase
+  
+      // Block uppercase letters
+      if (/[A-Z]/.test(value)) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          emailId: "Invalid email format",
+        }));
+        return;
+      }
+  
+      // Update value with the lowercase and no spaces
+      newValue = lowerCaseValue;
     }
-
-    if (value === "0") {
+  
+    // Handle "0" case for studentClass
+    if (value === "0" && name === "studentClass") {
       setErrors((prevErrors) => ({
         ...prevErrors,
         studentClass: "Zero is not allowed as a valid entry.",
       }));
       return;
     }
+  
+    // Update the formData with the new value
     setFormData({
       ...formData,
       [name]: newValue,
     });
   };
+  
+
   const detectLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -380,10 +405,10 @@ const StudentRegister = ({ setIsSubmitted }) => {
     const key = e.key;
     const value = e.target.value;
 
-    const nameRegex = /^[A-Za-z]/;
+    const nameRegex = /^[A-Za-z0-9!+#$%^&*(),.?":{}|<>]/;
     let newError = {};
 
-    if ((value === "" && key === " ") || !/[a-zA-Z\s]/.test(key)) {
+    if ((value === "" && key === " ") || !/[A-Za-z0-9!+#$%^&*(),.?":{}|<>]/.test(key)) {
       e.preventDefault();
     } else if (!nameRegex.test(value)) {
       newError.Organizationname = "Must start with a Character";
@@ -470,9 +495,9 @@ const StudentRegister = ({ setIsSubmitted }) => {
     //Subject
     if (!formData.subjectsLookingFor.trim()) {
       newErrors.subjectsLookingFor = "Subject tuition looking for is required";
-    } else if (formData.subjectsLookingFor.length < 2) {
+    } else if (formData.subjectsLookingFor.length < 1) {
       newErrors.subjectsLookingFor =
-        "SubsubjectsLookingForject Name must be at least 2 characters";
+        "SubsubjectsLookingForject Name must be at least characters";
     }
 
     //mode of teaching
@@ -509,476 +534,490 @@ const StudentRegister = ({ setIsSubmitted }) => {
 
   return (
     <>
-      <div className="w-[650px]  mx-auto border border-gray-400 mt-[150px] p-4 overflow-hidden mb-9">
-        <div>
-          <p>
-            <strong className="text-red-500">Note: </strong>
-            <a
-              className="text-blue-600 hover:underline cursor-pointer"
-              onClick={handleOpenModal}
-            >
-              Terms and Conditions
-            </a>
-          </p>
-        </div>
-        <h2 className="text-2xl font-bold text-center mt-8 text-cyan-600 mb-6">
-          Sign Up as a Student
-        </h2>
-
-        <form onSubmit={handleSubmit}>
-          <div className="flex ">
-            <div className="my-2 relative">
-              <label className="float-start text-sm font-medium text-gray-700">
-                First Name
-              </label>
-              <input
-                type="text"
-                id="firstName"
-                minLength={3}
-                maxLength={20}
-                name="firstName"
-                onChange={handleChange}
-                onKeyDown={handleNameChar}
-                value={formData.firstName}
-                placeholder="Enter your First Name"
-                className={`w-[300px] py-2 px-2 mr-6 border border-gray-500 outline-none  ${
-                  errors.firstName ? "border-red-500" : ""
-                }`}
-              ></input>
-              {errors.firstName && (
-                <span className="text-red-500 text-sm">{errors.firstName}</span>
-              )}
-            </div>
-
-            <div className="my-2">
-              <label className="float-start text-sm font-medium text-gray-700">
-                Last Name
-              </label>
-              <input
-                type="text"
-                id="lastName"
-                minLength={3}
-                maxLength={20}
-                name="lastName"
-                onChange={handleChange}
-                onKeyDown={handleNameChar}
-                value={formData.lastName}
-                placeholder="Enter your Last Name"
-                className={`w-[300px] py-2 px-2 mr-6 border border-gray-500 outline-none  ${
-                  errors.lastName ? "border-red-500" : ""
-                }`}
-              ></input>
-              {errors.firstName && (
-                <span className="text-red-500 text-sm">{errors.lastName}</span>
-              )}
-            </div>
-          </div>
-
-          <div className="flex gap-6">
-            <div className="my-2">
-              <label className="float-start text-sm font-medium text-gray-700">
-                Email Id
-              </label>
-              <input
-                type="emailId"
-                id="emailId"
-                name="emailId"
-                maxLength={40}
-                value={formData.emailId}
-                onChange={handleChange}
-                onInput={handleInput}
-                placeholder="Enter your Email Id"
-                className={`w-[300px] py-2 px-2 border border-gray-500 outline-none  ${
-                  errors.emailId ? "border-red-500" : ""
-                }`}
-              ></input>
-              {errors.emailId && (
-                <span className="text-red-500 text-sm">{errors.emailId}</span>
-              )}
-            </div>
-
-            <div className="pr-3 mt-2">
-              <label className=" float-start  text-sm font-medium text-gray-700">
-                Mobile Number
-              </label>
-              <div className="flex float-start">
-                <Select
-                  name="countryCode"
-                  id="mobileNumber"
-                  options={countryOptions}
-                  onChange={(selectedOption) => {
-                    setSelectedCountry(selectedOption.country);
-                    setPersonInfo({
-                      ...personInfo,
-                      countryCode: `+${selectedOption.country.phone}`,
-                    });
-                    setFormData({
-                      ...formData,
-                      countryCode: `+${selectedOption.country.phone}`,
-                    });
-                  }}
-                  value={
-                    selectedCountry
-                      ? {
-                          value: selectedCountry.code,
-                          label: `+${selectedCountry.phone} ${selectedCountry.label}`,
-                        }
-                      : null
-                  }
-                  isSearchable
-                  styles={{
-                    menu: (provided) => ({
-                      ...provided,
-                      minWidth: "150px",
-                    }),
-                    control: (provided) => ({
-                      ...provided,
-                      minWidth: "60px",
-                      height: "40px",
-                    }),
-                    dropdownIndicator: (provided) => ({
-                      ...provided,
-                      display: "none",
-                    }),
-                    indicatorSeparator: () => null,
-                  }}
-                  className="border border-gray-500 outline-none"
-                />
-
-                <input
-                  maxLength={10}
-                  type="tel"
-                  name="phoneNumber"
-                  placeholder="Enter your Mobile Number"
-                  value={personInfo.phone || ""}
-                  disabled={!selectedCountry}
-                  onChange={(e) => {
-                    const inputvalue = e.target.value.replace(/[^0-9]/g, "");
-                    setPersonInfo({ ...personInfo, phone: inputvalue });
-                    setFormData({ ...formData, phoneNumber: inputvalue });
-                  }}
-                  onInput={(e) => {
-                    const inputValue = e.target.value.replace(/[^0-9]/g, "");
-
-                    if (
-                      selectedCountry &&
-                      !validateStartDigits(inputValue, selectedCountry)
-                    ) {
-                      e.target.value = "";
-                    }
-
-                    setPersonInfo({ ...personInfo, phone: inputValue });
-                    setFormData({ ...formData, phoneNumber: inputValue });
-                  }}
-                  className={`w-[225px] px-4 py-4 border border-gray-500 outline-none   ${
-                    selectedCountry && personInfo.phone
-                      ? !validateStartDigits(personInfo.phone, selectedCountry)
-                        ? "border-red-500"
-                        : ""
-                      : ""
-                  }`}
-                  style={{
-                    height: "42px",
-                  }}
-                />
-              </div>
-              {errors.phoneNumber && (
-                <span className="text-red-500 text-sm">
-                  {errors.phoneNumber}
-                </span>
-              )}
-            </div>
-          </div>
-
-          <div className="flex gap-6">
-            <div className="my-2">
-              <label className="float-start text-sm font-medium text-gray-700">
-                Date of Birth
-              </label>
-              <input
-                type="date"
-                id="dob"
-                name="dob"
-                value={formData.dob}
-                max={
-                  new Date(
-                    new Date().setFullYear(new Date().getFullYear() - 4) - 1
-                  )
-                    .toISOString()
-                    .split("T")[0]
-                }
-                min={
-                  new Date(
-                    new Date().setFullYear(new Date().getFullYear() - 100)
-                  )
-                    .toISOString()
-                    .split("T")[0]
-                }
-                onChange={handleChange}
-                className={`w-[300px] py-2 px-2 border border-gray-500 outline-none  ${
-                  errors.dob ? "border-red-500" : ""
-                }`}
-                onKeyDown={(e) => e.preventDefault()}
-              ></input>
-              {errors.dob && (
-                <span className="text-red-500 text-sm">{errors.dob}</span>
-              )}
-            </div>
-
-            <div className="my-2">
-              <label className="float-start text-sm font-medium text-gray-700">
-                Location
-              </label>
-              <input
-                type="text"
-                id="location"
-                name="location"
-                value={formData.location}
-                onChange={handleChange}
-                onFocus={handleFocus}
-                placeholder="Enter your Current Location"
-                className={`w-[300px] py-2 px-2 border border-gray-500 outline-none  ${
-                  errors.location ? "border-red-500" : ""
-                }`}
-              ></input>
-              {errors.location && (
-                <span className="text-red-500 text-sm">{errors.location}</span>
-              )}
-            </div>
-          </div>
-
-          <div className="flex gap-6">
-            <div className="my-2">
-              <label className="float-start text-sm font-medium text-gray-700">
-                Gender
-              </label>
-              <select
-                name="gender"
-                value={formData.gender}
-                onChange={handleChange}
-                className="w-[300px] py-2 border border-gray-500 outline-none "
-              >
-                <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </select>
-              {errors.gender && (
-                <span className="text-red-500 text-sm">{errors.gender}</span>
-              )}
-            </div>
-
-            <div className="my-2">
-              <label className="float-start text-sm font-medium text-gray-700">
-                Studying Class
-              </label>
-              <input
-                type="text"
-                id="studentClass"
-                name="studentClass"
-                value={formData.studentClass}
-                onChange={handleStudyingClassChange}
-                onKeyDown={handleNameChar}
-                placeholder="Enter your Standard/Class"
-                className={`w-[300px] py-2 px-2 border border-gray-500 outline-none  ${
-                  errors.studentClass ? "border-red-500" : ""
-                }`}
-              ></input>
-              {errors.studentClass && (
-                <span className="text-red-500 text-sm">
-                  {errors.studentClass}
-                </span>
-              )}
-            </div>
-          </div>
-
-          <div className="flex gap-6">
-            <div className="my-2">
-              <label className="float-start text-sm font-medium text-gray-700">
-                Board
-              </label>
-              <input
-                type="text"
-                id="board"
-                name="board"
-                value={formData.board}
-                onChange={handleChange}
-                minLength={2}
-                maxLength={30}
-                onKeyDown={handleNameChar}
-                placeholder="Enter your Board"
-                className={`w-[300px] py-2 px-2 border border-gray-500 outline-none  ${
-                  errors.board ? "border-red-500" : ""
-                }`}
-              ></input>
-              {errors.board && (
-                <span className="text-red-500 text-sm">{errors.board}</span>
-              )}
-            </div>
-            <div className="my-2">
-              <label className="float-start  text-sm font-medium text-gray-700">
-                School/institution
-              </label>
-              <input
-                type="text"
-                id="institution"
-                name="institution"
-                value={formData.institution}
-                maxLength={50}
-                onKeyDown={handleNameChar}
-                onChange={handleChange}
-                placeholder="Enter your School/institution"
-                className={`w-[300px] py-2 px-2 border border-gray-500 outline-none  ${
-                  errors.institution ? "border-red-500" : ""
-                }`}
-              ></input>
-              {errors.institution && (
-                <span className="text-red-500 text-sm">
-                  {errors.institution}
-                </span>
-              )}
-            </div>
-          </div>
-
-          <div className="flex gap-6">
-            <div className="my-2">
-              <label className="float-start text-sm font-medium text-gray-700">
-                Subjects tuition looking for
-              </label>
-              <input
-                type="text"
-                name="subjectsLookingFor"
-                placeholder="Enter Subject you are Looking for"
-                value={formData.subjectsLookingFor}
-                maxLength={50}
-                onChange={handleSubjectChange}
-                onKeyDown={handleNameChar}
-                className={`w-[300px] py-2 px-2 border border-gray-500 outline-none  ${
-                  errors.subjectsLookingFor ? "border-red-500" : ""
-                }`}
-              />
-              {errors.subjectsLookingFor && (
-                <span className="text-red-500 text-sm">
-                  {errors.subjectsLookingFor}
-                </span>
-              )}
-            </div>
-            <div className="my-2">
-              <label className="float-start text-sm font-medium text-gray-700">
-                Mode of Teaching
-              </label>
-              <select
-                name="modeOfTeaching"
-                value={formData.modeOfTeaching}
-                onChange={handleChange}
-                className="w-[300px] py-2 border border-gray-500 outline-none "
-              >
-                <option value="">Select Mode</option>
-                <option value="Student Home">Student Home</option>
-                <option value="Tutor Home">Tutor Home</option>
-                <option value="Virtual Mode">Virtual Mode</option>
-              </select>
-              {errors.modeOfTeaching && (
-                <span className="text-red-500 text-sm">
-                  {errors.modeOfTeaching}
-                </span>
-              )}
-            </div>
-          </div>
-
-          <div className="flex gap-6">
-            <div className="my-2">
-              <label className="float-start text-sm font-medium text-gray-700">
-                Your Affordability per month
-              </label>
-              <input
-                type="text"
-                name="affordablity"
-                placeholder="Your affordability per month"
-                value={formData.affordablity}
-                onChange={handleAffordChange}
-                onKeyDown={handleKeyDown}
-                maxLength={7}
-                className={`w-[300px] py-2 px-2 border border-gray-500 outline-none  ${
-                  errors.affordablity ? "border-red-500" : ""
-                }`}
-              />
-              {errors.affordablity && (
-                <span className="text-red-500 text-sm">
-                  {errors.affordablity}
-                </span>
-              )}
-            </div>
-
-            <div className="my-3">
-              <label className="float-start text-sm font-medium text-gray-700">
-                Available Time slots
-              </label>
-              <select
-                name="availableTimings"
-                value={formData.availableTimings}
-                onChange={handleChange}
-                className={`w-[300px] py-1.5 border border-gray-500 outline-none  ${
-                  errors.availableTimings ? "border-red-500" : ""
-                }`}
-              >
-                <option value="">Select Available Timing</option>
-                {availableTimings.map((timing, index) => (
-                  <option key={index} value={timing}>
-                    {timing}
-                  </option>
-                ))}
-              </select>
-              {errors.availableTimings && (
-                <span className="text-red-500 text-sm">
-                  {errors.availableTimings}
-                </span>
-              )}
-            </div>
-          </div>
+         <div className="flex py-20 justify-center items-center min-h-screen bg-gray-100 mt-2 bg-gradient-to-r from-gray-200 to-blue-300">
+        <div className="w-full sm:w-[650px]  mx-auto   p-8  mt-9">
+          <form onSubmit={handleSubmit} className="w-full max-w-2xl border border-gray-400 p-8 bg-transparent bg-gradient-to-r from-gray-200 to-blue-300 shadow-md rounded-lg">
           <div>
-            <div>
-              <label className="float-start text-sm font-medium text-gray-700">
-                Category
-              </label>
-              <input
-                type="text"
-                name="category"
-                placeholder="Text Here...."
-                value={formData.category}
-                onChange={handleChange}
-                maxLength={30}
-                className={`w-[300px]  mr-[1000px] py-2 px-2 border border-gray-500 outline-none  ${
-                  errors.category ? "border-red-500" : ""
-                }`}
-              />
-              {errors.category && (
-                <span className="text-red-500 text-sm">{errors.category}</span>
-              )}
-            </div>
-            <div className="flex justify-end mb-4">
-              <button
-                type="submit"
-                className="w-full mt-10 bg-cyan-600 text-white font-bold py-2 rounded-lg  hover:bg-blue-500"
-                disabled={isSubmitting}
+            <p>
+              <strong className="text-red-500">Note: </strong>
+              <a
+                className="text-blue-600 hover:underline cursor-pointer"
+                onClick={handleOpenModal}
               >
-                {isSubmitting ? "Submitting..." : "Save"}
-              </button>
-            </div>
+                Terms and Conditions
+              </a>
+            </p>
           </div>
-        </form>
-        {isModalOpen && (
-          <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-            <div className="relative bg-white shadow-lg rounded-lg max-w-4xl w-full mx-auto h-[90vh] overflow-y-auto p-8">
-              <button
-                className="absolute top-3 right-3 text-red-700 font-bold hover:text-red-500 "
-                onClick={handleCloseModal}
-              >
-                X
-              </button>
-              <Slide6 />
+          <h2 className="text-2xl font-bold  mt-8 text-cyan-600 mb-10">
+            Sign Up as a Student
+          </h2>
+            <div className="flex flex-col sm:flex-row w-full space-y-4 sm:space-y-0 sm:space-x-4 ">
+              <div className="w-full sm:w-1/2">
+                <label className="block text-gray-800 text-shadow-default font-bold mb-1">
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  id="firstName"
+                  minLength={4}
+                  maxLength={20}
+                  name="firstName"
+                  onChange={handleChange}
+                  onKeyDown={handleNameChar}
+                  value={formData.firstName}
+                  placeholder="Enter First Name"
+                  className={` px-3  bg-transparent  border-gray-500 rounded py-2 border  outline-none w-full ${
+                    errors.firstName ? "border-red-400" : ""
+                  }`}
+                />
+                {errors.firstName && (
+                  <p className="text-red-400 text-base mt-1">
+                    {errors.firstName}
+                  </p>
+                )}
+              </div>
+
+              <div className="w-full sm:w-1/2  ">
+                <label className="block text-gray-800 text-shadow-default font-bold mb-1">
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  id="lastName"
+                  minLength={4}
+                  maxLength={20}
+                  name="lastName"
+                  onChange={handleChange}
+                  onKeyDown={handleNameChar}
+                  value={formData.lastName}
+                  placeholder="Enter Last Name"
+                  className={` px-3  bg-transparent border-gray-500 rounded py-2 border  outline-none w-full ${
+                    errors.lastName ? "border-red-500" : ""
+                  }`}
+                />
+                {errors.lastName && (
+                  <p className="text-red-400 text-base mt-1">
+                    {errors.lastName}
+                  </p>
+                )}
+              </div>
             </div>
-          </div>
-        )}
+
+            <div className="flex flex-col sm:flex-row w-full space-y-4 sm:space-y-0 sm:space-x-4 mt-4 ">
+              {/* Email Field */}
+              <div className="w-full sm:w-1/2   ">
+                <label className="block text-gray-800 text-shadow-default font-bold mb-1">
+                  Email Id
+                </label>
+                <input
+                  type="email"
+                  id="emailId"
+                  name="emailId"
+                  maxLength={40}
+                  value={formData.emailId}
+                  onChange={handleChange}
+                  onInput={handleInput}
+                  placeholder="Enter your Email Id"
+                  className={` px-3  bg-transparent border-gray-500 rounded py-2 border  outline-none w-full ${
+                    errors.emailId ? "border-red-400" : ""
+                  }`}
+                />
+                {errors.emailId && (
+                  <span className="text-red-500 text-sm">{errors.emailId}</span>
+                )}
+              </div>
+
+              {/* Mobile Number Field */}
+              <div className="w-full sm:w-1/2  ">
+                <label className="block text-gray-800 text-shadow-default font-bold  mb-1">
+                  Mobile Number
+                </label>
+                <div className="flex">
+                  <Select
+                    name="countryCode"
+                    id="mobileNumber"
+                    options={countryOptions}
+                    onChange={(selectedOption) => {
+                      setSelectedCountry(selectedOption.country);
+                      setPersonInfo({
+                        ...personInfo,
+                        countryCode: `+${selectedOption.country.phone}`,
+                      });
+                      setFormData({
+                        ...formData,
+                        countryCode: `+${selectedOption.country.phone}`,
+                      });
+                    }}
+                    value={
+                      selectedCountry
+                        ? {
+                            value: selectedCountry.code,
+                            label: `+${selectedCountry.phone} ${selectedCountry.label}`,
+                          }
+                        : null
+                    }
+                    isSearchable
+                    styles={{
+                      menu: (provided) => ({
+                        ...provided,
+                        minWidth: "150px",
+                      }),
+                      control: (provided) => ({
+                        ...provided,
+                        minWidth: "60px",
+                        height: "40px",
+                        backgroundColor: "transparent",
+                      }),
+                      dropdownIndicator: (provided) => ({
+                        ...provided,
+                        display: "none",
+                      }),
+                      indicatorSeparator: () => null,
+                    }}
+                    className="border border-gray-500 rounded-l-md outline-none mr-0"
+                  />
+
+                  <input
+                    maxLength={10}
+                    type="tel"
+                    name="phoneNumber"
+                    placeholder="Enter your Mobile Number"
+                    value={personInfo.phone || ""}
+                    disabled={!selectedCountry}
+                    onChange={(e) => {
+                      const inputValue = e.target.value.replace(/[^0-9]/g, "");
+                      setPersonInfo({ ...personInfo, phone: inputValue });
+                      setFormData({ ...formData, phoneNumber: inputValue });
+                    }}
+                    onInput={(e) => {
+                      const inputValue = e.target.value.replace(/[^0-9]/g, "");
+                      if (
+                        selectedCountry &&
+                        !validateStartDigits(inputValue, selectedCountry)
+                      ) {
+                        e.target.value = "";
+                      }
+                      setPersonInfo({ ...personInfo, phone: inputValue });
+                      setFormData({ ...formData, phoneNumber: inputValue });
+                    }}
+                    className={`w-full px-3  py-2 border border-gray-500 rounded-r-md bg-transparent outline-none ${
+                      selectedCountry && personInfo.phone
+                        ? !validateStartDigits(
+                            personInfo.phone,
+                            selectedCountry
+                          )
+                          ? "border-red-500"
+                          : ""
+                        : ""
+                    }`}
+                    style={{
+                      height: "42px",
+                    }}
+                  />
+                </div>
+                {errors.phoneNumber && (
+                  <span className="text-red-500 text-sm">
+                    {errors.phoneNumber}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row w-full space-y-4 sm:space-y-0 sm:space-x-4 mt-4 ">
+              <div className="w-full sm:w-1/2 ">
+                <label className="block text-gray-800 text-shadow-default font-bold mb-1">
+                  Date of Birth
+                </label>
+                <input
+                  type="date"
+                  id="dob"
+                  name="dob"
+                  value={formData.dob}
+                  // max={
+                  //   new Date(
+                  //     new Date().setFullYear(new Date().getFullYear() - 4) - 1
+                  //   )
+                  //     .toISOString()
+                  //     .split("T")[0]
+                  // }
+                  min={
+                    new Date(
+                      new Date().setFullYear(new Date().getFullYear() - 100)
+                    )
+                      .toISOString()
+                      .split("T")[0]
+                  }
+                  onChange={handleChange}
+                  className={`w-full  bg-transparent py-2 px-3 border border-gray-500 rounded outline-none  ${
+                    errors.dob ? "border-red-500" : ""
+                  }`}
+                  onKeyDown={(e) => e.preventDefault()}
+                ></input>
+                {errors.dob && (
+                  <span className="text-red-500 text-sm">{errors.dob}</span>
+                )}
+              </div>
+
+              <div className="w-full sm:w-1/2  ">
+                <label className="block text-gray-800 text-shadow-default font-bold mb-1">
+                  Location
+                </label>
+                <input
+                  type="text"
+                  id="location"
+                  name="location"
+                  value={formData.location}
+                  onChange={handleChange}
+                  onFocus={handleFocus}
+                  placeholder="Enter your Current Location"
+                  className={`px-3   bg-transparent border-gray-500 rounded py-2 border  outline-none w-full  ${
+                    errors.location ? "border-red-500" : ""
+                  }`}
+                ></input>
+                {errors.location && (
+                  <span className="text-red-500 text-sm">
+                    {errors.location}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row w-full space-y-4 sm:space-y-0 sm:space-x-4 mt-4 ">
+              <div className="w-full sm:w-1/2 ">
+                <label className="block text-gray-800 text-shadow-default font-bold mb-1">
+                  Gender
+                </label>
+                <select
+                  name="gender"
+                  value={formData.gender}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2  bg-transparent border border-gray-500 rounded outline-none "
+                >
+                  <option value="">Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+                {errors.gender && (
+                  <span className="text-red-500 text-sm">{errors.gender}</span>
+                )}
+              </div>
+
+              <div className="w-full sm:w-1/2  ">
+                <label className="block text-gray-800 text-shadow-default font-bold mb-1">
+                  Studying Class
+                </label>
+                <input
+                  type="text"
+                  id="studentClass"
+                  name="studentClass"
+                  value={formData.studentClass}
+                  onChange={handleStudyingClassChange}
+                  onKeyDown={handleNameChar}
+                  placeholder="Enter your Standard/Class"
+                  className={`w-full py-2 px-3 border  bg-transparent border-gray-500 rounded outline-none  ${
+                    errors.studentClass ? "border-red-500" : ""
+                  }`}
+                ></input>
+                {errors.studentClass && (
+                  <span className="text-red-500 text-sm">
+                    {errors.studentClass}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row w-full space-y-4 sm:space-y-0 sm:space-x-4 mt-4 ">
+              <div className="w-full sm:w-1/2  ">
+                <label className="block text-gray-800 text-shadow-default font-bold mb-1">
+                  Board
+                </label>
+                <input
+                  type="text"
+                  id="board"
+                  name="board"
+                  value={formData.board}
+                  onChange={handleChange}
+                  minLength={2}
+                  maxLength={30}
+                  onKeyDown={handleNameChar}
+                  placeholder="Enter your Board"
+                  className={`w-full py-2 px-3  bg-transparent border border-gray-500 rounded outline-none  ${
+                    errors.board ? "border-red-500" : ""
+                  }`}
+                ></input>
+                {errors.board && (
+                  <span className="text-red-500 text-sm">{errors.board}</span>
+                )}
+              </div>
+              <div className=" w-full sm:w-1/2 ">
+                <label className="block text-gray-800 text-shadow-default font-bold mb-1">
+                  School/institution
+                </label>
+                <input
+                  type="text"
+                  id="institution"
+                  name="institution"
+                  value={formData.institution}
+                  maxLength={50}
+                  onKeyDown={handleNameChar}
+                  onChange={handleChange}
+                  placeholder="Enter your School/institution"
+                  className={`w-full py-2 px-3 border border-gray-500 rounded bg-transparent outline-none  ${
+                    errors.institution ? "border-red-500" : ""
+                  }`}
+                ></input>
+                {errors.institution && (
+                  <span className="text-red-500 text-sm">
+                    {errors.institution}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row w-full space-y-4 sm:space-y-0 sm:space-x-4 mt-4">
+              <div className="w-full sm:w-1/2 ">
+                <label className="block text-gray-800 text-shadow-default font-bold mb-1">
+                  Subjects tuition looking for
+                </label>
+                <input
+                  type="text"
+                  name="subjectsLookingFor"
+                  placeholder="Enter Subject you are Looking for"
+                  value={formData.subjectsLookingFor}
+                  maxLength={50}
+                  onChange={handleSubjectChange}
+                  onKeyDown={handleNameChar}
+                  className={`w-full py-2 px-3 border border-gray-500 rounded bg-transparent outline-none  ${
+                    errors.subjectsLookingFor ? "border-red-500" : ""
+                  }`}
+                />
+                {errors.subjectsLookingFor && (
+                  <span className="text-red-500 text-sm">
+                    {errors.subjectsLookingFor}
+                  </span>
+                )}
+              </div>
+              <div className="w-full sm:w-1/2 ">
+                <label className="block text-gray-800 text-shadow-default font-bold mb-1">
+                  Mode of Teaching
+                </label>
+                <select
+                  name="modeOfTeaching"
+                  value={formData.modeOfTeaching}
+                  onChange={handleChange}
+                  className="w-full py-2 px-3 border border-gray-500 rounded bg-transparent outline-none "
+                >
+                  <option value="">Select Mode</option>
+                  <option value="Student Home">Student Home</option>
+                  <option value="Tutor Home">Tutor Home</option>
+                  <option value="Virtual Mode">Virtual Mode</option>
+                </select>
+                {errors.modeOfTeaching && (
+                  <span className="text-red-500 text-sm">
+                    {errors.modeOfTeaching}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row w-full space-y-4 sm:space-y-0 sm:space-x-4 mt-4">
+              <div className="w-full sm:w-1/2 ">
+                <label className="block text-gray-800 text-shadow-default font-bold mb-1">
+                  Your Affordability per month
+                </label>
+                <input
+                  type="text"
+                  name="affordablity"
+                  placeholder="Your affordability per month"
+                  value={formData.affordablity}
+                  onChange={handleAffordChange}
+                  onKeyDown={handleKeyDown}
+                  maxLength={7}
+                  className={`w-full py-2 px-3 border border-gray-500 rounded bg-transparent outline-none  ${
+                    errors.affordablity ? "border-red-500" : ""
+                  }`}
+                />
+                {errors.affordablity && (
+                  <span className="text-red-500 text-sm">
+                    {errors.affordablity}
+                  </span>
+                )}
+              </div>
+
+              <div className="w-full sm:w-1/2 ">
+                <label className="block text-gray-800 text-shadow-default font-bold mb-1">
+                  Available Time slots
+                </label>
+                <select
+                  name="availableTimings"
+                  value={formData.availableTimings}
+                  onChange={handleChange}
+                  className={`w-full py-2 px-3 border border-gray-500 rounded bg-transparent outline-none  ${
+                    errors.availableTimings ? "border-red-500" : ""
+                  }`}
+                >
+                  <option value="">Select Available Timing</option>
+                  {availableTimings.map((timing, index) => (
+                    <option key={index} value={timing}>
+                      {timing}
+                    </option>
+                  ))}
+                </select>
+                {errors.availableTimings && (
+                  <span className="text-red-500 text-sm">
+                    {errors.availableTimings}
+                  </span>
+                )}
+              </div>
+            </div>
+            <div className="flex flex-wrap -mx-2 mb-4">
+              <div className="w-full sm:w-1/2 px-2 ">
+                <label className="block text-gray-800 text-shadow-default font-bold mb-1">
+                  Category
+                </label>
+                <input
+                  type="text"
+                  name="category"
+                  placeholder="Text Here...."
+                  value={formData.category}
+                  onChange={handleChange}
+                  maxLength={30}
+                  className={`w-full   py-2 px-3  bg-transparent border border-gray-500 rounded outline-none  ${
+                    errors.category ? "border-red-500" : ""
+                  }`}
+                />
+                {errors.category && (
+                  <span className="text-red-500 text-sm">
+                    {errors.category}
+                  </span>
+                )}
+              </div>
+              </div>
+              <div className="flex justify-end mb-4">
+                <button
+                  type="submit"
+                  className="w-full mt-10 bg-blue-600 text-white font-bold py-2 rounded-lg  hover:bg-blue-500"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Submitting..." : "Submit"}
+                </button>
+              </div>
+              
+          </form>
+          {isModalOpen && (
+            <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+              <div className="relative bg-white shadow-lg rounded-lg max-w-4xl w-full mx-auto h-[90vh] overflow-y-auto p-8">
+                <button
+                  className="absolute top-3 right-3 text-red-700 font-bold hover:text-red-500 "
+                  onClick={handleCloseModal}
+                >
+                  X
+                </button>
+                <Slide6 />
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </>
   );
