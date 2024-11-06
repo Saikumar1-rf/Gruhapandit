@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { ImCross } from "react-icons/im";
 import { FaCheck, FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
-// import axiosInstance from "./AxiosInstance";
 
 const Forgotpass = () => {
   const [emailId, setEmailId] = useState("");
@@ -46,6 +45,10 @@ const Forgotpass = () => {
           `https://hrms-repository-gruhabase.onrender.com/tuition-application/authenticate/forgotPassword?emailId=${emailId}`
         );
 
+        // try {
+        //   const response = await axios.post(
+        //     `https://tution-application.onrender.com/tuition-application/authenticate/forgotPassword?emailId=${emailId}`
+        //   );
         setOtpSent(true);
         setTimer(60);
         setCanResendOtp(false);
@@ -75,6 +78,7 @@ const Forgotpass = () => {
     }
 
     try {
+      // const url = `https://tution-application.onrender.com/tuition-application/authenticate/resetPassword?emailId=${emailId}&password=${password}&otp=${otp}`;
       const url = `https://hrms-repository-gruhabase.onrender.com/tuition-application/authenticate/resetPassword?emailId=${emailId}&password=${password}&otp=${otp}`;
 
       await axios.patch(
@@ -83,6 +87,7 @@ const Forgotpass = () => {
         { headers: { "Content-Type": "application/json" } }
       );
 
+      
       setShowPopup(false);
       setShowSuccessPopup(true);
       setTimeout(() => {
@@ -103,8 +108,15 @@ const Forgotpass = () => {
     }
   };
 
+  // Password strength validation
+  const isPasswordStrong =
+    password.length >= 8 &&
+    /[A-Z]/.test(password) &&
+    /\d/.test(password) &&
+    /[!@#$%^&*(),.?":{}||<>]/.test(password);
+
   return (
-    <div className="relative flex items-center justify-center min-h-screen bg-blue-100  ">
+    <div className="relative flex items-center justify-center min-h-screen bg-blue-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md bg-blue-100">
         <h1 className="text-3xl font-bold text-center mb-6">Forgot Password</h1>
         <form className="space-y-4">
@@ -191,9 +203,7 @@ const Forgotpass = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium">
-                  New Password
-                </label>
+                <label className="block text-sm font-medium">New Password</label>
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
@@ -216,6 +226,50 @@ const Forgotpass = () => {
                 {errors.password && (
                   <p className="text-red-500 text-sm mt-1">{errors.password}</p>
                 )}
+
+                {/* Password strength validation */}
+                <div className="space-y-2 mt-4">
+                  <div className="flex items-center">
+                    {isPasswordStrong ? (
+                      <FaCheck className="mr-2 h-4 w-4 text-blue-500" />
+                    ) : (
+                      <ImCross className="mr-2 text-red-500 h-3 w-3" />
+                    )}
+                    <p>Password strength: {isPasswordStrong ? "strong" : "weak"}</p>
+                  </div>
+                  <div className="flex items-center">
+                    {password.length >= 8 ? (
+                      <FaCheck className="mr-2 h-4 w-4 text-blue-500" />
+                    ) : (
+                      <ImCross className="mr-2 text-red-500 h-3 w-3" />
+                    )}
+                    <p>At least 8 characters</p>
+                  </div>
+                  <div className="flex items-center">
+                    {/[A-Z]/.test(password) ? (
+                      <FaCheck className="mr-2 h-4 w-4 text-blue-500" />
+                    ) : (
+                      <ImCross className="mr-2 text-red-500 h-3 w-3" />
+                    )}
+                    <p>At least one uppercase letter</p>
+                  </div>
+                  <div className="flex items-center">
+                    {/\d/.test(password) ? (
+                      <FaCheck className="mr-2 h-4 w-4 text-blue-500" />
+                    ) : (
+                      <ImCross className="mr-2 text-red-500 h-3 w-3" />
+                    )}
+                    <p>At least one number</p>
+                  </div>
+                  <div className="flex items-center">
+                    {/[!@#$%^&*(),.?":{}||<>]/.test(password) ? (
+                      <FaCheck className="mr-2 h-4 w-4 text-blue-500" />
+                    ) : (
+                      <ImCross className="mr-2 text-red-500 h-3 w-3" />
+                    )}
+                    <p>At least one special character</p>
+                  </div>
+                </div>
               </div>
 
               <button
@@ -232,16 +286,9 @@ const Forgotpass = () => {
 
       {showSuccessPopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-green-100 p-6 rounded-lg shadow-lg text-center">
-            <h2 className="text-lg font-bold text-green-600 mb-2">
-              Password Reset Successful!
-            </h2>
-            <button
-              onClick={() => setShowSuccessPopup(false)}
-              className="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
-            >
-              OK
-            </button>
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+            <h2 className="text-xl font-bold">Password Reset Successful</h2>
+            <p className="text-gray-500">Your password has been reset successfully!</p>
           </div>
         </div>
       )}
