@@ -52,9 +52,9 @@ function Header() {
         <nav
           className={`${
             isMobileMenuOpen ? "block" : "hidden"
-          } sm:flex sm:items-center sm:space-x-6 absolute sm:relative top-[10vh] left-0 w-full  sm:w-auto bg-white sm:bg-transparent shadow-lg sm:shadow-none p-4 sm:p-0 sm:-mt-28`}
+          } sm:flex sm:items-center sm:space-x-6 absolute sm:relative top-[10vh] left-0 w-full sm:w-auto bg-white sm:bg-transparent shadow-lg sm:shadow-none p-4 sm:p-0 sm:-mt-28`}
         >
-          <ul className="flex flex-col sm:flex-row justify-between space-y-4 sm:space-y-0 sm:space-x-6  sm:mt-0 ">
+          <ul className="flex flex-col sm:flex-row justify-between space-y-4 sm:space-y-0 sm:space-x-6 mt-4 sm:mt-0 pb-10">
             <li>
               <NavLink
                 to="/"
