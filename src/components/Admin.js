@@ -80,6 +80,9 @@ const Admin = () => {
         <li>
           <Link to="/dashboard" className="hover:text-blue-300">Create Posts</Link>
         </li>
+        <li>
+          <Link to="/emailtemplate" className="hover:text-blue-300">Email Template</Link>
+        </li>
       </ul>
     </div>
   
