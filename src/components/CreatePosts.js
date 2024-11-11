@@ -167,6 +167,14 @@ const CreatePosts = () => {
                   Create Posts
                 </Link>
               </li>
+              <li>
+                <Link
+                  to="/emailtemplate"
+                  className="hover:text-blue-300 text-sm sm:text-base"
+                >
+                 Email Template
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

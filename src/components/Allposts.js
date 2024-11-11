@@ -55,6 +55,9 @@ function Allposts() {
             <li>
               <Link to="/dashboard" className="hover:text-blue-500">Create Posts</Link>
             </li>
+            <li>
+              <Link to="/emailtemplate" className="hover:text-blue-500">Email Template</Link>
+            </li>
           </ul>
         </div>
       </div>
