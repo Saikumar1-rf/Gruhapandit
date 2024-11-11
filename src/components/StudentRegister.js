@@ -25,7 +25,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
     availableTimings: "",
   });
   const navigate = useNavigate();
-  const [showModal, setShowModal] = useState(false);
+  
   const [isSubmitting, setIsSubmitting] = useState(false);
   //Mobile Number Validation//
   const [selectedCountry, setSelectedCountry] = useState("");
@@ -54,7 +54,9 @@ const StudentRegister = ({ setIsSubmitted }) => {
     const { name, value } = e.target;
     let errorMessage = "";
 
-    if (/^\d+$/.test(value)) {
+    if (/^\s/.test(value)) {
+      errorMessage = "The input should not start with a space.";
+    } else if (/^\d+$/.test(value)) {
       if (Number(value) < 1 || Number(value) > 12) {
         errorMessage = "Please enter a number between 1 and 12";
       }
@@ -66,7 +68,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
         errorMessage = "Studying Class can only have up to 30 characters";
       }
     }
-
+  
     setErrors((prevErrors) => ({
       ...prevErrors,
       studentClass: errorMessage,
@@ -84,26 +86,35 @@ const StudentRegister = ({ setIsSubmitted }) => {
   const handleSubjectChange = (e) => {
     const { name, value } = e.target;
     let errorMessage = "";
-
-    const validInputPattern = /^.*$/;
-
-    if (!validInputPattern.test(value)) {
-      errorMessage =
-      "The input contains invalid characters.";
+  
+    // Updated pattern to disallow leading space
+    const validInputPattern = /^[^\s].*$/;
+  
+    if (value === "") {
+      errorMessage = ""; // Allow empty input to reset the field
+    } else if (!validInputPattern.test(value)) {
+      errorMessage = "The input should not start with a space.";
     }
-
+  
     setErrors((prevErrors) => ({
       ...prevErrors,
       subjectsLookingFor: errorMessage,
     }));
-
+  
     if (!errorMessage && value.length <= 50) {
       setFormData((prevData) => ({
         ...prevData,
         [name]: value,
       }));
+    } else if (value === "") {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value, // Update formData to allow empty string
+      }));
     }
   };
+  
+  
 
   const [availableTimings, setTimings] = useState([]);
 
@@ -185,6 +196,8 @@ const StudentRegister = ({ setIsSubmitted }) => {
     e.preventDefault();
 
     const newErrors = validate();
+    setErrors(newErrors);
+
     if (Object.keys(newErrors).length === 0) {
       setIsSubmitting(true); // Set submitting state
       try {
@@ -211,11 +224,9 @@ const StudentRegister = ({ setIsSubmitted }) => {
         formDataToSend.append("availableTimings", formData.availableTimings);
         // formDataToSend.append("file", formData.file); // Add the file if needed
 
-        // console.log("form submit", formDataToSend);
-
-        // Axios POST request with proper headers for FormData
         const response = await axios.post(
           "https://hrms-repository-gruhabase.onrender.com/tuition-application/student/create",
+          // "https://tution-application.onrender.com/tuition-application/student/create",
           formDataToSend,
           {
             headers: {
@@ -234,13 +245,39 @@ const StudentRegister = ({ setIsSubmitted }) => {
 
         setIsSubmitted(true);
         console.log("navigated");
-      } catch (error) {
-        setIsSubmitting(false); // Reset submitting state on error
+      }catch (error) {
+      setIsSubmitting(false);
+
+      if (error.response) {
+        // Check if the error status is 400 and extract the message
+        if (error.response.status === 400) {
+          // console.log(error.response.data.split(":")[1])
+          const errorMessage = error.response.data.split(":")[1]
+
+
+          setErrors({
+            // apiError: backendErrorMessage,
+            emailId: errorMessage.includes("email id") && errorMessage,
+            phoneNumber:errorMessage.includes("phone number") && errorMessage,
+            dob:errorMessage.includes("Date of birth") && errorMessage,
+            location:errorMessage.includes("location") && errorMessage,
+            studentClass:errorMessage.includes("studentClass") && errorMessage,
+            board:errorMessage.includes("board") && errorMessage,
+            institution:errorMessage.includes("institution") && errorMessage,
+            category:errorMessage.includes("category") && errorMessage,
+            subjectsLookingFor:errorMessage.includes("subjectsLookingFor") && errorMessage,
+            modeOfTeaching:errorMessage.includes("modeOfTeaching") && errorMessage,
+            availableTimings:errorMessage.includes("availableTimings") && errorMessage,
+          });
+        } else {
+          setErrors({ apiError: "An error occurred while submitting the form." });
+        }
+      } else {
+        setErrors({ apiError: "Network error. Please try again later." });
       }
-    } else {
-      setErrors(newErrors); // Show validation errors if any
     }
-  };
+  }
+};
 
   const handleAffordChange = (e) => {
     const { name, value } = e.target;
@@ -271,21 +308,34 @@ const StudentRegister = ({ setIsSubmitted }) => {
     }
   };
 
-  const handleKeyDown = (e) => {
-    if (
-      e.key === "Backspace" ||
-      e.key === "Delete" ||
-      e.key === "Tab" ||
-      e.key === "Escape" ||
-      e.key === "Enter" ||
-      e.key === "ArrowLeft" ||
-      e.key === "ArrowRight" ||
-      e.key === "."
-    ) {
-      return;
+  const handleEmailChange = (e) => {
+    const { name, value } = e.target;
+  
+    // Convert input to lowercase and remove spaces
+    const lowercaseValue = value.replace(/\s/g, "").toLowerCase();
+    
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: lowercaseValue,
+    }));
+  
+    // Set an error if any uppercase letters were in the original input
+    if (/[A-Z]/.test(value)) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        emailId: "Email should not contain uppercase letters.",
+      }));
+    } else {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        emailId: "",
+      }));
     }
+  };
+  
 
-    if (!/^[0-9]$/.test(e.key)) {
+  const handleKeyDown = (e) => {
+    if(e.key === " "){
       e.preventDefault();
     }
   };
@@ -340,6 +390,13 @@ const StudentRegister = ({ setIsSubmitted }) => {
       setErrors((prevErrors) => ({
         ...prevErrors,
         studentClass: "Zero is not allowed as a valid entry.",
+      }));
+      return;
+    }
+    if ((name === "firstName" || name === "lastName" || name === "category") && /[^a-zA-Z\s]/.test(value)) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: "Only alphabetic characters are allowed.",
       }));
       return;
     }
@@ -400,6 +457,8 @@ const StudentRegister = ({ setIsSubmitted }) => {
     }
   };
 
+
+
   //validate first Name
   const handleNameChar = (e) => {
     const key = e.key;
@@ -440,7 +499,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
       /^(?!\d)[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*@(gmail|yahoo|outlook|hotmail|example|sai)\.(com|net|org|in|edu|gov|mil|us|info|org\.in)$/;
 
     if (!formData.emailId) {
-      newErrors.emailId = "emailId is required";
+      newErrors.emailId = "email Id is required";
     } else if (!emailRegex.test(formData.emailId)) {
       newErrors.emailId = "Invalid email format";
     }
@@ -548,8 +607,8 @@ const StudentRegister = ({ setIsSubmitted }) => {
               </a>
             </p>
           </div>
-          <h2 className="text-2xl font-bold  mt-8 text-cyan-600 mb-10">
-            Sign Up as a Student
+          <h2 className="text-2xl font-bold  mt-8 text-black-600 mb-10">
+            STUDENT REGISTRATION
           </h2>
             <div className="flex flex-col sm:flex-row w-full space-y-4 sm:space-y-0 sm:space-x-4 ">
               <div className="w-full sm:w-1/2">
@@ -559,11 +618,11 @@ const StudentRegister = ({ setIsSubmitted }) => {
                 <input
                   type="text"
                   id="firstName"
-                  minLength={4}
+                  minLength={3}
                   maxLength={20}
                   name="firstName"
                   onChange={handleChange}
-                  onKeyDown={handleNameChar}
+                  // onKeyDown={handleNameChar}
                   value={formData.firstName}
                   placeholder="Enter First Name"
                   className={` px-3  bg-transparent  border-gray-500 rounded py-2 border  outline-none w-full ${
@@ -584,11 +643,11 @@ const StudentRegister = ({ setIsSubmitted }) => {
                 <input
                   type="text"
                   id="lastName"
-                  minLength={4}
+                  minLength={3}
                   maxLength={20}
                   name="lastName"
                   onChange={handleChange}
-                  onKeyDown={handleNameChar}
+                  // onKeyDown={handleNameChar}
                   value={formData.lastName}
                   placeholder="Enter Last Name"
                   className={` px-3  bg-transparent border-gray-500 rounded py-2 border  outline-none w-full ${
@@ -604,7 +663,6 @@ const StudentRegister = ({ setIsSubmitted }) => {
             </div>
 
             <div className="flex flex-col sm:flex-row w-full space-y-4 sm:space-y-0 sm:space-x-4 mt-4 ">
-              {/* Email Field */}
               <div className="w-full sm:w-1/2   ">
                 <label className="block text-gray-800 text-shadow-default font-bold mb-1">
                   Email Id
@@ -615,8 +673,8 @@ const StudentRegister = ({ setIsSubmitted }) => {
                   name="emailId"
                   maxLength={40}
                   value={formData.emailId}
-                  onChange={handleChange}
-                  onInput={handleInput}
+                  onChange={handleEmailChange}
+                  onKeyDown={handleKeyDown}
                   placeholder="Enter your Email Id"
                   className={` px-3  bg-transparent border-gray-500 rounded py-2 border  outline-none w-full ${
                     errors.emailId ? "border-red-400" : ""
@@ -733,13 +791,13 @@ const StudentRegister = ({ setIsSubmitted }) => {
                   id="dob"
                   name="dob"
                   value={formData.dob}
-                  // max={
-                  //   new Date(
-                  //     new Date().setFullYear(new Date().getFullYear() - 4) - 1
-                  //   )
-                  //     .toISOString()
-                  //     .split("T")[0]
-                  // }
+                  max={
+                    new Date(
+                      new Date().setFullYear(new Date().getFullYear() - 2) - 1
+                    )
+                      .toISOString()
+                      .split("T")[0]
+                  }
                   min={
                     new Date(
                       new Date().setFullYear(new Date().getFullYear() - 100)
@@ -749,7 +807,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
                   }
                   onChange={handleChange}
                   className={`w-full  bg-transparent py-2 px-3 border border-gray-500 rounded outline-none  ${
-                    errors.dob ? "border-red-500" : ""
+                    errors.dob ? "border-red-400" : ""
                   }`}
                   onKeyDown={(e) => e.preventDefault()}
                 ></input>
@@ -769,9 +827,9 @@ const StudentRegister = ({ setIsSubmitted }) => {
                   value={formData.location}
                   onChange={handleChange}
                   onFocus={handleFocus}
-                  placeholder="Enter your Current Location"
+                  placeholder="Choose your Current Location"
                   className={`px-3   bg-transparent border-gray-500 rounded py-2 border  outline-none w-full  ${
-                    errors.location ? "border-red-500" : ""
+                    errors.location ? "border-red-400" : ""
                   }`}
                 ></input>
                 {errors.location && (
@@ -812,7 +870,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
                   name="studentClass"
                   value={formData.studentClass}
                   onChange={handleStudyingClassChange}
-                  onKeyDown={handleNameChar}
+                  //onKeyDown={handleNameChar}
                   placeholder="Enter your Standard/Class"
                   className={`w-full py-2 px-3 border  bg-transparent border-gray-500 rounded outline-none  ${
                     errors.studentClass ? "border-red-500" : ""
@@ -839,7 +897,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
                   onChange={handleChange}
                   minLength={2}
                   maxLength={30}
-                  onKeyDown={handleNameChar}
+                  //onKeyDown={handleNameChar}
                   placeholder="Enter your Board"
                   className={`w-full py-2 px-3  bg-transparent border border-gray-500 rounded outline-none  ${
                     errors.board ? "border-red-500" : ""
@@ -859,7 +917,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
                   name="institution"
                   value={formData.institution}
                   maxLength={50}
-                  onKeyDown={handleNameChar}
+                  //onKeyDown={handleNameChar}
                   onChange={handleChange}
                   placeholder="Enter your School/institution"
                   className={`w-full py-2 px-3 border border-gray-500 rounded bg-transparent outline-none  ${
@@ -886,7 +944,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
                   value={formData.subjectsLookingFor}
                   maxLength={50}
                   onChange={handleSubjectChange}
-                  onKeyDown={handleNameChar}
+                  //onKeyDown={handleNameChar}
                   className={`w-full py-2 px-3 border border-gray-500 rounded bg-transparent outline-none  ${
                     errors.subjectsLookingFor ? "border-red-500" : ""
                   }`}
@@ -899,7 +957,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
               </div>
               <div className="w-full sm:w-1/2 ">
                 <label className="block text-gray-800 text-shadow-default font-bold mb-1">
-                  Mode of Teaching
+                  Mode of Learning
                 </label>
                 <select
                   name="modeOfTeaching"
@@ -978,7 +1036,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
                 <input
                   type="text"
                   name="category"
-                  placeholder="Text Here...."
+                  placeholder="Enter Category"
                   value={formData.category}
                   onChange={handleChange}
                   maxLength={30}

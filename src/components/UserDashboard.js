@@ -67,8 +67,11 @@ const TutorDash = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("jwtToken");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userType");
     navigate("/");
   };
+  
 
   const handleProfileClick = () => {
     setShowProfile(true); // Open the profile modal

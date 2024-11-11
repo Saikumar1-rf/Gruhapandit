@@ -40,9 +40,10 @@ function App() {
                 <ProtectedRoute>
                   <Admin />
                  </ProtectedRoute>
-              }   
+              }
                 />
               <Route path='/postsdash' element={<Postsdash />} />
+              <Route path='/slide6'element={<Slide6/>}></Route>
               <Route path='/dashboard' element={<CreatePosts />} />
               <Route path='/allposts' element={<Allposts />} />
               <Route path='/payment'element={<Payment/>}></Route>

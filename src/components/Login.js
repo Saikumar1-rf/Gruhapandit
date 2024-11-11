@@ -31,7 +31,6 @@ const Login = () => {
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&+#^=])[A-Za-z\d@$!%?&+#^=]{8,}$/;
     return passwordPattern.test(input) && !/\s/.test(input);
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setEmailError("");
@@ -49,13 +48,9 @@ const Login = () => {
       return;
     }
 
-    // try {
-    //   const response = await axios.post(
-    //     "https://tution-application.onrender.com/tuition-application/authenticate/login",
-    //     { emailId, password }
-    //   );
     try {
       const response = await axios.post(
+        // "https://tution-application.onrender.com/tuition-application/authenticate/login",
         "https://hrms-repository-gruhabase.onrender.com/tuition-application/authenticate/login",
         { emailId, password }
       );
@@ -68,14 +63,26 @@ const Login = () => {
       login();
       navigate(userType === "admin" ? "/posts" : "/userDashboard");
     } catch (error) {
-      setEmailError("Login failed. Please try again.");
+      if (error.response && error.response.data) {
+        const errorMessage = error.response.data.message;
+
+        if (error.response.status === 404) {
+          setEmailError("Account does not exist. Please register first.");
+        } else if (error.response.status === 401) {
+          setEmailError("Invalid email ID or password. Please try again.");
+        } else {
+          setEmailError(errorMessage || "Login failed. Please try again.");
+        }
+      } else {
+        setEmailError("Login failed. Please try again.");
+      }
       console.error("Login error:", error);
     }
   };
 
   const handleEmailChange = (e) => {
     const value = e.target.value;
-    const formattedValue = value.replace(/\s+/g, "").toLowerCase(); // Remove spaces and convert to lowercase
+    const formattedValue = value.replace(/\s+/g, "").toLowerCase();
 
     setEmailId(formattedValue);
   };

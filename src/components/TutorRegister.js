@@ -117,6 +117,15 @@ const TutorRegister = () => {
       } else {
         setErrors({ ...errors, chargesPerHour: "Charges per hour must be a number." });
       }
+    } 
+    else if (name === "firstName" || name === "lastName" || name === "category") {
+      // Only allow alphabetic characters for firstName, lastName, and category fields
+      if (/[^a-zA-Z\s]/.test(value)) {
+        setErrors({ ...errors, [name]: "Only alphabetic characters are allowed." });
+      } else {
+        setFormData({ ...formData, [name]: value });
+        setErrors({ ...errors, [name]: "" });
+      }
     } else {
       setFormData({ ...formData, [name]: value });
     }
@@ -144,10 +153,16 @@ const TutorRegister = () => {
 
   const validateForm = () => {
     let errors = {};
-    // const emailRegex = /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/;
+    const emailRegex = /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/;
     if (!formData.firstName) errors.firstName = "First Name is required";
     if (!formData.lastName) errors.lastName = "Last Name is required";
-    if(!formData.emailId) errors.emailId="EmailId is required"
+    if (!formData.emailId) {
+      errors.emailId = "EmailId is required";
+    } else if (!emailRegex.test(formData.emailId)) {
+      errors.emailId = "Invalid email format";
+    } else if (/[A-Z]/.test(formData.emailId)) {
+      errors.emailId = "EmailId cannot contain uppercase letters";
+    }
     const { phoneNumber } = formData;
     const allSameDigits = /^(\d)\1*$/.test(phoneNumber);
     if (!phoneNumber) {
@@ -184,12 +199,14 @@ const TutorRegister = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validateForm();
+
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
       try {
         const response = await axios.post(
           "https://hrms-repository-gruhabase.onrender.com/tuition-application/tutor/create",
+              // "https://tution-application.onrender.com/tuition-application/tutor/create",
           formData,
           {
             headers: {
@@ -198,17 +215,38 @@ const TutorRegister = () => {
           }
         );
         navigate("/create-password", { state: { emailId: formData.emailId } });
-        // console.log("Form submitted successfully:", response.data);
       } catch (error) {
-        console.error(
-          "Error submitting the form:",
-          error.response?.data || error.message
-        );
-        setErrors({ apiError: "An error occurred while submitting the form." });
+        if (error.response) {
+          // Check if the error status is 400 and extract the message
+          if (error.response.status === 400) {
+            // console.log(error.response.data.split(":")[1])
+            const errorMessage = error.response.data.split(":")[1]
+  
+            // const backendErrorMessage = error.response.data.message || "Already Data  exists"; 
+            setErrors({
+              // apiError: backendErrorMessage,
+              emailId: errorMessage.includes("email id") && errorMessage,
+              phoneNumber:errorMessage.includes("phone number") && errorMessage,
+              dob:errorMessage.includes("Date of birth") && errorMessage,
+              // location:errorMessage.includes("location") && errorMessage,
+              board:errorMessage.includes("board") && errorMessage,
+              institution:errorMessage.includes("institution") && errorMessage,
+              category:errorMessage.includes("category") && errorMessage,
+              subjectsYouAreExpertAt:errorMessage.includes("subjectsYouAreExpertAt") && errorMessage,
+              modeOfTeaching:errorMessage.includes("modeOfTeaching") && errorMessage,
+              availableTimings:errorMessage.includes("availableTimings") && errorMessage,
+              highestQualification:errorMessage.includes("highestQualification") && errorMessage,
+              nationalId: errorMessage.includes("NationalId")});
+          } else {
+            setErrors({ apiError: "An error occurred while submitting the form." });
+          }
+        } else {
+          setErrors({ apiError: "Network error. Please try again later." });
+        }
       }
     }
   };
-
+  
     const generateTimings = () => {
     const timings = [];
     const startHour = 0; // 00:00 (12 AM in 24-hour format)
@@ -243,6 +281,37 @@ const TutorRegister = () => {
 
     return timings;
   }; 
+  const handleEmailChange = (e) => {
+    const { name, value } = e.target;
+  
+    // Convert input to lowercase and remove spaces
+    const lowercaseValue = value.replace(/\s/g, "").toLowerCase();
+    
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: lowercaseValue,
+    }));
+  
+    // Set an error if any uppercase letters were in the original input
+    if (/[A-Z]/.test(value)) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        emailId: "Email should not contain uppercase letters.",
+      }));
+    } else {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        emailId: "",
+      }));
+    }
+  };
+  
+
+  const handleKeyDown = (e) => {
+    if (e.key === " ") {
+      e.preventDefault(); // Prevent the space key from being typed
+    }
+  };
 
   const formatTime = (hour, minute) => {
     const amPm = hour < 12 || hour === 24 ? "AM" : "PM";
@@ -302,6 +371,14 @@ const TutorRegister = () => {
       }));
     }
   };
+  
+  const handleFocus = () => {
+    if (!isLocationDetected) {
+      detectLocation();
+    }
+  };
+
+
 
   return (
     <div className="flex py-20 justify-center items-center min-h-screen bg-gray-100 mt-2 bg-gradient-to-r from-gray-200 to-blue-300">
@@ -324,7 +401,7 @@ const TutorRegister = () => {
             </p>
           </div>
           <h2 className="text-2xl font-bold text-center text-gray-800 text-shadow-default mb-10 mt-5">
-            Tutor Registration
+            TUTOR REGISTRATION
           </h2>
           <div className="flex flex-wrap -mx-2 mb-4">
             <div className="w-full sm:w-1/2 px-2">
@@ -339,7 +416,7 @@ const TutorRegister = () => {
                 onChange={handleChange}
                 minLength={3}
                 maxLength={20}
-                className="w-full px-3 mt-2 bg-transparent border-gray-400 py-2 border rounded"
+                className="w-full px-3 outline-none py-2 border rounded mt-2 bg-transparent border-gray-400"
               />
               {errors.firstName && (
                 <p className="text-red-400 text-base mt-1">
@@ -375,20 +452,22 @@ const TutorRegister = () => {
                 placeholder="Enter Email ID"
                 value={formData.emailId}
                 maxLength={40}
-                onChange={handleChange}
-                className="w-full px-3 mt-2 bg-transparent border border-gray-400 py-2 rounded"
+                onChange={handleEmailChange}
+                onKeyDown={handleKeyDown}
+                className="w-full px-3 outline-none py-2 border rounded mt-2 bg-transparent border-gray-400"
               />
               {errors.emailId && (
                 <p className="text-red-400 text-base mt-1">{errors.emailId}</p>
               )}
             </div>
-            <div className="w-full sm:w-1/2 px-2 mt-2">
-              <label className="block text-gray-800 font-bold">
+          <div className="w-full sm:w-1/2 px-2 mt-2">
+              <label className="block text-gray-800 text-shadow-default font-bold  mb-1">
                 Mobile Number
               </label>
               <div className="flex">
                 <Select
                   name="countryCode"
+                  id="mobileNumber"
                   options={countryOptions}
                   onChange={(selectedOption) => {
                     setSelectedCountry(selectedOption.country);
@@ -411,17 +490,25 @@ const TutorRegister = () => {
                   }
                   isSearchable
                   styles={{
+                    menu: (provided) => ({
+                      ...provided,
+                      minWidth: "150px",
+                    }),
                     control: (provided) => ({
                       ...provided,
                       minWidth: "60px",
                       height: "40px",
-                      background:"transparent"
+                      backgroundColor: "transparent",
                     }),
-                    dropdownIndicator: () => ({ display: "none" }),
+                    dropdownIndicator: (provided) => ({
+                      ...provided,
+                      display: "none",
+                    }),
+                    indicatorSeparator: () => null,
                   }}
-                  className="w-1/4 border border-gray-500 rounded-l-md"
+                  className="border border-gray-500 rounded-l-md outline-none mr-0"
                 />
-                                <input
+                <input
                   maxLength={10}
                   type="tel"
                   name="phoneNumber"
@@ -429,24 +516,22 @@ const TutorRegister = () => {
                   value={personInfo.phone || ""}
                   disabled={!selectedCountry}
                   onChange={(e) => {
-                    const inputvalue = e.target.value.replace(/[^0-9]/g, "");
-                    setPersonInfo({ ...personInfo, phone: inputvalue });
-                    setFormData({ ...formData, phoneNumber: inputvalue });
+                    const inputValue = e.target.value.replace(/[^0-9]/g, "");
+                    setPersonInfo({ ...personInfo, phone: inputValue });
+                    setFormData({ ...formData, phoneNumber: inputValue });
                   }}
                   onInput={(e) => {
                     const inputValue = e.target.value.replace(/[^0-9]/g, "");
-
                     if (
                       selectedCountry &&
                       !validateStartDigits(inputValue, selectedCountry)
                     ) {
                       e.target.value = "";
                     }
-
                     setPersonInfo({ ...personInfo, phone: inputValue });
                     setFormData({ ...formData, phoneNumber: inputValue });
                   }}
-                  className={`w-[225px] px-4 py-4 border border-gray-500  bg-transparent outline-none   ${
+                  className={`w-full px-3  py-2 border border-gray-500 rounded-r-md bg-transparent outline-none ${
                     selectedCountry && personInfo.phone
                       ? !validateStartDigits(personInfo.phone, selectedCountry)
                         ? "border-red-500"
@@ -455,7 +540,6 @@ const TutorRegister = () => {
                   }`}
                   style={{
                     height: "42px",
-                    background:"transparent"
                   }}
                 />
               </div>
@@ -464,7 +548,7 @@ const TutorRegister = () => {
                   {errors.phoneNumber}
                 </span>
               )}
-            </div>
+            </div> 
           </div>
           <div className="flex flex-wrap -mx-2 mb-4">
             <div className="w-full sm:w-1/2 px-2">
@@ -474,9 +558,10 @@ const TutorRegister = () => {
               <input
                 type="text"
                 name="location"
-                placeholder="Enter Location"
+                placeholder="Choose Your Current Location"
                 value={formData.location}
                 onChange={handleChange}
+                onFocus={handleFocus}
                 className="w-full px-3 outline-none py-2 border rounded mt-2 bg-transparent border-gray-400"
               />
               {errors.location && (
@@ -512,13 +597,13 @@ const TutorRegister = () => {
                 type="date"
                 name="dob"
                 value={formData.dob}
-                // max={
-                //   new Date(
-                //     new Date().setFullYear(new Date().getFullYear() - 16) - 1
-                //   )
-                //     .toISOString()
-                //     .split("T")[0]
-                // }
+                max={
+                  new Date(
+                    new Date().setFullYear(new Date().getFullYear() - 2) - 1
+                  )
+                    .toISOString()
+                    .split("T")[0]
+                }
                 min={
                   new Date(
                     new Date().setFullYear(new Date().getFullYear() - 100)
@@ -681,7 +766,9 @@ const TutorRegister = () => {
                 placeholder={
                   formData.nationalIdType === "Aadhar Card"
                     ? "Enter 12-digit Aadhar Number"
-                    : "Enter 10-character PAN"
+                    :formData.nationalIdType === "Pan Card"
+                    ? "Enter 10-character PAN"
+                    :"Enter The Number"
                 }
                 />
               {errors.nationalIdNum && (

@@ -5,7 +5,7 @@ const Slide4 = () => {
   return (
     <div className="slide2-container border shadow-xl py-10">
       <div className="about-us-section flex flex-col lg:flex-row items-center lg:items-start lg:justify-between lg:space-x-8 p-6">
-        <div className="w-full lg:w-1/2">
+        <div className="w-full lg:w-[670px] ml-6">
           <img
             src="https://images.unsplash.com/photo-1509869175650-a1d97972541a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="AboutUsImage"
@@ -15,11 +15,12 @@ const Slide4 = () => {
 
         <div className="w-full lg:w-1/2 mt-6 lg:mt-0">
           <h2 className="text-3xl sm:text-4xl text-cyan-500 font-bold mb-4">
-            For Tutors
+            <Link to="/register/tutor"> For Tutors</Link>
           </h2>
           <p className="text-base sm:text-lg leading-relaxed font-bold text-gray-800">
-            If you're a tutor looking to share your expertise, Gruhapandit
-            tuitions provides you with the perfect platform. You can:
+            If you're a tutor looking to share your expertise,{" "}
+            <Link to="/register/tutor"> Gruhapandit tuitions</Link> provides you
+            with the perfect platform. You can:
           </p>
 
           <ul className="list-disc pl-6 sm:pl-10 space-y-2 text-base sm:text-lg leading-relaxed mt-4 text-gray-800">
@@ -54,3 +55,4 @@ const Slide4 = () => {
 };
 
 export default Slide4;
+ 

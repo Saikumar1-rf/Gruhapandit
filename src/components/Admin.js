@@ -86,7 +86,7 @@ const Admin = () => {
     {/* Main Content Area */}
     <div className="flex-1 flex flex-col">
       <header className="bg-blue-200 flex items-center h-14 justify-between px-4 py-2">
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 ml-auto mt-1">
           <FaEnvelope className="text-black w-4 h-4" />
           <FaBell className="text-black w-4 h-4" />
           <div className="relative flex items-center" ref={dropdownRef}>

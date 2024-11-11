@@ -44,7 +44,6 @@ const Forgotpass = () => {
         const response = await axios.post(
           `https://hrms-repository-gruhabase.onrender.com/tuition-application/authenticate/forgotPassword?emailId=${emailId}`
         );
-
         // try {
         //   const response = await axios.post(
         //     `https://tution-application.onrender.com/tuition-application/authenticate/forgotPassword?emailId=${emailId}`
@@ -60,9 +59,18 @@ const Forgotpass = () => {
     }
   };
 
-  const handleResendOtp = () => {
-    setTimer(60);
-    setCanResendOtp(false);
+  const handleResendOtp = async () => {
+    try {
+      await axios.post(
+        `https://hrms-repository-gruhabase.onrender.com/tuition-application/authenticate/forgotPassword?emailId=${emailId}`
+      );
+      setTimer(60); // Restart the timer
+      setCanResendOtp(false); // Disable resend button
+      setOtpSent(true); // Indicate that the OTP was resent successfully
+    } catch (error) {
+      console.error("Error resending OTP:", error);
+      setErrors({ otp: "Failed to resend OTP. Please try again." });
+    }
   };
 
   const handleResetPassword = async () => {
@@ -214,6 +222,9 @@ const Forgotpass = () => {
                     maxLength={15}
                     onChange={(e) => setPassword(e.target.value)}
                     className="w-full px-4 py-2 border rounded-lg"
+                    style={{
+                      WebkitTextSecurity: password ? "none" : "disc",
+                    }}
                   />
                   <button
                     type="button"

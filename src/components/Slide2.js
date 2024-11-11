@@ -2,6 +2,7 @@ import React from "react";
 import { BiTimer } from "react-icons/bi";
 import { FaBookReader, FaGraduationCap } from "react-icons/fa";
 import { MdOutlineSupportAgent } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 const Slide2 = () => {
   return (
@@ -21,29 +22,31 @@ const Slide2 = () => {
               About Us
             </h2>
             <p className="text-lg leading-relaxed font-bold text-gray-600">
-              At Gruhapandit Tuitions, we strive to make learning engaging,
-              effective, and accessible for every student. Whether you choose
-              online tuition or offline tuition, our goal is to help you reach
-              your academic goals with confidence.
+              At <Link to="/login">Gruhapandit Tuitions</Link>, we strive to
+              make learning engaging, effective, and accessible for every
+              student. Whether you choose
+              <Link to="/login"> online tuition or offline tuition</Link>, our
+              goal is to help you reach your academic goals with confidence.
               <p className="text-gray-600">
-                Join Gruhapandit Tuitions today and take the first step toward
-                academic excellence!
+                Join <Link to="/login">Gruhapandit Tuitions</Link> today and
+                take the first step toward academic excellence!
               </p>
             </p>
             <p className="text-lg leading-relaxed font-bold mt-4 text-gray-600">
-              Join Gruhapandit Tuitions as a Tutor – Empower Students, Shape
-              Futures!
+              Join <Link to="/login">Gruhapandit Tuitions</Link> as a Tutor –
+              Empower Students, Shape Futures!
               <span className="inline-flex items-center">
                 <FaGraduationCap className="ml-2" />
               </span>
             </p>
             <p className="text-lg leading-relaxed mt-10 shadow-lg p-6 bg-slate-400 rounded-lg font-bold text-gray-800">
               Are you passionate about teaching and helping students excel
-              academically? Gruhapandit Tuitions is looking for dedicated and
-              experienced tutors to join our growing community of educators.
-              Whether you specialize in online teaching or prefer offline
-              tuition, we provide the perfect platform for you to share your
-              expertise and make a lasting impact on students' lives.
+              academically? <Link to="/login">Gruhapandit Tuitions</Link> is
+              looking for dedicated and experienced tutors to join our growing
+              community of educators. Whether you specialize in online teaching
+              or prefer offline tuition, we provide the perfect platform for you
+              to share your expertise and make a lasting impact on students
+              lives.
             </p>
           </div>
         </div>
@@ -53,7 +56,8 @@ const Slide2 = () => {
         <div className="bg-white shadow-lg rounded-lg p-8 max-w-7xl mt-10 mx-auto">
           <div>
             <h1 className="text-gray-700 font-bold justify-center text-center mb-10 text-4xl">
-              Why Choose to Teach at Gruhapandit Tuitions?
+              Why Choose to Teach at
+              <Link to="/login"> Gruhapandit Tuitions?</Link>
             </h1>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
@@ -76,7 +80,7 @@ const Slide2 = () => {
               </div>
               <h3 className="text-2xl font-bold">Teach What You Love</h3>
               <p className="text-gray-600 mt-4 text-start px-4">
-                Focus on your areas of expertise, whether it’s Math tuitions,
+                Focus on your areas of expertise, whether it’s Maths tuitions,
                 Science tuitions, English tuitions, or any other subject. Our
                 platform allows you to teach a wide variety of subjects and
                 grade levels, from primary school to high school.
@@ -91,8 +95,9 @@ const Slide2 = () => {
               <p className="text-gray-600 mt-4 text-start px-4">
                 As a Gruhapandit tutor, you will have access to tools,
                 resources, and support to help you manage your classes
-                effectively. Whether you're teaching online or offline, we
-                ensure you have everything you need to succeed.
+                effectively. Whether you're teaching{" "}
+                <Link to="/login">online or offline</Link>, we ensure you have
+                everything you need to succeed.
               </p>
             </div>
           </div>
@@ -103,3 +108,4 @@ const Slide2 = () => {
 };
 
 export default Slide2;
+ 

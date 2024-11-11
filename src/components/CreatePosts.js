@@ -132,7 +132,7 @@ const CreatePosts = () => {
 
   return (
     <div>
-      <div className="h-screen flex mt-20">
+      <div className="h-screen flex mt-14">
         <div
           className="bg-gray-200 w-2/5
         
