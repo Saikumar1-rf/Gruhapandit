@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Home from './components/Home';
 import './App.css';
@@ -17,16 +17,25 @@ import CreatePosts from './components/CreatePosts';
 import Allposts from './components/Allposts';
 import UserDashboard from './components/UserDashboard';
 import { AuthProvider } from './components/authContext'; 
-import ProtectedRoute from './components/ProtectedRoutes'; 
+import ProtectedRoute from './components/ProtectedRoutes';
+import EmailTemplate from './components/EmailTemplate';
+// import NavigateEmailTemplate from './components/NavigateEmailTemplate';
+import EditTemplate from './components/EditTemplate';
+
+//import RegistrationEmail from './components/Registrationemail';
 
 
-function App() {
+function AppContent() {
+  const location = useLocation();
+  const noHeaderPaths = ['/emailtemplate', '/editemaill'];
+  
   return (
-    <AuthProvider>
-      <Router>
-        <div className="App">
-          <Header />
-          <div className="content">
+    <div className="App">
+     
+      {!noHeaderPaths.includes(location.pathname) && <Header />}
+      <div className="content">
+        <Routes></Routes>
+
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path='/about-us' element={<Slide2 />} />
@@ -40,10 +49,13 @@ function App() {
                 <ProtectedRoute>
                   <Admin />
                  </ProtectedRoute>
-              }
+              }   
                 />
+                              
+              <Route path='/emailtemplate' element={<EmailTemplate/>}/>
+              <Route path='/editemaill' element={<EditTemplate/>}/>
+
               <Route path='/postsdash' element={<Postsdash />} />
-              <Route path='/slide6'element={<Slide6/>}></Route>
               <Route path='/dashboard' element={<CreatePosts />} />
               <Route path='/allposts' element={<Allposts />} />
               <Route path='/payment'element={<Payment/>}></Route>
@@ -58,9 +70,18 @@ function App() {
             </Routes>
           </div>
         </div>
+    
+  );
+}
+
+function App(){
+  return(
+    <AuthProvider>
+      <Router>
+        <AppContent/>
       </Router>
     </AuthProvider>
-  );
+  )
 }
 
 export default App;
