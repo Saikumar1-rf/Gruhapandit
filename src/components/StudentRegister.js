@@ -225,8 +225,8 @@ const StudentRegister = ({ setIsSubmitted }) => {
         // formDataToSend.append("file", formData.file); // Add the file if needed
 
         const response = await axios.post(
-          // "https://hrms-repository-gruhabase.onrender.com/tuition-application/student/create",
-          "https://tution-application.onrender.com/tuition-application/student/create",
+          "https://hrms-repository-gruhabase.onrender.com/tuition-application/student/create",
+          // "https://tution-application.onrender.com/tuition-application/student/create",
           formDataToSend,
           {
             headers: {
@@ -277,34 +277,34 @@ const StudentRegister = ({ setIsSubmitted }) => {
   }
 };
 
-const handleAffordChange = (e) => {
-  const { name, value } = e.target;
+ const handleAffordChange = (e) => {
+    const { name, value } = e.target;
 
-  if (/^\d*\.?\d{0,2}$/.test(value) || value === "") {
-    const affordValue = value === "" ? "" : parseFloat(value);
+    if (/^\d*\.?\d{0,2}$/.test(value) || value === "") {
+      const affordValue = value === "" ? "" : parseFloat(value);
 
-    if (value === "0") {
-      setErrors((prevState) => ({
-        ...prevState,
-        affordablity: "Zero is not allowed as a valid amount.",
-      }));
+      if (value === "0") {
+        setErrors((prevState) => ({
+          ...prevState,
+          affordablity: "Zero is not allowed as a valid amount.",
+        }));
+      } else {
+        setFormData((prevState) => ({
+          ...prevState,
+          [name]: affordValue,
+        }));
+        setErrors((prevState) => ({
+          ...prevState,
+          affordablity: "",
+        }));
+      }
     } else {
-      setFormData((prevState) => ({
-        ...prevState,
-        [name]: affordValue,
-      }));
       setErrors((prevState) => ({
         ...prevState,
-        affordablity: "",
+        affordablity: "Only numeric values are allowed.",
       }));
     }
-  } else {
-    setErrors((prevState) => ({
-      ...prevState,
-      affordablity: "Only numeric values are allowed.",
-    }));
-  }
-}; 
+  }; 
 
   const handleEmailChange = (e) => {
     const { name, value } = e.target;

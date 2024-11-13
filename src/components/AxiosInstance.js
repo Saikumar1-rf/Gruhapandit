@@ -3,8 +3,8 @@ import axios from 'axios';
 // Create an Axios instance
 const axiosInstance = axios.create({
   // baseURL: 'http://192.168.0.120:8080/',
-  // baseURL: 'https://hrms-repository-gruhabase.onrender.com/',
-  baseURL:'https://tution-application.onrender.com',
+  baseURL: 'https://hrms-repository-gruhabase.onrender.com/',
+  // baseURL:'https://tution-application.onrender.com',
 });
 
 // Set up an interceptor to add the token to each request
