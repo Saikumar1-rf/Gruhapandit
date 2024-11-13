@@ -109,11 +109,18 @@ const TutorRegister = () => {
       } else {
         setErrors({ ...errors, emailId: "" });
       }
-    } else if (name === "chargesPerHour") {
+    }else if (name === "chargesPerHour") {
       // Allow only numeric values for charges per hour
-      setFormData({ ...formData, [name]: value });
-      setErrors({ ...errors, chargesPerHour: "" });
-
+      if (/^\d*\.?\d*$/.test(value)) {
+        // Regular expression for numbers (optional decimal)
+        setFormData({ ...formData, [name]: value });
+        setErrors({ ...errors, chargesPerHour: "" });
+      } else {
+        setErrors({
+          ...errors,
+          chargesPerHour: "Charges per hour must be a number.",
+        });
+      }
     } else if (name === "firstName" || name === "lastName" || name === "category") {
       // Only allow alphabetic characters for firstName, lastName, and category fields
       if (/[^a-zA-Z\s]/.test(value)) {
@@ -189,7 +196,7 @@ const TutorRegister = () => {
 
   const validateForm = () => {
     let errors = {};
-    const emailRegex = /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/;
+    const emailRegex = /^(?!\d)[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*@(gmail|yahoo|outlook|hotmail|example|sai)\.(com|net|org|in|edu|gov|mil|us|info|org\.in)$/;
     if (!formData.firstName) errors.firstName = "First Name is required";
     if (!formData.lastName) errors.lastName = "Last Name is required";
     if (!formData.emailId) {
@@ -241,8 +248,8 @@ const TutorRegister = () => {
     if (Object.keys(validationErrors).length === 0) {
       try {
         const response = await axios.post(
-          "https://hrms-repository-gruhabase.onrender.com/tuition-application/tutor/create",
-              // "https://tution-application.onrender.com/tuition-application/tutor/create",
+          // "https://hrms-repository-gruhabase.onrender.com/tuition-application/tutor/create",
+              "https://tution-application.onrender.com/tuition-application/tutor/create",
           formData,
           {
             headers: {

@@ -93,8 +93,8 @@ const CreatePosts = () => {
 
         if (selectedRole === "student") {
           url =
-            "https://hrms-repository-gruhabase.onrender.com/tuition-application/studentAdvertisement/create";
-            // "https://tution-application.onrender.com/tuition-application/studentAdvertisement/create";
+            // "https://hrms-repository-gruhabase.onrender.com/tuition-application/studentAdvertisement/create";
+            "https://tution-application.onrender.com/tuition-application/studentAdvertisement/create";
           payload = {
             firstName: formData.firstName,
             subjectsLookingFor: formData.subjectsLookingFor,
@@ -103,8 +103,8 @@ const CreatePosts = () => {
           };
         } else if (selectedRole === "tutor") {
           url =
-            "https://hrms-repository-gruhabase.onrender.com/tuition-application/tutorAdvertisement/create";
-            // "https://tution-application.onrender.com/tuition-application/tutorAdvertisement/create"    
+            // "https://hrms-repository-gruhabase.onrender.com/tuition-application/tutorAdvertisement/create";
+            "https://tution-application.onrender.com/tuition-application/tutorAdvertisement/create"    
           payload = {
             firstName: formData.firstName,
             subjectsYouAreExpertAt: formData.subjectsYouAreExpertAt,
