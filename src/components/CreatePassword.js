@@ -102,6 +102,7 @@ const CreatePassword = () => {
         }
       );
       if (response.status === 200) {
+        setSuccessMessage("Account create successfully!")
         setShowPopup(true);
         setEmailId("");
         setPassword("");
@@ -109,7 +110,7 @@ const CreatePassword = () => {
         setTimeout(() => {
           setShowPopup(false);
           navigate("/payment");
-        }, 2000);
+        }, 1000);
       }
     } catch (error) {
       setPasswordError(
@@ -121,7 +122,7 @@ const CreatePassword = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 bg-gradient-to-r from-gray-200 to-blue-300 pt-20">
+    <div className="flex items-center justify-center min-h-screen bg-white-100 bg-gradient-to-r pt-20">
       <div className="w-full max-w-md p-8 bg-white shadow-md rounded-lg">
         <h1 className="text-2xl font-bold mb-6 text-center text-cyan-500">
           Create Password
@@ -263,6 +264,13 @@ const CreatePassword = () => {
             {loading ? "Loading..." : "Create Account"}
           </button>
         </form>
+         {/* Success Popup */}
+         {showPopup && (
+          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-4 rounded-lg shadow-lg">
+            <h2 className="text-center text-green-600">{successMessage}</h2>
+            <p className="text-center text-sm mt-2">Redirecting to payment...</p>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import { FaGraduationCap } from "react-icons/fa6";
 
 function Slide1() {
   return (
-    <div className="home-tuition flex flex-col justify-center items-center text-center">
+    <div className="home-tuition flex flex-col justify-center items-center text-center mt-10">
       <h1 className="home-head text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight sm:leading-[45px] md:leading-[60px] lg:leading-[70px]">
         Welcome to <Link to="/login">Gruhapandit Tuitions</Link> - Your Trusted
         Learning Partner!

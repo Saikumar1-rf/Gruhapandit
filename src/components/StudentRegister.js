@@ -253,8 +253,6 @@ const StudentRegister = ({ setIsSubmitted }) => {
         if (error.response.status === 400) {
           // console.log(error.response.data.split(":")[1])
           const errorMessage = error.response.data.split(":")[1]
-
-
           setErrors({
             // apiError: backendErrorMessage,
             emailId: errorMessage.includes("email id") && errorMessage,
@@ -279,34 +277,37 @@ const StudentRegister = ({ setIsSubmitted }) => {
   }
 };
 
-  const handleAffordChange = (e) => {
-    const { name, value } = e.target;
+ const handleAffordChange = (e) => {
+  const { name, value } = e.target;
 
-    if (/^\d*\.?\d{0,2}$/.test(value) || value === "") {
-      const affordValue = value === "" ? "" : parseFloat(value);
+  // Allow any input: alphabets, numbers, special characters, etc.
+  // Update the form data with the entered value
+  setFormData((prevState) => ({
+    ...prevState,
+    [name]: value,
+  }));
 
-      if (value === "0") {
-        setErrors((prevState) => ({
-          ...prevState,
-          affordablity: "Zero is not allowed as a valid amount.",
-        }));
-      } else {
-        setFormData((prevState) => ({
-          ...prevState,
-          [name]: affordValue,
-        }));
-        setErrors((prevState) => ({
-          ...prevState,
-          affordablity: "",
-        }));
-      }
-    } else {
-      setErrors((prevState) => ({
-        ...prevState,
-        affordablity: "Only numeric values are allowed.",
-      }));
-    }
-  };
+  // If the value is empty, clear any error messages
+  if (value === "") {
+    setErrors((prevState) => ({
+      ...prevState,
+      affordablity: "",
+    }));
+  } else if (value === "0") {
+    // If "0" is entered, show an error message
+    setErrors((prevState) => ({
+      ...prevState,
+      affordablity: "Zero is not allowed as a valid amount.",
+    }));
+  } else {
+    // If value is valid (non-zero and non-empty), clear the error
+    setErrors((prevState) => ({
+      ...prevState,
+      affordablity: "",
+    }));
+  }
+};
+
 
   const handleEmailChange = (e) => {
     const { name, value } = e.target;
@@ -393,7 +394,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
       }));
       return;
     }
-    if ((name === "firstName" || name === "lastName" || name === "category") && /[^a-zA-Z\s]/.test(value)) {
+    if ((name === "firstName" || name === "lastName" || name === "category" || name === "board" || name === "institution") && /[^a-zA-Z\s]/.test(value)) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         [name]: "Only alphabetic characters are allowed.",
@@ -593,21 +594,21 @@ const StudentRegister = ({ setIsSubmitted }) => {
 
   return (
     <>
-         <div className="flex py-20 justify-center items-center min-h-screen bg-gray-100 mt-2 bg-gradient-to-r from-gray-200 to-blue-300">
-        <div className="w-full sm:w-[650px]  mx-auto   p-8  mt-9">
-          <form onSubmit={handleSubmit} className="w-full max-w-2xl border border-gray-400 p-8 bg-transparent bg-gradient-to-r from-gray-200 to-blue-300 shadow-md rounded-lg">
+         <div className="flex py-20 justify-center items-center min-h-screen bg-white-200 bg-gradient-to-r">
+        <div className="w-[650px] mx-auto p-4">
+          <form onSubmit={handleSubmit} className="w-full max-w-2xl border border-gray-400 p-8 bg-transparent bg-gradient-to-r shadow-md rounded-lg">
           <div>
             <p>
-              <strong className="text-red-500">Note: </strong>
+              <strong className="text-red-500 text-shadow-default">Note: </strong>
               <a
-                className="text-blue-600 hover:underline cursor-pointer"
+                className="text-blue-600 text-shadow-default hover:underline cursor-pointer"
                 onClick={handleOpenModal}
               >
                 Terms and Conditions
               </a>
             </p>
           </div>
-          <h2 className="text-2xl font-bold  mt-8 text-black-600 mb-10">
+          <h2 className="text-xl font-bold text-center text-gray-800 text-shadow-default mb-10 mt-5">
             STUDENT REGISTRATION
           </h2>
             <div className="flex flex-col sm:flex-row w-full space-y-4 sm:space-y-0 sm:space-x-4 ">

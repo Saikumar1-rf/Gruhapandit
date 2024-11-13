@@ -63,6 +63,8 @@ const Forgotpass = () => {
     try {
       await axios.post(
         `https://hrms-repository-gruhabase.onrender.com/tuition-application/authenticate/forgotPassword?emailId=${emailId}`
+        // `https://tution-application.onrender.com/tuition-application/authenticate/forgotPassword?emailId=${emailId}`
+
       );
       setTimer(60); // Restart the timer
       setCanResendOtp(false); // Disable resend button

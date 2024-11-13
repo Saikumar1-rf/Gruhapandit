@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 const Slide2 = () => {
   return (
     <>
-      <div className="slide2-container border mt-20 shadow-xl py-10">
+      <div className="slide2-container border mt-11 shadow-xl py-10">
         <div className="about-us-section flex flex-col mt-10 md:flex-row items-center md:items-start md:justify-between md:space-x-8 p-6">
           <div className="w-full md:w-1/2">
             <img
@@ -17,7 +17,7 @@ const Slide2 = () => {
             />
           </div>
 
-          <div className="w-full md:w-1/2 mt-6 md:mt-0">
+          <div className="w-full md:w-1/2 mt-5 md:mt-0">
             <h2 className="text-4xl text-cyan-500 mt-10 font-bold mb-4">
               About Us
             </h2>

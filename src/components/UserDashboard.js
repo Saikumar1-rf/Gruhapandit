@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaEnvelope, FaBell, FaCog } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import gradi from "../Asserts/Step (1).jpg";
-import grad from "../Asserts/gruhapandit.png";
+// import gradi from "../Asserts/Step (1).jpg";
+import tutions from "../Asserts/tutio.jpg";
 import axiosInstance from "./AxiosInstance";
 import ProfileDetails from "./ProfileDetails";
 
@@ -15,11 +15,13 @@ const TutorDash = () => {
   const [showProfile, setShowProfile] = useState(false);
   // const [isProfileOpen,setIsProfileOpen]=useState(false);
 
+  
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
   
   const API_URL =
     "https://hrms-repository-gruhabase.onrender.com/tuition-application/userHomePage/";
+    // "https://tution-application.onrender.com/tuition-application/userHomePage/"
 
   // Fetch posts
   useEffect(() => {
@@ -116,10 +118,10 @@ const TutorDash = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 mt-[120px]">
+    <div className="min-h-screen flex flex-col bg-gray-50 mt-[60px]">
       <header className="bg-cyan-700 flex items-center h-16 justify-between px-4 md:px-10 py-2 shadow-md relative">
-        <img src={grad} alt="Gruha Pandit" className="w-20 md:w-24" />
-        <div className="flex items-center space-x-4 text-white">
+        {/* <img src={grad} alt="Gruha Pandit" className="w-20 md:w-24" /> */}
+        <div className="flex items-center space-x-4 text-white ml-auto">
           <FaEnvelope className="w-5 h-5 cursor-pointer" />
           <FaBell className="w-5 h-5 cursor-pointer" />
           <div
@@ -200,7 +202,7 @@ const TutorDash = () => {
         <>
           <main className="w-full md:w-3/5 mx-auto mt-10 p-4 flex justify-center bg-white">
             <img
-              src={gradi}
+              src={tutions}
               alt="Graduation pic"
               className="w-full h-48 md:h-56 object-cover rounded-md"
             />
