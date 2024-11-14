@@ -128,14 +128,14 @@ const Forgotpass = () => {
         <h1 className="text-3xl font-bold text-center mb-6">Forgot Password</h1>
         <form className="space-y-4">
           <div>
-            <label className="block text-sm font-medium">Email</label>
+            <label className="block text-sm font-medium mb-3 ml-1">Email Id</label>
             <input
               type="text"
               name="emailId"
-              placeholder="Enter your email"
+              placeholder="Enter your email id"
               value={emailId}
               maxLength={40}
-              onChange={(e) => setEmailId(e.target.value)}
+              onChange={(e) => setEmailId(e.target.value.replace(/\s/g, ""))}
               className="w-full px-4 py-2 border rounded-lg"
             />
             {errors.emailId && (
