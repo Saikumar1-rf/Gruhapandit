@@ -193,8 +193,8 @@ const ProfileDetails = ({ userData, userType, onClose, onUpdate }) => {
 
     const url =
       userType === "student"
-        ? "https://hrms-repository-gruhabase.onrender.com/tuition-application/student/update"
-        : "https://hrms-repository-gruhabase.onrender.com/tuition-application/tutor/update";
+        ? "https://tution-application-testenv.onrender.com/tuition-application/student/update"
+        : "https://tution-application-testenv.onrender.com/tuition-application/tutor/update";
 
     try {
       const response = await axios.patch(url, editableData, {

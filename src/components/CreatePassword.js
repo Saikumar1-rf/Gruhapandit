@@ -93,7 +93,8 @@ const CreatePassword = () => {
     try {
       const response = await axios.post(
         // "https://tution-application.onrender.com/tuition-application/authenticate/register",
-        "https://hrms-repository-gruhabase.onrender.com/tuition-application/authenticate/register",
+        // "https://hrms-repository-gruhabase.onrender.com/tuition-application/authenticate/register",
+        "https://tution-application-testenv.onrender.com/tuition-application/authenticate/register",
         requestData,
         {
           headers: {
