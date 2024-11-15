@@ -22,7 +22,6 @@ const TutorDash = () => {
   const API_URL =
     "https://tution-application-testenv.onrender.com/tuition-application/userHomePage/";
     // "https://tution-application.onrender.com/tuition-application/userHomePage/"
-
   // Fetch posts
   useEffect(() => {
     const fetchPosts = async () => {
@@ -118,7 +117,7 @@ const TutorDash = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 mt-[60px]">
+    <div className="min-h-screen flex flex-col bg-gray-50 sticky">
       <header className="bg-cyan-700 flex items-center h-16 justify-between px-4 md:px-10 py-2 shadow-md relative">
         {/* <img src={grad} alt="Gruha Pandit" className="w-20 md:w-24" /> */}
         <div className="flex items-center space-x-4 text-white ml-auto">

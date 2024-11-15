@@ -56,17 +56,17 @@ const Admin = () => {
   }, []);
 
   const filteredTutors = tutors.filter((tutor) =>
-    tutor.firstName.toLowerCase().includes(tutorSearch.toLowerCase()) ||
-    tutor.subjectsLookingFor.toLowerCase().includes(tutorSearch.toLowerCase())
+    (tutor.firstName && tutor.firstName.toLowerCase().includes(tutorSearch.toLowerCase())) ||
+    (tutor.subjectsLookingFor && tutor.subjectsLookingFor.toLowerCase().includes(tutorSearch.toLowerCase()))
   );
 
   const filteredStudents = students.filter((student) =>
-    student.firstName.toLowerCase().includes(studentSearch.toLowerCase()) ||
-    student.subjectsLookingFor.toLowerCase().includes(studentSearch.toLowerCase())
+    (student.firstName && student.firstName.toLowerCase().includes(studentSearch.toLowerCase())) ||
+    (student.subjectsLookingFor && student.subjectsLookingFor.toLowerCase().includes(studentSearch.toLowerCase()))
   );
 
   return (
-    <div className="h-screen flex flex-row md:flex-row mt-12">
+    <div className="h-screen flex flex-row md:flex-row mt-14">
     {/* Sidebar */}
     <div className="bg-gray-200 w-full md:w-1/5 min-h-screen text-black p-4">
       <h2 className="text-2xl font-bold mb-6 text-center md:text-left">Admin Dashboard</h2>
