@@ -20,8 +20,8 @@ const TutorDash = () => {
   const navigate = useNavigate();
   
   const API_URL =
-    "https://hrms-repository-gruhabase.onrender.com/tuition-application/userHomePage/";
-    // "https://tution-application.onrender.com/tuition-application/userHomePage/"
+    // "https://hrms-repository-gruhabase.onrender.com/tuition-application/userHomePage/";
+    "https://tution-application.onrender.com/tuition-application/userHomePage/"
 
   // Fetch posts
   useEffect(() => {

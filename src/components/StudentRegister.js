@@ -225,8 +225,8 @@ const StudentRegister = ({ setIsSubmitted }) => {
         // formDataToSend.append("file", formData.file); // Add the file if needed
 
         const response = await axios.post(
-          "https://hrms-repository-gruhabase.onrender.com/tuition-application/student/create",
-          // "https://tution-application.onrender.com/tuition-application/student/create",
+          // "https://hrms-repository-gruhabase.onrender.com/tuition-application/student/create",
+          "https://tution-application.onrender.com/tuition-application/student/create",
           formDataToSend,
           {
             headers: {
@@ -247,7 +247,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
         console.log("navigated");
       }catch (error) {
       setIsSubmitting(false);
-
+  
       if (error.response) {
         // Check if the error status is 400 and extract the message
         if (error.response.status === 400) {

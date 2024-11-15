@@ -248,8 +248,8 @@ const TutorRegister = () => {
     if (Object.keys(validationErrors).length === 0) {
       try {
         const response = await axios.post(
-          "https://hrms-repository-gruhabase.onrender.com/tuition-application/tutor/create",
-              // "https://tution-application.onrender.com/tuition-application/tutor/create",
+          // "https://hrms-repository-gruhabase.onrender.com/tuition-application/tutor/create",
+              "https://tution-application.onrender.com/tuition-application/tutor/create",
           formData,
           {
             headers: {
@@ -320,9 +320,9 @@ const TutorRegister = () => {
         hour++;
       }
     }
-
     return timings;
   }; 
+
   const handleEmailChange = (e) => {
     const { name, value } = e.target;
   
@@ -419,7 +419,6 @@ const TutorRegister = () => {
       detectLocation();
     }
   };
-
 
 
   return (
