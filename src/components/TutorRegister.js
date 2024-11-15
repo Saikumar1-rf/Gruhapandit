@@ -320,9 +320,9 @@ const TutorRegister = () => {
         hour++;
       }
     }
-
     return timings;
   }; 
+
   const handleEmailChange = (e) => {
     const { name, value } = e.target;
   
@@ -419,7 +419,6 @@ const TutorRegister = () => {
       detectLocation();
     }
   };
-
 
 
   return (

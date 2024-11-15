@@ -247,7 +247,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
         console.log("navigated");
       }catch (error) {
       setIsSubmitting(false);
-
+  
       if (error.response) {
         // Check if the error status is 400 and extract the message
         if (error.response.status === 400) {
