@@ -6,7 +6,7 @@ const apiClient = axios.create({
 	baseURL: API_BASE_URL,
 	headers: {
 		Authorization:
-			'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkByZmNoaC5jb20iLCJpYXQiOjE3MzE3NTI1ODQsImV4cCI6MTczMTgzODk4NH0.aSoGoGZcDl_GiIdabHtwso0TWV48RyxmXpKqdR5tLdE',
+			`Bearer ${localStorage.getItem('jwtToken')}`,
 	},
 });
 
@@ -14,7 +14,7 @@ const apiClient = axios.create({
 export const createTemplate = async (templateData) => {
 	try {
 		const response = await apiClient.post(
-			`${API_BASE_URL}/email-template/getAllTemplates`,
+			`${API_BASE_URL}/email-template/create`,
 			templateData
 		);
 		return response.data;
@@ -77,7 +77,7 @@ export const getEmailTemplateNames = async () => {
 export const softDeleteTemplate = async (templateId) => {
 	try {
 		const response = await apiClient.patch(
-			`${API_BASE_URL}/api/email-templates/${templateId}/delete`
+			`${API_BASE_URL}/email-template/delete/${templateId}`
 		);
 		return response.data;
 	} catch (error) {
@@ -102,6 +102,17 @@ export const getTemplateById = async (templateId) => {
 	try {
 		const response = await apiClient.get(
 			`${API_BASE_URL}/email-template/${templateId}`
+		);
+		return response.data;
+	} catch (error) {
+		throw error;
+	}
+};
+
+export const getEventNames = async () => {
+	try {
+		const response = await apiClient.get(
+			`${API_BASE_URL}/email-template/getEventNames`
 		);
 		return response.data;
 	} catch (error) {
