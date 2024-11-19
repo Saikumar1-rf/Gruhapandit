@@ -56,8 +56,8 @@ const Slide3 = () => {
             </ol>
           </div>
 
-          <Link to="/register/student font-serif">
-            <button className="apply-btn bg-cyan-500 hover:bg-cyan-600 text-white px-6 py-3 mt-6 sm:mt-8 rounded-xl font-semibold transition-colors duration-300">
+          <Link to="/register/student">
+            <button className="apply-btn bg-cyan-500 hover:bg-cyan-600 text-white px-6 py-3 mt-6 sm:mt-8 rounded-xl font-semibold transition-colors duration-300 font-serif">
               Apply Now
             </button>
           </Link>
