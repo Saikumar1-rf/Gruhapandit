@@ -4,6 +4,7 @@ import Select from "react-select";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Slide6 from "./Slide6";
+import bgImage10 from "../Asserts/tution-bg10.jpg";
 
 const StudentRegister = ({ setIsSubmitted }) => {
   const [formData, setFormData] = useState({
@@ -192,6 +193,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
         return 31;
     }
   };
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -591,9 +593,15 @@ const StudentRegister = ({ setIsSubmitted }) => {
 
   return (
     <>
-         <div className="flex py-20 justify-center items-center min-h-screen bg-white-200 bg-gradient-to-r">
+          <div className="flex py-20 justify-center items-center min-h-screen bg-gray-100 mt-2 bg-gradient-to-r"
+         style={{
+          backgroundImage: `url(${bgImage10})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+
+        }}>
         <div className="w-[650px] mx-auto p-4">
-          <form onSubmit={handleSubmit} className="w-full max-w-2xl border border-gray-400 p-8 bg-transparent bg-gradient-to-r shadow-md rounded-lg">
+          <form onSubmit={handleSubmit} className="w-full max-w-2xl bg-white border border-gray-400 p-8 bg-transparent bg-gradient-to-r shadow-md rounded-lg">
           <div>
             <p>
               <strong className="text-red-500 text-shadow-default">Note: </strong>
@@ -813,7 +821,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
                   <span className="text-red-500 text-sm">{errors.dob}</span>
                 )}
               </div>
-
+    
               <div className="w-full sm:w-1/2  ">
                 <label className="block text-gray-800 text-shadow-default font-bold mb-1">
                   Location

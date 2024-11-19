@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Slide6 from "./Slide6";
 import { countries } from "./Countries";
 import Select from "react-select";
+import bgImage from "../Asserts/tution-bg13.jpg";
 
 const TutorRegister = () => {
   const [formData, setFormData] = useState({
@@ -422,11 +423,16 @@ const TutorRegister = () => {
 
 
   return (
-    <div className="flex py-20 justify-center items-center min-h-screen bg-white-200 bg-gradient-to-r">
+    <div className="flex py-20 justify-center items-center min-h-screen bg-gray-100 mt-2 bg-gradient-to-r from"
+      style={{
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}> 
       <div className="w-[650px] mx-auto p-4">
         <form
           onSubmit={handleSubmit}
-          className="w-full max-w-2xl border border-gray-400 p-8 bg-transparent bg-gradient-to-r shadow-md rounded-lg"
+          className="w-full max-w-2xl border bg-white border-gray-400 p-8 bg-transparent bg-gradient-to-r shadow-md rounded-lg"
         >
           <div>
             <p>

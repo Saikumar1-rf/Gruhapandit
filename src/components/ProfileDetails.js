@@ -257,6 +257,27 @@ const ProfileDetails = ({ userData, userType, onClose, onUpdate }) => {
             <span className="text-red-500 text-sm">{errors.countryCode}</span>
           )}
           </>
+        ) : name === "availableTimings" ? (
+          <div className="w-full">
+            <select
+              name="availableTimings"
+              value={editableData.availableTimings || ""}
+              onChange={handleChange}
+              className="border border-gray-300 rounded-lg w-full p-2 h-10 focus:outline-none focus:border-cyan-600"
+            >
+              <option value="">Select Timing</option>
+              {availableTimings.map((timing, index) => (
+                <option key={index} value={timing}>
+                  {timing}
+                </option>
+              ))}
+            </select>
+            {errors.availableTimings && (
+              <p className="text-red-500 text-sm">
+                {errors.availableTimings}
+              </p>
+            )}
+          </div>
         ) : (
           <input
             type={name === "dob" ? "date" : "text"}
@@ -277,6 +298,56 @@ const ProfileDetails = ({ userData, userType, onClose, onUpdate }) => {
     </div>
   );
 
+  const [availableTimings, setTimings] = useState([]);
+
+  const generateTimings = () => {
+    const timings = [];
+    const startHour = 0; // 00:00 (12 AM in 24-hour format)
+    const endHour = 23; // 23:00 (11 PM in 24-hour format)
+    const interval = 45; // 45 minutes
+
+    let hour = startHour;
+    let minute = 0;
+
+    while (hour < endHour || (hour === endHour && minute === 15)) {
+      const startTime = formatTime(hour, minute);
+
+      // Increment time by 45 minutes to get the end time of the slot
+      let endHour = hour;
+      let endMinute = minute + interval;
+
+      if (endMinute >= 60) {
+        endMinute -= 60;
+        endHour++;
+      }
+
+      const endTime = formatTime(endHour, endMinute);
+      timings.push(`${startTime} to ${endTime} IST`);
+
+      // Update the current time for the next slot
+      minute += interval;
+      if (minute >= 60) {
+        minute -= 60; // Reset minutes and increment hour
+        hour++;
+      }
+    }
+
+    return timings;
+  };
+  const formatTime = (hour, minute) => {
+    const amPm = hour < 12 || hour === 24 ? "AM" : "PM"; // Handle AM/PM correctly
+    const formattedHour = hour % 12 || 12; // Convert 0 and 24 hour to 12 for display
+    const formattedMinute = minute < 10 ? `0${minute}` : minute; // Add leading zero for minutes
+    return `${formattedHour}:${formattedMinute} ${amPm}`; // Return in HH:mm AM/PM format
+  };
+
+  useEffect(() => {
+    const availableTimings = generateTimings();
+    setTimings(availableTimings);
+    // console.log(availableTimings); // To log the available timings in IST format
+  }, []);
+
+ 
   const commonFields = [
     { label: "First Name", name: "firstName", editable: false },
     { label: "Last Name", name: "lastName", editable: false },

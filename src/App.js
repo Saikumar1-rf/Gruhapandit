@@ -22,7 +22,7 @@ import ProtectedRoute from './components/ProtectedRoutes';
 
 function AppContent() {
   const location = useLocation();
-  const noHeaderPaths = ['/emailtemplate', '/editemaill','/email-student','/userDashboard'];
+  const noHeaderPaths = ['/userDashboard','/posts','/allposts','/dashboard'];
 
   return (
         <div className="App">
@@ -38,9 +38,9 @@ function AppContent() {
           <Route path="/register/term" element={<Slide6 />} />
           <Route path="/register/tutor" element={<TutorRegister />} />
           <Route path="/posts" element={
-            <ProtectedRoute>
+            // <ProtectedRoute>
               <Admin />
-            </ProtectedRoute>
+            // {/* </ProtectedRoute> */}
           } />
           <Route path="/postsdash" element={<Postsdash />} />
           <Route path="/slide6" element={<Slide6 />} />
@@ -48,9 +48,9 @@ function AppContent() {
           <Route path="/allposts" element={<Allposts />} />
           <Route path="/payment" element={<Payment />} />
           <Route path="/userDashboard" element={
-            <ProtectedRoute>
+            // <ProtectedRoute>
               <UserDashboard />
-            </ProtectedRoute>
+            // {/* </ProtectedRoute> */}
           } />
         </Routes>
       </div>

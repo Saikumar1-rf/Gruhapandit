@@ -32,7 +32,7 @@ function Header() {
   };
 
   return (
-    <header className="bg-white shadow-md fixed top-0 left-0 w-full h-16 z-20 bg-gradient-to-r from-gray-200 to-blue-300">
+    <header className="bg-white shadow-md fixed top-0 left-0 w-full h-16 z-20 bg-gradient-to-r">
     <div className="container mx-auto flex justify-between items-center h-full px-4 sm:px-8">
       <NavLink to="/">
         <img

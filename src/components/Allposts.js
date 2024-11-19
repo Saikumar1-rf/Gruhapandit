@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import axiosInstance from "./AxiosInstance";
 import { FaEnvelope, FaBell } from "react-icons/fa";
 import { IoSettings } from "react-icons/io5";
+import Slide6 from "./Slide6";
  
 function Allposts() {
   const [tutorData, setTutorData] = useState(null);
@@ -39,12 +40,58 @@ function Allposts() {
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenPolicy = () => {
+    setIsModalOpen(true);
+  };
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const navigate=useNavigate();
+
+  
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem("jwtToken");
+      const usersData = JSON.parse(localStorage.getItem("usersData")); // Get usersData from localStorage
+  
+      if (token && usersData) {
+        await axiosInstance.post(
+          `/tuition-application/authenticate/logout?emailId=${usersData.emailId}`,
+          null,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+      }
+  
+      // Clear local storage and sensitive state
+      localStorage.removeItem("jwtToken");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("userType");
+      localStorage.removeItem("usersData");  // Clear usersData from localStorage if needed
+  
+      // Redirect user to the login page
+      navigate("/", { replace: true });
+    } catch (error) {
+      // Proceed with client-side logout even if server logout fails
+      localStorage.removeItem("jwtToken");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("userType");
+      localStorage.removeItem("usersData");
+  
+      navigate("/", { replace: true });
+    }
+  };  
+  
   return (
-    <div className="min-h-screen flex mt-12">
+    <div className="h-screen flex sticky">
       {/* Sidebar */}
-      <div className="bg-gray-200 w-full md:w-1/5 min-h-screen text-black">
+      <div className="bg-gray-200 w-2/5 sm:w-1/5 max-h-screen text-black">
         <div className="p-4">
-          <h2 className="text-2xl font-bold mb-6 sm:text-lg">Admin Dashboard</h2>
+          <h2 className="text-xl sm:text-2xl font-bold mb-6">Admin Dashboard</h2>
           <ul className="space-y-4">
             <li>
               <Link to="/posts" className="hover:text-blue-500">Dashboard</Link>
@@ -62,22 +109,22 @@ function Allposts() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <header className="bg-blue-200 flex items-center justify-between h-14 px-4 sm:px-10">
+        <header className="bg-cyan-700 flex items-center h-14 justify-between px-4 py-2">
           {/* <h1 className="text-black text-lg font-bold">Dashboard</h1> */}
           <div className="flex items-center space-x-4 ml-auto">
-            <FaEnvelope className="text-black w-5 h-5" />
-            <FaBell className="text-black w-5 h-5" />
+            <FaEnvelope className="w-4 h-4 text-white" />
+            <FaBell className="w-4 h-4 text-white" />
             <div className="relative">
               <IoSettings
-                className="text-black w-6 h-6 cursor-pointer"
+                className="text-white w-5 h-5 cursor-pointer"
                 onClick={toggleDropdown}
               />
               {isOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg">
-                  <Link to="/register/term" className="block px-4 py-2 hover:bg-blue-100">
+                  <li className="block px-4 py-2 hover:bg-blue-100" onClick={handleOpenPolicy}>
                     Policy
-                  </Link>
-                  <Link to="/" className="block px-4 py-2 hover:bg-blue-100">
+                  </li>
+                  <Link to="/" className="block px-4 py-2 hover:bg-blue-100" onClick={handleLogout}>
                     Logout
                   </Link>
                 </div>
@@ -149,6 +196,21 @@ function Allposts() {
             </div>
           )}
         </div>
+
+        {isModalOpen && (
+        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 ">
+          <div className="relative bg-white shadow-lg rounded-lg max-w-4xl w-full mx-auto h-[90vh] overflow-y-auto p-8">
+            <button
+              className="absolute top-3 right-3 text-red-700 font-bold hover:text-red-500 "
+              onClick={handleCloseModal}
+            >
+              X
+            </button>
+            <Slide6/>
+          </div>
+        </div>
+      )}
+
       </div>
     </div>
   );

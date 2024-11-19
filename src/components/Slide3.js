@@ -4,13 +4,13 @@ import { Link } from "react-router-dom";
 const Slide3 = () => {
   return (
     <>
-      <div className="flex flex-col lg:flex-row justify-evenly p-6 lg:p-10 items-center lg:items-start">
+      <div className="flex flex-col lg:flex-row justify-evenly p-6 lg:p-10 items-center lg:items-start font-serif">
         <div className="w-full lg:w-1/2 mt-6 lg:mt-0">
           <h2 className="text-2xl sm:text-3xl text-gray-800 font-bold mb-4">
-            Why<Link to="/register/student"> Gruhapandit Tuitions</Link> is
+            Why<Link to="/register/student" className="text-[#41C9E2] hover:text-blue-900 hover:underline transition duration-300"> Gruhapandit Tuitions</Link> is
             Perfect for Students
           </h2>
-          <ul className="list-disc pl-6 sm:pl-10 space-y-2 text-base sm:text-lg leading-relaxed text-gray-800 mt-4">
+          <ul className="list-disc pl-6 sm:pl-10 space-y-2 text-base sm:text-lg leading-relaxed text-gray-800 mt-4 ">
             <li>
               <strong>Interactive and Engaging Classes: </strong>Whether you opt
               for online or offline tuitions, our classes are designed to keep
@@ -27,11 +27,11 @@ const Slide3 = () => {
               How it Works
             </h2>
 
-            <ol className="list-decimal pl-6 sm:pl-10 space-y-2 text-base sm:text-lg leading-relaxed text-gray-800 mt-4">
+            <ol className="list-decimal pl-6 sm:pl-10 space-y-2 text-base sm:text-lg leading-relaxed text-gray-800 mt-4 font-serif">
               <li>
                 <strong>Register with Gruhapandit Tuitions: </strong>
                 Sign up for
-                <Link to="/register/student"> online or offline tuitions </Link>
+                <Link to="/register/student"className="text-[#41C9E2] hover:text-blue-900 font-bold"> online or offline tuitions </Link>
                 based on your preferences.
               </li>
               <li>
@@ -56,7 +56,7 @@ const Slide3 = () => {
             </ol>
           </div>
 
-          <Link to="/register/student">
+          <Link to="/register/student font-serif">
             <button className="apply-btn bg-cyan-500 hover:bg-cyan-600 text-white px-6 py-3 mt-6 sm:mt-8 rounded-xl font-semibold transition-colors duration-300">
               Apply Now
             </button>

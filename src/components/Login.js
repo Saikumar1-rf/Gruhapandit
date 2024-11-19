@@ -199,7 +199,8 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../components/authContext";
 
-import gruhaimg from '../Asserts/gruhaimg.jpg';
+// import gruhaimg from '../Asserts/gruhaimg.jpg';
+import gruhaimg from '../Asserts/login.jpg';
 
 const Login = () => {
   const { login } = useAuth();
@@ -296,8 +297,8 @@ const Login = () => {
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-purple-200 px-4 sm:px-8">
-      <div className="flex flex-col md:flex-row w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden mt-12 md:mt-20">
+    <div className="min-h-screen flex items-center justify-center px-4 sm:px-8">
+      <div className="flex flex-col md:flex-row w-full max-w-4xl bg-white rounded-lg shadow-2xl overflow-hidden mt-12 md:mt-20">
         
         {/* Left Image */}
         <img

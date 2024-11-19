@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FaEnvelope, FaBell } from "react-icons/fa";
 import { IoSettings } from "react-icons/io5";
 import axiosInstance from './AxiosInstance';
+import Slide6 from './Slide6';
 
 const Admin = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -59,17 +60,63 @@ const Admin = () => {
     (tutor.firstName && tutor.firstName.toLowerCase().includes(tutorSearch.toLowerCase())) ||
     (tutor.subjectsLookingFor && tutor.subjectsLookingFor.toLowerCase().includes(tutorSearch.toLowerCase()))
   );
-
+  
   const filteredStudents = students.filter((student) =>
     (student.firstName && student.firstName.toLowerCase().includes(studentSearch.toLowerCase())) ||
     (student.subjectsLookingFor && student.subjectsLookingFor.toLowerCase().includes(studentSearch.toLowerCase()))
   );
 
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenPolicy = () => {
+    setIsModalOpen(true);
+  };
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+  
+
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem("jwtToken");
+      const usersData = JSON.parse(localStorage.getItem("usersData")); // Get usersData from localStorage
+  
+      if (token && usersData) {
+        await axiosInstance.post(
+          `/tuition-application/authenticate/logout?emailId=${usersData.emailId}`,
+          null,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+      }
+  
+      // Clear local storage and sensitive state
+      localStorage.removeItem("jwtToken");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("userType");
+      localStorage.removeItem("usersData");  // Clear usersData from localStorage if needed
+  
+      // Redirect user to the login page
+      navigate("/", { replace: true });
+    } catch (error) {
+      // Proceed with client-side logout even if server logout fails
+      localStorage.removeItem("jwtToken");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("userType");
+      localStorage.removeItem("usersData");
+  
+      navigate("/", { replace: true });
+    }
+  };
+  
+
   return (
-    <div className="h-screen flex flex-row md:flex-row mt-14">
+    <div className="h-screen flex sticky">
     {/* Sidebar */}
-    <div className="bg-gray-200 w-full md:w-1/5 min-h-screen text-black p-4">
-      <h2 className="text-2xl font-bold mb-6 text-center md:text-left">Admin Dashboard</h2>
+    <div className="bg-gray-200 w-2/5 sm:w-1/5 min-h-screen text-black">
+      <h2 className="text-xl sm:text-2xl font-bold mb-6">Admin Dashboard</h2>
       <ul className="space-y-4">
         <li>
           <Link to="/posts" className="hover:text-blue-300">Dashboard</Link>
@@ -85,22 +132,22 @@ const Admin = () => {
   
     {/* Main Content Area */}
     <div className="flex-1 flex flex-col">
-      <header className="bg-blue-200 flex items-center h-14 justify-between px-4 py-2">
+      <header className="bg-cyan-700 flex items-center h-14 justify-between px-4 py-2">
         <div className="flex items-center space-x-4 ml-auto mt-1">
-          <FaEnvelope className="text-black w-4 h-4" />
-          <FaBell className="text-black w-4 h-4" />
+          <FaEnvelope className="text-white w-4 h-4"/>
+          <FaBell className="text-white w-4 h-4" />
           <div className="relative flex items-center" ref={dropdownRef}>
             <IoSettings
-              className="text-black-400 h-5 w-5 cursor-pointer"
+              className="text-white h-5 w-5 cursor-pointer"
               onClick={toggleDropdown}
             />
             {isOpen && (
-              <div className="absolute right-0 mt-14 w-48 bg-white rounded-md shadow-lg z-10">
-                <Link to="/register/term" className="block px-4 py-2 hover:bg-blue-100" onClick={closeDropdown}>
+              <div className="absolute right-0 mt-24 w-48 bg-white rounded-md shadow-lg z-10">
+                <li className="block px-4 py-2 hover:bg-blue-100" onClick={handleOpenPolicy}>
                   Policy
-                </Link>
-                <Link to="/" className="block px-4 py-2 hover:bg-blue-100" onClick={closeDropdown}>
-                  Logout
+                </li>
+                <Link to="/" className="block px-4 py-2 hover:bg-blue-100" onClick={handleLogout}>
+                  Logout    
                 </Link>
               </div>
             )}
@@ -152,7 +199,6 @@ const Admin = () => {
               </table>
             </div>
           </div>
-  
           {/* Student Section */}
           <div className="flex flex-col w-full md:w-1/2 mt-4 md:mt-0">
             <h1 className="text-2xl font-bold text-center">Students</h1>
@@ -193,10 +239,23 @@ const Admin = () => {
             </div>
           </div>
         </div>
+
+        {isModalOpen && (
+        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 ">
+          <div className="relative bg-white shadow-lg rounded-lg max-w-4xl w-full mx-auto h-[90vh] overflow-y-auto p-8">
+            <button
+              className="absolute top-3 right-3 text-red-700 font-bold hover:text-red-500 "
+              onClick={handleCloseModal}
+            >
+              X
+            </button>
+            <Slide6/>
+          </div>
+        </div>
+      )}
       </div>
     </div>
   </div>
-  
   );
 };
 
