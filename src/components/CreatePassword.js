@@ -66,7 +66,13 @@ const CreatePassword = () => {
   };
 
   const handlePasswordChange = (e) => {
-    const input = e.target.value;
+    let input = e.target.value;
+
+    // Prevent the first character from being a space
+    if (input.startsWith(" ")) {
+      input = input.trimStart(); // Remove leading spaces
+    }
+
     setPassword(input);
     setPasswordStrength(checkPasswordStrength(input)); // Update strength immediately
     validatePassword(input); // Check for criteria and update checklist
@@ -102,7 +108,7 @@ const CreatePassword = () => {
         }
       );
       if (response.status === 200) {
-        setSuccessMessage("Account create successfully!")
+        setSuccessMessage("Account create successfully!");
         setShowPopup(true);
         setEmailId("");
         setPassword("");
@@ -120,7 +126,7 @@ const CreatePassword = () => {
       setLoading(false);
     }
   };
-
+  
   return (
     <div className="flex items-center justify-center min-h-screen bg-white-100 bg-gradient-to-r pt-20">
       <div className="w-full max-w-md p-8 bg-white shadow-md rounded-lg">
@@ -150,7 +156,6 @@ const CreatePassword = () => {
               <p className="text-red-500 text-sm mt-1">{emailIdError}</p>
             )}
           </div>
-
           <div className="mb-4 relative">
             <label
               htmlFor="password"
@@ -165,6 +170,9 @@ const CreatePassword = () => {
               minLength={8}
               maxLength={15}
               onChange={handlePasswordChange}
+              onKeyDown={(e) => {
+                if (e.key === " ") e.preventDefault(); // Block spaces
+              }}
               required
               className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm ${
                 passwordError ? "border-red-500" : "border-gray-300"
@@ -243,6 +251,9 @@ const CreatePassword = () => {
               minLength={8}
               maxLength={15}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === " ") e.preventDefault(); // Block spaces
+              }}
               required
               className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm ${
                 password !== confirmPassword
@@ -266,11 +277,13 @@ const CreatePassword = () => {
             {loading ? "Loading..." : "Create Account"}
           </button>
         </form>
-         {/* Success Popup */}
-         {showPopup && (
+        {/* Success Popup */}
+        {showPopup && (
           <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-4 rounded-lg shadow-lg">
             <h2 className="text-center text-green-600">{successMessage}</h2>
-            <p className="text-center text-sm mt-2">Redirecting to payment...</p>
+            <p className="text-center text-sm mt-2">
+              Redirecting to payment...
+            </p>
           </div>
         )}
       </div>

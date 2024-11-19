@@ -7,7 +7,7 @@ function Slide1() {
   return (
     <div className="home-tuition flex flex-col justify-center items-center text-center mt-10">
       <h1 className="home-head text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight sm:leading-[45px] md:leading-[60px] lg:leading-[70px]">
-        Welcome to <Link to="/login">Gruhapandit Tuitions</Link> - Your Trusted
+        Welcome to <Link to="/login"className="text-blue-800">Gruhapandit Tuitions</Link> - Your Trusted
         Learning Partner!
         <span className="inline-flex items-center">
           <FaGraduationCap className="ml-2" />
@@ -16,9 +16,9 @@ function Slide1() {
 
       <div className="w-full max-w-[90%] sm:max-w-[600px] md:max-w-[700px] lg:max-w-[800px] text-base sm:text-md md:text-lg lg:text-xl font-semibold text-white mb-6">
         <p className="home-para">
-          At <Link to="/login">Gruhapandit Tuitions</Link>, we are committed to
+          At <Link to="/login" className="text-blue-800">Gruhapandit Tuitions</Link>, we are committed to
           providing top-quality education through both
-          <Link to="/login"> online tuition and offline tuition,</Link> designed
+          <Link to="/login" className="text-blue-800"> online tuition and offline tuition,</Link> designed
           to meet the needs of every student. Whether you're looking for
           personalized one-on-one tutoring or engaging group sessions, we offer
           flexible learning solutions that fit your schedule and learning style.

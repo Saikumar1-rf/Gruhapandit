@@ -22,7 +22,7 @@ import ProtectedRoute from './components/ProtectedRoutes';
 
 function AppContent() {
   const location = useLocation();
-  const noHeaderPaths = ['/emailtemplate', '/editemaill','/email-student','/userDashboard'];
+  const noHeaderPaths = ['/userDashboard','/posts','/allposts','/dashboard'];
 
   return (
         <div className="App">

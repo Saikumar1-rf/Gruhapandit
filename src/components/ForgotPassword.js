@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ImCross } from "react-icons/im";
 import { FaCheck, FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
+import gruhaimg from '../Asserts/forgot.jpg';
 
 const Forgotpass = () => {
   const [emailId, setEmailId] = useState("");
@@ -43,6 +44,7 @@ const Forgotpass = () => {
       try {
         const response = await axios.post(
           `https://hrms-repository-gruhabase.onrender.com/tuition-application/authenticate/forgotPassword?emailId=${emailId}`
+        // `https://tution-application.onrender.com/tuition-application/authenticate/forgotPassword?emailId=${emailId}`
         );
         setOtpSent(true);
         setTimer(60);
@@ -69,8 +71,9 @@ const Forgotpass = () => {
       setErrors({ otp: "Failed to resend OTP. Please try again." });
     }
   };
-
-  const handleResetPassword = async () => {
+  
+  
+    const handleResetPassword = async () => {
     const errors = {};
 
     // Validate inputs
@@ -98,7 +101,7 @@ const Forgotpass = () => {
       setTimeout(() => {
         setShowSuccessPopup(false);
         window.location.href = "/login";
-      }, 3000);
+      }, 1000);
     } catch (error) {
       console.error("Error resetting password:", error);
       if (error.response && error.response.status === 400) {
@@ -121,8 +124,15 @@ const Forgotpass = () => {
     /[!@#$%^&*(),.?":{}||<>]/.test(password);
 
   return (
-    <div className="relative flex items-center justify-center min-h-screen bg-blue-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md bg-blue-100">
+    <div className="min-h-screen flex items-center justify-center bg-white px-4 sm:px-8 shadow-md">
+    <div className="flex flex-col md:flex-row w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden mt-12 md:mt-20">
+      {/* Image Section */}
+      <img
+        src={gruhaimg}
+        alt="gimg"
+        className="w-full md:w-1/2 md:h-auto object-cover"
+      />
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md mt-20">
         <h1 className="text-3xl font-bold text-center mb-6">Forgot Password</h1>
         <form className="space-y-4">
           <div>
@@ -133,7 +143,11 @@ const Forgotpass = () => {
               placeholder="Enter your email"
               value={emailId}
               maxLength={40}
-              onChange={(e) => setEmailId(e.target.value)}
+              onChange={(e) =>{ const value=e.target.value;
+                if (!/^\s/.test(value)) {
+                  setEmailId(value);
+                }
+              }}
               className="w-full px-4 py-2 border rounded-lg"
             />
             {errors.emailId && (
@@ -152,13 +166,18 @@ const Forgotpass = () => {
       </div>
 
       {showPopup && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 px-4">
+          <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg w-full max-w-sm sm:max-w-md mx-4 sm:mx-auto"
+          style={{
+            maxHeight: "70vh", // Ensure the form doesn't exceed the viewport
+            overflowY: "auto", // Enable scrolling if content overflows
+          }}
+        >
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">Enter OTP and New Password</h2>
+              <h2 className="text-lg sm:text-xl font-bold text-center sm:text-left">Enter OTP and New Password</h2>
               <button
                 onClick={() => setShowPopup(false)}
-                className="text-gray-500"
+                className="text-gray-500 text-lg"
               >
                 <ImCross />
               </button>
@@ -178,13 +197,18 @@ const Forgotpass = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium">OTP</label>
+                <label className="block text-sm font-medium ">OTP</label>
                 <input
                   type="text"
                   placeholder="Enter OTP"
                   value={otp}
                   name="otp"
-                  onChange={(e) => setOtp(e.target.value)}
+                  // onChange={(e) => setOtp(e.target.value)}
+                  onChange={(e) =>{ const value=e.target.value;
+                    if (!/\s/.test(value)) {
+                      setOtp(value);
+                    }
+                  }}
                   className="w-full px-4 py-2 border rounded-lg"
                   maxLength={6}
                 />
@@ -217,7 +241,12 @@ const Forgotpass = () => {
                     value={password}
                     minLength={8}
                     maxLength={15}
-                    onChange={(e) => setPassword(e.target.value)}
+                    // onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) =>{ const value=e.target.value;
+                      if (!/\s/.test(value)) {
+                        setPassword(value);
+                      }
+                    }}
                     className="w-full px-4 py-2 border rounded-lg"
                     style={{
                       WebkitTextSecurity: password ? "none" : "disc",
@@ -235,13 +264,12 @@ const Forgotpass = () => {
                   <p className="text-red-500 text-sm mt-1">{errors.password}</p>
                 )}
 
-                {/* Password strength validation */}
                 <div className="space-y-2 mt-4">
                   <div className="flex items-center">
                     {isPasswordStrong ? (
                       <FaCheck className="mr-2 h-4 w-4 text-blue-500" />
                     ) : (
-                      <ImCross className="mr-2 text-red-500 h-3 w-3" />
+                      <ImCross className="mr-2 text-red-500 h-2 w-2" />
                     )}
                     <p>Password strength: {isPasswordStrong ? "strong" : "weak"}</p>
                   </div>
@@ -249,7 +277,7 @@ const Forgotpass = () => {
                     {password.length >= 8 ? (
                       <FaCheck className="mr-2 h-4 w-4 text-blue-500" />
                     ) : (
-                      <ImCross className="mr-2 text-red-500 h-3 w-3" />
+                      <ImCross className="mr-2 text-red-500 h-2 w-2" />
                     )}
                     <p>At least 8 characters</p>
                   </div>
@@ -257,7 +285,7 @@ const Forgotpass = () => {
                     {/[A-Z]/.test(password) ? (
                       <FaCheck className="mr-2 h-4 w-4 text-blue-500" />
                     ) : (
-                      <ImCross className="mr-2 text-red-500 h-3 w-3" />
+                      <ImCross className="mr-2 text-red-500 h-2 w-2" />
                     )}
                     <p>At least one uppercase letter</p>
                   </div>
@@ -265,7 +293,7 @@ const Forgotpass = () => {
                     {/\d/.test(password) ? (
                       <FaCheck className="mr-2 h-4 w-4 text-blue-500" />
                     ) : (
-                      <ImCross className="mr-2 text-red-500 h-3 w-3" />
+                      <ImCross className="mr-2 text-red-500 h-2 w-2" />
                     )}
                     <p>At least one number</p>
                   </div>
@@ -273,7 +301,7 @@ const Forgotpass = () => {
                     {/[!@#$%^&*(),.?":{}||<>]/.test(password) ? (
                       <FaCheck className="mr-2 h-4 w-4 text-blue-500" />
                     ) : (
-                      <ImCross className="mr-2 text-red-500 h-3 w-3" />
+                      <ImCross className="mr-2 text-red-500 h-2 w-2" />
                     )}
                     <p>At least one special character</p>
                   </div>
@@ -292,14 +320,15 @@ const Forgotpass = () => {
         </div>
       )}
 
-      {showSuccessPopup && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-            <h2 className="text-xl font-bold">Password Reset Successful</h2>
-            <p className="text-gray-500">Your password has been reset successfully!</p>
-          </div>
-        </div>
-      )}
+{showSuccessPopup && (
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md mx-4 sm:mx-auto">
+      <h2 className="text-xl font-bold">Password Reset Successful</h2>
+      <p className="text-gray-500">Your password has been reset successfully!</p>
+    </div>
+  </div>
+)}
+    </div>
     </div>
   );
 };
