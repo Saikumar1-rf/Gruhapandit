@@ -4,7 +4,7 @@ import { FaEnvelope, FaBell } from "react-icons/fa";
 import { IoSettings } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "./AxiosInstance";
-import Slide6 from './Slide6';
+import Slide6 from "./Slide6";
 
 const CreatePosts = () => {
   const [showPopup, setShowPopup] = useState(false);
@@ -127,7 +127,6 @@ const CreatePosts = () => {
     }
   };
 
-
   const [availableTimings, setTimings] = useState([]);
 
   //timing slots validations
@@ -197,14 +196,13 @@ const CreatePosts = () => {
     setIsModalOpen(false);
   };
 
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
-  
   const handleLogout = async () => {
     try {
       const token = localStorage.getItem("jwtToken");
       const usersData = JSON.parse(localStorage.getItem("usersData")); // Get usersData from localStorage
-  
+
       if (token && usersData) {
         await axiosInstance.post(
           `/tuition-application/authenticate/logout?emailId=${usersData.emailId}`,
@@ -214,27 +212,25 @@ const CreatePosts = () => {
           }
         );
       }
-  
+
       // Clear local storage and sensitive state
       localStorage.removeItem("jwtToken");
       localStorage.removeItem("userId");
       localStorage.removeItem("userType");
-      localStorage.removeItem("usersData");  // Clear usersData from localStorage if needed
-  
+      localStorage.removeItem("usersData"); // Clear usersData from localStorage if needed
+
       // Redirect user to the login page
       navigate("/", { replace: true });
     } catch (error) {
-      
-  
       // Proceed with client-side logout even if server logout fails
       localStorage.removeItem("jwtToken");
       localStorage.removeItem("userId");
       localStorage.removeItem("userType");
       localStorage.removeItem("usersData");
-  
+
       navigate("/", { replace: true });
     }
-  };  
+  };
 
   return (
     <div>
@@ -298,10 +294,10 @@ const CreatePosts = () => {
                     >
                       Policy
                     </li>
-                    <Link to="/"
+                    <Link
+                      to="/"
                       className="block px-4 py-2 hover:bg-blue-100"
                       onClick={handleLogout}
-
                     >
                       Logout
                     </Link>
@@ -469,18 +465,18 @@ const CreatePosts = () => {
         </div>
 
         {isModalOpen && (
-        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 ">
-          <div className="relative bg-white shadow-lg rounded-lg max-w-4xl w-full mx-auto h-[90vh] overflow-y-auto p-8">
-            <button
-              className="absolute top-3 right-3 text-red-700 font-bold hover:text-red-500 "
-              onClick={handleCloseModal}
-            >
-              X
-            </button>
-            <Slide6/>
+          <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 ">
+            <div className="relative bg-white shadow-lg rounded-lg max-w-4xl w-full mx-auto h-[90vh] overflow-y-auto p-8">
+              <button
+                className="absolute top-3 right-3 text-red-700 font-bold hover:text-red-500 "
+                onClick={handleCloseModal}
+              >
+                X
+              </button>
+              <Slide6 />
+            </div>
           </div>
-        </div>
-      )}
+        )}
       </div>
     </div>
   );
