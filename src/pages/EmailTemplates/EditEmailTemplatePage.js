@@ -87,7 +87,7 @@ function EditEmailTemplatePage() {
     };
 
     const onEditorLoad = async (editor) => {
-        if (!errors && getValues().design) {
+        if (watchAllFields.design.json) {
             try {
                 const parsedJsonDesign = JSON.parse(JSON.parse(getValues().design.json))
                 editor.loadDesign(parsedJsonDesign);
@@ -159,20 +159,20 @@ function EditEmailTemplatePage() {
 
         </div>
     );
-    if (loading && !apiError && errors) {
+    if (loading && !apiError) {
         return <div className="h-screen w-screen font-grostek overflow-hidden bg-stone-100 flex flex-row">
             {renderLoadingState()}
         </div>
     }
 
-    if (!loading && apiError && errors) {
+    if (!loading && apiError) {
         return <div
             className="h-screen w-screen font-grostek overflow-hidden justify-center items-center bg-stone-100 flex flex-row">
             {renderErrorState()}
         </div>
     }
 
-    if (!loading && !apiError && !errors) {
+    if (!loading && !apiError ) {
         return (
             <>
                 <div className="h-screen w-screen font-grostek overflow-hidden bg-stone-200/80 flex flex-row">
