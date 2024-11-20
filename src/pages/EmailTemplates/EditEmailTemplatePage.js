@@ -4,7 +4,7 @@ import {
     Braces,
     ChevronLeft,
     CloudUpload,
-    CodeXml,
+    CodeXml, Inbox, Info,
     PaintRoller,
     PenTool,
     RefreshCcw,
@@ -40,19 +40,7 @@ function EditEmailTemplatePage() {
         setValue,
         setError,
         formState: {errors}
-    } = useForm({
-        defaultValues: {
-            templateName: "",
-            eventName: "",
-            subject: "",
-            design: {
-                html: "",
-                json: "",
-            },
-            active: true,
-            deleted: false,
-        },
-    });
+    } = useForm({});
 
     const watchAllFields = watch();
 
@@ -143,14 +131,45 @@ function EditEmailTemplatePage() {
             <p className="text-sm text-stone-900">Fetching Templates</p>
         </div>
     );
+    const renderErrorState = () => (
+        <div className="flex  rounded-lg  flex-col gap-4  justify-center items-center">
+            <Info size={36} strokeWidth={0.8} className="text-stone-900"/>
+            <div className=" text-center">
+                <p className="text-md font-medium text-stone-900">Network Failed</p>
+                <p className="text-xs font-light text-stone-500">Looks like the network request got failed.Please try again.
+                     </p>
+            </div>
+            <div className="flex gap-1 flex-row">
+                <button
+                    onClick={() => navigate(-1)}
+                    className="bg-white border font-grostek flex flex-row justify-center items-center gap-1.5 hover:bg-stone-50 px-2.5 py-2 rounded font-medium text-xs">
+                    <ChevronLeft size={14}/>
+                    Back Templates
+                </button>
+                <button
+                    onClick={fetchTemplates}
+                    className="bg-white border font-grostek flex flex-row justify-center items-center gap-1.5 hover:bg-stone-50 px-2.5 py-2 rounded font-medium text-xs">
+                    <RefreshCcw size={14}/>
+                    Retry Fetching
+                </button>
+            </div>
 
+        </div>
+    );
     if (loading) {
         return <div className="h-screen w-screen font-grostek overflow-hidden bg-stone-100 flex flex-row">
             {renderLoadingState()}
         </div>
     }
 
-    if (!loading) {
+    if (!loading && errors) {
+        return <div
+            className="h-screen w-screen font-grostek overflow-hidden justify-center items-center bg-stone-100 flex flex-row">
+            {renderErrorState()}
+        </div>
+    }
+
+    if (!loading && !errors) {
         return (
             <>
                 <div className="h-screen w-screen font-grostek overflow-hidden bg-stone-200/80 flex flex-row">
