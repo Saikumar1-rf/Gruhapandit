@@ -12,8 +12,8 @@ const Slide5 = () => {
             "url('https://images.unsplash.com/photo-1517673132405-a56a62b18caf?q=80&w=1776&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
         }}
       >
-        <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center text-center px-4">
-          <h1 className="text-white font-bold text-xl sm:text-3xl md:text-4xl lg:text-5xl mb-5 sm:mb-7 lg:mb-12 overflow-auto">
+        <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center text-center px-4 font-serif">
+          <h1 className="text-white font-bold text-xl sm:text-3xl md:text-4xl lg:text-5xl mb-5 sm:mb-7 lg:mb-12">
             Why Choose Gruhapandit Tuitions?
           </h1>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-white w-full max-w-6xl px-3 sm:px-0 ">
@@ -66,7 +66,7 @@ const Slide5 = () => {
       </div>
 
       {/* {/ Vision and Mission Section /} */}
-      <div className="border border-gray-300 p-5 sm:p-7 md:p-10 rounded-lg mt-6 lg:mt-12 max-w-6xl mx-auto">
+      <div className="border border-gray-300 p-5 sm:p-7 md:p-10 rounded-lg mt-6 lg:mt-12 max-w-6xl mx-auto font-serif">
         <h2 className="text-center text-cyan-500 font-bold text-xl sm:text-3xl md:text-4xl mb-5">
           Our Vision & Mission
         </h2>

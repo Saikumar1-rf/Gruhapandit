@@ -1,10 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaEnvelope, FaBell, FaCog } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import gradi from "../Asserts/Step (1).jpg";
-import grad from "../Asserts/gruhapandit.png";
+// import gradi from "../Asserts/Step (1).jpg";
+import tutions from "../Asserts/tutio.jpg";
 import axiosInstance from "./AxiosInstance";
 import ProfileDetails from "./ProfileDetails";
+import Slide6 from "./Slide6";
+import gradi from "../Asserts/user3.jpg";
+import gruhapa from "../Asserts/gruhapandit.png";
 
 const TutorDash = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -15,11 +18,22 @@ const TutorDash = () => {
   const [showProfile, setShowProfile] = useState(false);
   // const [isProfileOpen,setIsProfileOpen]=useState(false);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenPolicy = () => {
+    setIsModalOpen(true);
+  };
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
   
   const API_URL =
     "https://hrms-repository-gruhabase.onrender.com/tuition-application/userHomePage/";
+    // "https://tution-application.onrender.com/tuition-application/userHomePage/"
 
   // Fetch posts
   useEffect(() => {
@@ -53,8 +67,6 @@ const TutorDash = () => {
             ? `/tuition-application/student/${userId}`
             : `/tuition-application/tutor/${userId}`;
 
-        console.log("Fetching user data from:", url);
-
         const response = await axiosInstance.get(url);
         setUserData(response.data);
       } catch (error) {
@@ -65,11 +77,36 @@ const TutorDash = () => {
   }, [userId, userType]);
   const toggleDropdown = () => setShowDropdown((prev) => !prev);
 
-  const handleLogout = () => {
-    localStorage.removeItem("jwtToken");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("userType");
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      // If there is a backend endpoint to invalidate the token, call it here
+      const token = localStorage.getItem("jwtToken");
+      if (token) {
+        await axiosInstance.post(`/tuition-application/authenticate/logout?emailId=${userData.emailId}`, null, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      }
+      // Clear local storage and sensitive state
+      localStorage.removeItem("jwtToken");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("userType");
+  
+      // Clear React state to reset user data
+      setUserData({});
+      setPosts([]);
+  
+      // Redirect user to the login page
+      navigate("/", { replace: true });
+    } catch (error) {
+      // Proceed with client-side logout even if server logout fails
+      localStorage.removeItem("jwtToken");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("userType");
+  
+      setUserData({});
+      setPosts([]);
+      navigate("/", { replace: true });
+    }
   };
   
 
@@ -81,9 +118,9 @@ const TutorDash = () => {
     setShowProfile(false); // Close the profile modal
   };
 
-  const handlePolicyClick = () => {
-    navigate("/register/term");
-  };
+  // const handlePolicyClick = () => {
+  //   navigate("/register/term");
+  // };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -116,10 +153,10 @@ const TutorDash = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 mt-[120px]">
+    <div className="min-h-screen flex flex-col bg-gray-50 sticky">
       <header className="bg-cyan-700 flex items-center h-16 justify-between px-4 md:px-10 py-2 shadow-md relative">
-        <img src={grad} alt="Gruha Pandit" className="w-20 md:w-24" />
-        <div className="flex items-center space-x-4 text-white">
+        <img src={gruhapa} alt="Gruha Pandit" className="w-20 md:w-24" />
+        <div className="flex items-center space-x-4 text-white ml-auto">
           <FaEnvelope className="w-5 h-5 cursor-pointer" />
           <FaBell className="w-5 h-5 cursor-pointer" />
           <div
@@ -139,7 +176,7 @@ const TutorDash = () => {
                   </li>
                   <li
                     className="px-4 py-2 hover:bg-blue-100 cursor-pointer"
-                    onClick={handlePolicyClick}
+                    onClick={handleOpenPolicy}
                   >
                     Policy
                   </li>
@@ -198,14 +235,14 @@ const TutorDash = () => {
         </div>
       ) : (
         <>
-          <main className="w-full md:w-3/5 mx-auto mt-10 p-4 flex justify-center bg-white">
+          <main className="w-full md:w-3/5 mx-auto mt-10 p-3 flex justify-center bg-white">
             <img
               src={gradi}
               alt="Graduation pic"
               className="w-full h-48 md:h-56 object-cover rounded-md"
             />
           </main>
-
+  
           <div className="w-full md:w-3/4 mx-auto mt-6">
             <header className="bg-cyan-700 text-white px-4 py-3 rounded-t-md">
               <h2 className="text-lg font-semibold">Your Required Posts</h2>
@@ -248,6 +285,21 @@ const TutorDash = () => {
         </>
       )}
 
+
+{isModalOpen && (
+        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+          <div className="relative bg-white shadow-lg rounded-lg max-w-4xl w-full mx-auto h-[90vh] overflow-y-auto p-8">
+            <button
+              className="absolute top-3 right-3 text-red-700 font-bold hover:text-red-500 "
+              onClick={handleCloseModal}
+            >
+              X
+            </button>
+            <Slide6/>
+          </div>
+        </div>
+      )}
+  
       {/* Profile Modal */}
       {showProfile && (
         <ProfileDetails

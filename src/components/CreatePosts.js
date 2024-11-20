@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { AiTwotoneProfile } from "react-icons/ai";
 import { FaEnvelope, FaBell } from "react-icons/fa";
 import { IoSettings } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "./AxiosInstance";
-
+import Slide6 from './Slide6';
 
 const CreatePosts = () => {
   const [showPopup, setShowPopup] = useState(false);
@@ -40,10 +40,15 @@ const CreatePosts = () => {
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
+
+    // Prevent the first character from being a space
+    const trimmedValue = value.startsWith(" ") ? value.trimStart() : value;
+
     setFormData((prevData) => ({
       ...prevData,
-      [id]: value,
+      [id]: trimmedValue,
     }));
+
     setErrors((prevErrors) => ({
       ...prevErrors,
       [id]: "",
@@ -53,20 +58,20 @@ const CreatePosts = () => {
   const validate = () => {
     const newErrors = {};
     const nameRegex = /^[A-Za-z](?:[A-Za-z\s]*)$/;
-    const subjectRegex = /^[A-Za-z0-9][A-Za-z0-9\s,]*$/;
+    const subjectRegex = /^[A-Za-z0-9][A-Za-z0-9\s,.+]*$/;
 
     if (!formData.firstName) newErrors.firstName = "Name is required";
     else if (!nameRegex.test(formData.firstName))
       newErrors.firstName = "Name can only contain letters and spaces";
 
     if (selectedRole === "student") {
-      if (!formData.subjectsLookingFor)
+      if (!formData.subjectsLookingFor) {
         newErrors.subjectsLookingFor = "Subject is required";
-      else if (!subjectRegex.test(formData.subjectsLookingFor))
+      } else if (!subjectRegex.test(formData.subjectsLookingFor)) {
         newErrors.subjectsLookingFor =
-          "Subject can only contain letters, numbers, spaces, and commas";
+          "Subject can only contain letters, numbers, spaces, commas, plus signs (+), and periods (.)";
+      }
     }
-
     if (selectedRole === "tutor") {
       if (!formData.subjectsYouAreExpertAt)
         newErrors.subjectsYouAreExpertAt = "Expertise is required";
@@ -94,6 +99,7 @@ const CreatePosts = () => {
         if (selectedRole === "student") {
           url =
             "https://hrms-repository-gruhabase.onrender.com/tuition-application/studentAdvertisement/create";
+          // "https://tution-application.onrender.com/tuition-application/studentAdvertisement/create";
           payload = {
             firstName: formData.firstName,
             subjectsLookingFor: formData.subjectsLookingFor,
@@ -103,6 +109,7 @@ const CreatePosts = () => {
         } else if (selectedRole === "tutor") {
           url =
             "https://hrms-repository-gruhabase.onrender.com/tuition-application/tutorAdvertisement/create";
+          // "https://tution-application.onrender.com/tuition-application/tutorAdvertisement/create"
           payload = {
             firstName: formData.firstName,
             subjectsYouAreExpertAt: formData.subjectsYouAreExpertAt,
@@ -120,6 +127,58 @@ const CreatePosts = () => {
     }
   };
 
+
+  const [availableTimings, setTimings] = useState([]);
+
+  //timing slots validations
+
+  const generateTimings = () => {
+    const timings = [];
+    const startHour = 0; // 00:00 (12 AM in 24-hour format)
+    const endHour = 23; // 23:00 (11 PM in 24-hour format)
+    const interval = 45; // 45 minutes
+
+    let hour = startHour;
+    let minute = 0;
+
+    while (hour < endHour || (hour === endHour && minute === 15)) {
+      const startTime = formatTime(hour, minute);
+
+      // Increment time by 45 minutes to get the end time of the slot
+      let endHour = hour;
+      let endMinute = minute + interval;
+
+      if (endMinute >= 60) {
+        endMinute -= 60;
+        endHour++;
+      }
+
+      const endTime = formatTime(endHour, endMinute);
+      timings.push(`${startTime} to ${endTime} IST`);
+
+      // Update the current time for the next slot
+      minute += interval;
+      if (minute >= 60) {
+        minute -= 60; // Reset minutes and increment hour
+        hour++;
+      }
+    }
+
+    return timings;
+  };
+  const formatTime = (hour, minute) => {
+    const amPm = hour < 12 || hour === 24 ? "AM" : "PM"; // Handle AM/PM correctly
+    const formattedHour = hour % 12 || 12; // Convert 0 and 24 hour to 12 for display
+    const formattedMinute = minute < 10 ? `0${minute}` : minute; // Add leading zero for minutes
+    return `${formattedHour}:${formattedMinute} ${amPm}`; // Return in HH:mm AM/PM format
+  };
+  // useEffect to set the generated timings on component mount
+  useEffect(() => {
+    const availableTimings = generateTimings();
+    setTimings(availableTimings);
+    // console.log(availableTimings); // To log the available timings in IST format
+  }, []);
+
   useEffect(() => {
     const today = new Date();
     const options = { month: "short", day: "numeric" };
@@ -130,9 +189,56 @@ const CreatePosts = () => {
   const toggleDropdown = () => setIsOpen(!isOpen);
   const closeDropdown = () => setIsOpen(false);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleOpenPolicy = () => {
+    setIsModalOpen(true);
+  };
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const navigate=useNavigate();
+
+  
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem("jwtToken");
+      const usersData = JSON.parse(localStorage.getItem("usersData")); // Get usersData from localStorage
+  
+      if (token && usersData) {
+        await axiosInstance.post(
+          `/tuition-application/authenticate/logout?emailId=${usersData.emailId}`,
+          null,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+      }
+  
+      // Clear local storage and sensitive state
+      localStorage.removeItem("jwtToken");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("userType");
+      localStorage.removeItem("usersData");  // Clear usersData from localStorage if needed
+  
+      // Redirect user to the login page
+      navigate("/", { replace: true });
+    } catch (error) {
+      
+  
+      // Proceed with client-side logout even if server logout fails
+      localStorage.removeItem("jwtToken");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("userType");
+      localStorage.removeItem("usersData");
+  
+      navigate("/", { replace: true });
+    }
+  };  
+
   return (
     <div>
-      <div className="h-screen flex mt-14">
+      <div className="h-screen flex sticky">
         <div
           className="bg-gray-200 w-2/5
         
@@ -185,18 +291,17 @@ const CreatePosts = () => {
                   onClick={toggleDropdown}
                 />
                 {isOpen && (
-                  <div className="absolute right-0 mt-14 w-48 bg-white rounded-md shadow-lg z-10">
-                    <Link
-                      to="/register/term"
+                  <div className="absolute right-0 mt-28 w-48 bg-white rounded-md shadow-lg z-10">
+                    <li
                       className="block px-4 py-2 hover:bg-blue-100"
-                      onClick={closeDropdown}
+                      onClick={handleOpenPolicy}
                     >
                       Policy
-                    </Link>
-                    <Link
-                      to="/"
+                    </li>
+                    <Link to="/"
                       className="block px-4 py-2 hover:bg-blue-100"
-                      onClick={closeDropdown}
+                      onClick={handleLogout}
+
                     >
                       Logout
                     </Link>
@@ -259,31 +364,69 @@ const CreatePosts = () => {
                     )}
                   </div>
                   <div>
-                <label className='block'>{selectedRole === 'student' ? 'Subject' : 'Subject'}:</label>
-                <input
-                  type='text'
-                  id={selectedRole === 'student' ? 'subjectsLookingFor' : 'subjectsYouAreExpertAt'}
-                  maxLength='30'
-                  placeholder={selectedRole === 'student' ? 'subject' : 'subject'}
-                  className={`border-2 border-black w-full p-2 ${errors[selectedRole === 'student' ? 'subjectsLookingFor' : 'subjectsYouAreExpertAt'] ? 'border-red-500' : ''}`}
-                  value={selectedRole === 'student' ? formData.subjectsLookingFor : formData.subjectsYouAreExpertAt}
-                  onChange={handleInputChange}
-                />
-                {errors[selectedRole === 'student' ? 'subjectsLookingFor' : 'subjectsYouAreExpertAt'] && <p className='text-red-500 text-sm'>{errors[selectedRole === 'student' ? 'subjectsLookingFor' : 'subjectsYouAreExpertAt']}</p>}
-              </div>
-                  <div>
-                    <label className="block">Mode of Teaching:</label>
+                    <label className="block">
+                      {selectedRole === "student" ? "Subject" : "Subject"}:
+                    </label>
                     <input
                       type="text"
-                      id="modeOfTeaching"
+                      id={
+                        selectedRole === "student"
+                          ? "subjectsLookingFor"
+                          : "subjectsYouAreExpertAt"
+                      }
                       maxLength="30"
-                      placeholder="online/offline"
+                      placeholder={
+                        selectedRole === "student" ? "subject" : "subject"
+                      }
+                      className={`border-2 border-black w-full p-2 ${
+                        errors[
+                          selectedRole === "student"
+                            ? "subjectsLookingFor"
+                            : "subjectsYouAreExpertAt"
+                        ]
+                          ? "border-red-500"
+                          : ""
+                      }`}
+                      value={
+                        selectedRole === "student"
+                          ? formData.subjectsLookingFor
+                          : formData.subjectsYouAreExpertAt
+                      }
+                      onChange={handleInputChange}
+                    />
+                    {errors[
+                      selectedRole === "student"
+                        ? "subjectsLookingFor"
+                        : "subjectsYouAreExpertAt"
+                    ] && (
+                      <p className="text-red-500 text-sm">
+                        {
+                          errors[
+                            selectedRole === "student"
+                              ? "subjectsLookingFor"
+                              : "subjectsYouAreExpertAt"
+                          ]
+                        }
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <label className="block">Mode of Teaching:</label>
+                    <select
+                      id="modeOfTeaching"
                       className={`border-2 border-black w-full p-2 ${
                         errors.modeOfTeaching ? "border-red-500" : ""
                       } mb-4`}
                       value={formData.modeOfTeaching}
                       onChange={handleInputChange}
-                    />
+                    >
+                      <option value="" disabled>
+                        Select a mode
+                      </option>
+                      <option value="Online Mode">Student Mode</option>
+                      <option value="Offline Mode">Tutor Mode</option>
+                      <option value="Virtual Mode">Virtual Mode</option>
+                    </select>
                     {errors.modeOfTeaching && (
                       <p className="text-red-500 text-sm">
                         {errors.modeOfTeaching}
@@ -292,17 +435,21 @@ const CreatePosts = () => {
                   </div>
                   <div>
                     <label className="block">Available Timings:</label>
-                    <input
-                      type="text"
+                    <select
                       id="availableTimings"
-                      maxLength="30"
-                      placeholder="timing"
                       className={`border-2 border-black w-full p-2 ${
                         errors.availableTimings ? "border-red-500" : ""
                       }`}
                       value={formData.availableTimings}
                       onChange={handleInputChange}
-                    />
+                    >
+                      <option value="">Select a time slot</option>
+                      {availableTimings.map((time, index) => (
+                        <option key={index} value={time}>
+                          {time}
+                        </option>
+                      ))}
+                    </select>
                     {errors.availableTimings && (
                       <p className="text-red-500 text-sm">
                         {errors.availableTimings}
@@ -320,6 +467,20 @@ const CreatePosts = () => {
             </div>
           )}
         </div>
+
+        {isModalOpen && (
+        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 ">
+          <div className="relative bg-white shadow-lg rounded-lg max-w-4xl w-full mx-auto h-[90vh] overflow-y-auto p-8">
+            <button
+              className="absolute top-3 right-3 text-red-700 font-bold hover:text-red-500 "
+              onClick={handleCloseModal}
+            >
+              X
+            </button>
+            <Slide6/>
+          </div>
+        </div>
+      )}
       </div>
     </div>
   );

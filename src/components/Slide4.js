@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Slide4 = () => {
   return (
-    <div className="slide2-container border shadow-xl py-10">
+    <div className="slide2-container border shadow-xl py-10 font-serif">
       <div className="about-us-section flex flex-col lg:flex-row items-center lg:items-start lg:justify-between lg:space-x-8 p-6">
         <div className="w-full lg:w-[670px] ml-6">
           <img
@@ -19,7 +19,7 @@ const Slide4 = () => {
           </h2>
           <p className="text-base sm:text-lg leading-relaxed font-bold text-gray-800">
             If you're a tutor looking to share your expertise,{" "}
-            <Link to="/register/tutor"> Gruhapandit tuitions</Link> provides you
+            <Link to="/register/tutor" className="text-blue-800"> Gruhapandit tuitions</Link> provides you
             with the perfect platform. You can:
           </p>
 

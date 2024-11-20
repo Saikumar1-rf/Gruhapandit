@@ -1,0 +1,7 @@
+@media (max-width: 375px) {
+    .popup-container {
+      padding: 16px;
+      max-width: 95%;
+      margin: 0 auto;
+    }
+  }

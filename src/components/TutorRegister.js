@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Slide6 from "./Slide6";
 import { countries } from "./Countries";
 import Select from "react-select";
+import bgImage from "../Asserts/tution-bg13.jpg";
 
 const TutorRegister = () => {
   const [formData, setFormData] = useState({
@@ -109,16 +110,19 @@ const TutorRegister = () => {
       } else {
         setErrors({ ...errors, emailId: "" });
       }
-    } else if (name === "chargesPerHour") {
+    }else if (name === "chargesPerHour") {
       // Allow only numeric values for charges per hour
-      if (/^\d*\.?\d*$/.test(value)) { // Regular expression for numbers (optional decimal)
+      if (/^\d*\.?\d*$/.test(value)) {
+        // Regular expression for numbers (optional decimal)
         setFormData({ ...formData, [name]: value });
         setErrors({ ...errors, chargesPerHour: "" });
       } else {
-        setErrors({ ...errors, chargesPerHour: "Charges per hour must be a number." });
+        setErrors({
+          ...errors,
+          chargesPerHour: "Charges per hour must be a number.",
+        });
       }
-    } 
-    else if (name === "firstName" || name === "lastName" || name === "category") {
+    } else if (name === "firstName" || name === "lastName" || name === "category") {
       // Only allow alphabetic characters for firstName, lastName, and category fields
       if (/[^a-zA-Z\s]/.test(value)) {
         setErrors({ ...errors, [name]: "Only alphabetic characters are allowed." });
@@ -130,6 +134,46 @@ const TutorRegister = () => {
       setFormData({ ...formData, [name]: value });
     }
   };
+  
+  const handleHigherQualificationChange = (e) => {
+    const { name, value } = e.target;
+    let errorMessage = "";
+  
+    // Prevent input from starting with a space
+    if (/^\s/.test(value)) {
+      errorMessage = "The input should not start with a space.";
+    } else {
+      // Allow letters, numbers, spaces, commas, periods, underscores, and hyphens
+      const validInputPattern = /^[a-zA-Z0-9\s,._-]*$/;
+      if (!validInputPattern.test(value)) {
+        errorMessage = "Only letters, numbers, spaces, commas, periods, underscores, and hyphens are allowed.";
+      } else {
+        // Extract numeric characters
+        const digits = value.replace(/[^0-9]/g, ""); // Keep only numbers
+  
+        // Check if digits are within 1-12
+        if (digits && (Number(digits) < 1 || Number(digits) > 12)) {
+          errorMessage = "Only class numbers between 1 and 12 are allowed in digits.";
+        } else if (value.length > 30) {
+          errorMessage = "Higher Qualification can only have up to 30 characters.";
+        }
+      }
+    }
+  
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      highestQualification: errorMessage,
+    }));
+  
+    // Update form data if there is no error
+    if (!errorMessage) {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
+  };
+  
   
 
   //Mobile Number Validation//
@@ -153,7 +197,7 @@ const TutorRegister = () => {
 
   const validateForm = () => {
     let errors = {};
-    const emailRegex = /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/;
+    const emailRegex = /^(?!\d)[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*@(gmail|yahoo|outlook|hotmail|example|sai)\.(com|net|org|in|edu|gov|mil|us|info|org\.in)$/;
     if (!formData.firstName) errors.firstName = "First Name is required";
     if (!formData.lastName) errors.lastName = "Last Name is required";
     if (!formData.emailId) {
@@ -221,8 +265,6 @@ const TutorRegister = () => {
           if (error.response.status === 400) {
             // console.log(error.response.data.split(":")[1])
             const errorMessage = error.response.data.split(":")[1]
-  
-            // const backendErrorMessage = error.response.data.message || "Already Data  exists"; 
             setErrors({
               // apiError: backendErrorMessage,
               emailId: errorMessage.includes("email id") && errorMessage,
@@ -236,7 +278,8 @@ const TutorRegister = () => {
               modeOfTeaching:errorMessage.includes("modeOfTeaching") && errorMessage,
               availableTimings:errorMessage.includes("availableTimings") && errorMessage,
               highestQualification:errorMessage.includes("highestQualification") && errorMessage,
-              nationalId: errorMessage.includes("NationalId")});
+              nationalIdNum: errorMessage.includes("NationalId") && errorMessage,
+            })
           } else {
             setErrors({ apiError: "An error occurred while submitting the form." });
           }
@@ -278,9 +321,9 @@ const TutorRegister = () => {
         hour++;
       }
     }
-
     return timings;
   }; 
+
   const handleEmailChange = (e) => {
     const { name, value } = e.target;
   
@@ -379,13 +422,17 @@ const TutorRegister = () => {
   };
 
 
-
   return (
-    <div className="flex py-20 justify-center items-center min-h-screen bg-gray-100 mt-2 bg-gradient-to-r from-gray-200 to-blue-300">
-      <div className="w-[650px] mx-auto p-4 mt-9">
+    <div className="flex py-20 justify-center items-center min-h-screen bg-gray-100 mt-2 bg-gradient-to-r from"
+      style={{
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}> 
+      <div className="w-[650px] mx-auto p-4">
         <form
           onSubmit={handleSubmit}
-          className="w-full max-w-2xl border border-gray-400 p-8 bg-transparent bg-gradient-to-r from-gray-200 to-blue-300 shadow-md rounded-lg"
+          className="w-full max-w-2xl border bg-white border-gray-400 p-8 bg-transparent bg-gradient-to-r shadow-md rounded-lg"
         >
           <div>
             <p>
@@ -400,7 +447,7 @@ const TutorRegister = () => {
               </a>
             </p>
           </div>
-          <h2 className="text-2xl font-bold text-center text-gray-800 text-shadow-default mb-10 mt-5">
+          <h2 className="text-xl font-bold text-center text-gray-800 text-shadow-default mb-10 mt-5">
             TUTOR REGISTRATION
           </h2>
           <div className="flex flex-wrap -mx-2 mb-4">
@@ -628,7 +675,7 @@ const TutorRegister = () => {
                 name="highestQualification"
                 placeholder="Enter Qualification"
                 value={formData.highestQualification}
-                onChange={handleChange}
+                onChange={handleHigherQualificationChange}
                 className="w-full px-3 outline-none py-2 border rounded mt-2 bg-transparent border-gray-400"
               />
               {errors.highestQualification && (
@@ -680,7 +727,6 @@ const TutorRegister = () => {
             </div>
           </div>
           <div className="flex flex-wrap -mx-2 mb-4">
-          
             <div className="w-full sm:w-1/2 px-2">
               <label className="block text-gray-800 text-shadow-default font-bold">
                 Charges Per Hour
@@ -691,7 +737,7 @@ const TutorRegister = () => {
                 placeholder="Enter Charges"
                 value={formData.chargesPerHour}
                 onChange={handleChange}
-                maxLength={5}
+                maxLength={8}
                 className="w-full px-3 outline-none py-2 border rounded mt-2 bg-transparent border-gray-400"
               />
               {errors.chargesPerHour && (
