@@ -19,7 +19,7 @@ const Slide4 = () => {
           </h2>
           <p className="text-base sm:text-lg leading-relaxed font-bold text-gray-800">
             If you're a tutor looking to share your expertise,{" "}
-            <Link to="/register/tutor" className="text-blue-800"> Gruhapandit tuitions</Link> provides you
+            <Link to="/register/tutor" className="text-[#41C9E2] hover:text-blue-900 hover:underline transition duration-300"> Gruhapandit tuitions</Link> provides you
             with the perfect platform. You can:
           </p>
 
@@ -55,4 +55,3 @@ const Slide4 = () => {
 };
 
 export default Slide4;
- 

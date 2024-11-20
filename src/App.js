@@ -18,6 +18,8 @@ import Allposts from './components/Allposts';
 import UserDashboard from './components/UserDashboard';
 import { AuthProvider } from './components/authContext'; 
 import ProtectedRoute from './components/ProtectedRoutes'; 
+import Sidebar from './components/Sidebar';
+import DialogueBox from './components/DialogueBox';
 
 
 function AppContent() {
@@ -36,6 +38,7 @@ function AppContent() {
           <Route path="/register/student" element={<StudentRegister />} />
           <Route path="/create-password" element={<CreatePassword />} />
           <Route path="/register/term" element={<Slide6 />} />
+          <Route path="/dialoguebox" element={<DialogueBox/>}></Route>
           <Route path="/register/tutor" element={<TutorRegister />} />
           <Route path="/posts" element={
             <ProtectedRoute>
@@ -44,6 +47,7 @@ function AppContent() {
           } />
           <Route path="/postsdash" element={<Postsdash />} />
           <Route path="/slide6" element={<Slide6 />} />
+         <Route path='sidebar' element={<Sidebar/>}/>
           <Route path="/dashboard" element={<CreatePosts />} />
           <Route path="/allposts" element={<Allposts />} />
           <Route path="/payment" element={<Payment />} />

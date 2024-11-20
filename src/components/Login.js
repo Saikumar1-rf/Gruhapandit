@@ -199,7 +199,8 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../components/authContext";
 
-import gruhaimg from '../Asserts/gruhaimg.jpg';
+// import gruhaimg from '../Asserts/gruhaimg.jpg';
+import gruhaimg from '../Asserts/login2.jpg';
 
 const Login = () => {
   const { login } = useAuth();
@@ -214,8 +215,9 @@ const Login = () => {
 
   const validateEmail = (input) => {
     const emailPattern =
-      /^[a-z0-9._%+-]+@[a-z.-]+\.(com|net|org|in|edu|gov|mil|co|us|info)$/;
-    return emailPattern.test(input) && !/^\d[0-5]/.test(input);
+      // /^[a-z0-9._%+-]+@[a-z.-]+\.(com|net|org|in|edu|gov|mil|co|us|info)$/;
+      /^(?!\d)[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*@[a-z]+\.(com|net|org|in|edu|gov|mil|us|info|org\.in)$/;
+      return emailPattern.test(input) && !/^\d[0-5]/.test(input);
   };
 
   const validatePhoneNumber = (input) => {
@@ -256,7 +258,7 @@ const Login = () => {
         "https://hrms-repository-gruhabase.onrender.com/tuition-application/authenticate/login",
         { emailId, password }
       );
-
+  
       const { jwtToken, userId, userType } = response.data;
       localStorage.setItem("jwtToken", jwtToken);
       localStorage.setItem("userId", userId);
@@ -295,7 +297,7 @@ const Login = () => {
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 sm:px-8">
+    <div className="min-h-screen flex items-center justify-center px-4 sm:px-8 transition transform hover:scale-105 hover:shadow-2xl hover:-translate-y-1 duration-300 ease-in-out">
       <div className="flex flex-col md:flex-row w-full max-w-4xl bg-white rounded-lg shadow-2xl overflow-hidden mt-12 md:mt-20">
         
         {/* Left Image */}

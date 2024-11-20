@@ -225,7 +225,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
         formDataToSend.append("category", formData.category);
         formDataToSend.append("availableTimings", formData.availableTimings);
         // formDataToSend.append("file", formData.file); // Add the file if needed
-
+        
         const response = await axios.post(
           "https://hrms-repository-gruhabase.onrender.com/tuition-application/student/create",
           // "https://tution-application.onrender.com/tuition-application/student/create",
@@ -496,8 +496,8 @@ const StudentRegister = ({ setIsSubmitted }) => {
       newErrors.lastName = "Last Name must be at least 3 characters";
     }
     const emailRegex =
-      /^(?!\d)[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*@(gmail|yahoo|outlook|hotmail|example|sai)\.(com|net|org|in|edu|gov|mil|us|info|org\.in)$/;
-
+      // /^(?!\d)[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*@(gmail|yahoo|outlook|hotmail|example|sai)\.(com|net|org|in|edu|gov|mil|us|info|org\.in)$/;
+      /^(?!\d)[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*@[a-z]+\.(com|net|org|in|edu|gov|mil|us|info|org\.in)$/;
     if (!formData.emailId) {
       newErrors.emailId = "email Id is required";
     } else if (!emailRegex.test(formData.emailId)) {

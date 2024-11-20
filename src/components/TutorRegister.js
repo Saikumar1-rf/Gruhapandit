@@ -39,41 +39,48 @@ const TutorRegister = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-  
+
     // Prevent the first character from being a space
     if (value.startsWith(" ")) return;
-  
+
     if (name === "nationalIdNum") {
       if (formData.nationalIdType === "Aadhar Card") {
         // Allow only numeric input for Aadhaar and limit to 12 digits
         const formattedValue = value.replace(/[^0-9]/g, "").slice(0, 12);
         setFormData({ ...formData, [name]: formattedValue });
-  
+
         if (formattedValue.length === 12) {
           setErrors({ ...errors, nationalIdNum: "" });
         } else {
-          setErrors({ ...errors, nationalIdNum: "Aadhar must be exactly 12 digits." });
+          setErrors({
+            ...errors,
+            nationalIdNum: "Aadhar must be exactly 12 digits.",
+          });
         }
       } else if (formData.nationalIdType === "Pan Card") {
         let formattedValue = value.toUpperCase();
-  
+
         // Allow only uppercase letters in the first 5 characters
         if (formattedValue.length <= 5) {
           formattedValue = formattedValue.replace(/[^A-Z]/g, "");
         }
         // Allow only numbers in the next 4 characters
         else if (formattedValue.length <= 9) {
-          formattedValue = formattedValue.slice(0, 5) + formattedValue.slice(5).replace(/[^0-9]/g, "");
+          formattedValue =
+            formattedValue.slice(0, 5) +
+            formattedValue.slice(5).replace(/[^0-9]/g, "");
         }
         // Allow only an uppercase letter in the 10th character
         else if (formattedValue.length === 10) {
-          formattedValue = formattedValue.slice(0, 9) + formattedValue[9].replace(/[^A-Z]/g, "");
+          formattedValue =
+            formattedValue.slice(0, 9) +
+            formattedValue[9].replace(/[^A-Z]/g, "");
         } else {
           formattedValue = formattedValue.slice(0, 10); // Limit input to 10 characters
         }
-  
+
         setFormData({ ...formData, [name]: formattedValue });
-  
+
         // Validate full PAN format after reaching 10 characters
         if (formattedValue.length === 10) {
           if (/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(formattedValue)) {
@@ -97,10 +104,14 @@ const TutorRegister = () => {
       setErrors({ ...errors, nationalIdNum: "" });
     } else if (name === "emailId") {
       // Remove spaces and convert to lowercase for emailId
-      const noSpaceValue = value.replace( `^\S$|^\S[\s\S]*\S$
-` ).toLowerCase();
+      const noSpaceValue = value
+        .replace(
+          `^\S$|^\S[\s\S]*\S$
+`
+        )
+        .toLowerCase();
       setFormData({ ...formData, [name]: noSpaceValue });
-  
+
       // Check if spaces were originally present
       if (/\s/.test(value)) {
         setErrors({
@@ -110,7 +121,7 @@ const TutorRegister = () => {
       } else {
         setErrors({ ...errors, emailId: "" });
       }
-    }else if (name === "chargesPerHour") {
+    } else if (name === "chargesPerHour") {
       // Allow only numeric values for charges per hour
       if (/^\d*\.?\d*$/.test(value)) {
         // Regular expression for numbers (optional decimal)
@@ -122,10 +133,17 @@ const TutorRegister = () => {
           chargesPerHour: "Charges per hour must be a number.",
         });
       }
-    } else if (name === "firstName" || name === "lastName" || name === "category") {
+    } else if (
+      name === "firstName" ||
+      name === "lastName" ||
+      name === "category"
+    ) {
       // Only allow alphabetic characters for firstName, lastName, and category fields
       if (/[^a-zA-Z\s]/.test(value)) {
-        setErrors({ ...errors, [name]: "Only alphabetic characters are allowed." });
+        setErrors({
+          ...errors,
+          [name]: "Only alphabetic characters are allowed.",
+        });
       } else {
         setFormData({ ...formData, [name]: value });
         setErrors({ ...errors, [name]: "" });
@@ -134,11 +152,11 @@ const TutorRegister = () => {
       setFormData({ ...formData, [name]: value });
     }
   };
-  
+
   const handleHigherQualificationChange = (e) => {
     const { name, value } = e.target;
     let errorMessage = "";
-  
+
     // Prevent input from starting with a space
     if (/^\s/.test(value)) {
       errorMessage = "The input should not start with a space.";
@@ -146,25 +164,28 @@ const TutorRegister = () => {
       // Allow letters, numbers, spaces, commas, periods, underscores, and hyphens
       const validInputPattern = /^[a-zA-Z0-9\s,._-]*$/;
       if (!validInputPattern.test(value)) {
-        errorMessage = "Only letters, numbers, spaces, commas, periods, underscores, and hyphens are allowed.";
+        errorMessage =
+          "Only letters, numbers, spaces, commas, periods, underscores, and hyphens are allowed.";
       } else {
         // Extract numeric characters
         const digits = value.replace(/[^0-9]/g, ""); // Keep only numbers
-  
+
         // Check if digits are within 1-12
         if (digits && (Number(digits) < 1 || Number(digits) > 12)) {
-          errorMessage = "Only class numbers between 1 and 12 are allowed in digits.";
+          errorMessage =
+            "Only class numbers between 1 and 12 are allowed in digits.";
         } else if (value.length > 30) {
-          errorMessage = "Higher Qualification can only have up to 30 characters.";
+          errorMessage =
+            "Higher Qualification can only have up to 30 characters.";
         }
       }
     }
-  
+
     setErrors((prevErrors) => ({
       ...prevErrors,
       highestQualification: errorMessage,
     }));
-  
+
     // Update form data if there is no error
     if (!errorMessage) {
       setFormData((prevData) => ({
@@ -173,8 +194,6 @@ const TutorRegister = () => {
       }));
     }
   };
-  
-  
 
   //Mobile Number Validation//
   const [selectedCountry, setSelectedCountry] = useState("");
@@ -195,10 +214,49 @@ const TutorRegister = () => {
     return country.validStartDigits.some((digit) => value.startsWith(digit));
   };
 
+  const handleFileUpload = (event) => {
+    const { name, files } = event.target;
+    const maxSize = 5 * 1024 * 1024; // 5 MB in bytes
+    const minSize = 1024; // 1 KB in bytes
+  
+    if (files.length > 0) {
+      const file = files[0];
+  
+      if (file.size < minSize) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: "File size must be at least 1 KB",
+        }));
+      } else if (file.size > maxSize) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: "File size must not exceed 5 MB",
+        }));
+      } else {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: "",
+        }));
+  
+        setFormData({
+          ...formData,
+          [name]: file, // Store the file in formData
+        });
+      }
+    } else {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: "Please upload a file",
+      }));
+    }
+  };
+  
   const validateForm = () => {
     let errors = {};
-    const emailRegex = /^(?!\d)[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*@(gmail|yahoo|outlook|hotmail|example|sai)\.(com|net|org|in|edu|gov|mil|us|info|org\.in)$/;
-    if (!formData.firstName) errors.firstName = "First Name is required";
+    const emailRegex =
+      // /^(?!\d)[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*@(gmail|yahoo|outlook|hotmail|example|sai)\.(com|net|org|in|edu|gov|mil|us|info|org\.in)$/;
+      /^(?!\d)[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*@[a-z]+\.(com|net|org|in|edu|gov|mil|us|info|org\.in)$/;
+      if (!formData.firstName) errors.firstName = "First Name is required";
     if (!formData.lastName) errors.lastName = "Last Name is required";
     if (!formData.emailId) {
       errors.emailId = "EmailId is required";
@@ -232,10 +290,14 @@ const TutorRegister = () => {
     if (!formData.nationalIdType)
       errors.nationalIdType = "National Id Type is required";
     if (!formData.nationalIdNum)
-      errors.nationalIdNum = "National Id Number is required";
+      errors.nationalIdNum = `${formData.nationalIdType} is required`;
     if (!formData.availableTimings)
       errors.availableTimings = "Available Timings is required";
     if (!formData.category) errors.category = "Category is required";
+
+    if (!formData[`${formData.nationalIdType}File`]) {
+      errors[`${formData.nationalIdType}File`] = `${formData.nationalIdType} document is required`;
+    }
 
     return errors;
   };
@@ -250,7 +312,7 @@ const TutorRegister = () => {
       try {
         const response = await axios.post(
           "https://hrms-repository-gruhabase.onrender.com/tuition-application/tutor/create",
-              // "https://tution-application.onrender.com/tuition-application/tutor/create",
+          // "https://tution-application.onrender.com/tuition-application/tutor/create",
           formData,
           {
             headers: {
@@ -264,24 +326,32 @@ const TutorRegister = () => {
           // Check if the error status is 400 and extract the message
           if (error.response.status === 400) {
             // console.log(error.response.data.split(":")[1])
-            const errorMessage = error.response.data.split(":")[1]
+            const errorMessage = error.response.data.split(":")[1];
             setErrors({
               // apiError: backendErrorMessage,
               emailId: errorMessage.includes("email id") && errorMessage,
-              phoneNumber:errorMessage.includes("phone number") && errorMessage,
-              dob:errorMessage.includes("Date of birth") && errorMessage,
+              phoneNumber:
+                errorMessage.includes("phone number") && errorMessage,
+              dob: errorMessage.includes("Date of birth") && errorMessage,
               // location:errorMessage.includes("location") && errorMessage,
-              board:errorMessage.includes("board") && errorMessage,
-              institution:errorMessage.includes("institution") && errorMessage,
-              category:errorMessage.includes("category") && errorMessage,
-              subjectsYouAreExpertAt:errorMessage.includes("subjectsYouAreExpertAt") && errorMessage,
-              modeOfTeaching:errorMessage.includes("modeOfTeaching") && errorMessage,
-              availableTimings:errorMessage.includes("availableTimings") && errorMessage,
-              highestQualification:errorMessage.includes("highestQualification") && errorMessage,
-              nationalIdNum: errorMessage.includes("NationalId") && errorMessage,
-            })
+              board: errorMessage.includes("board") && errorMessage,
+              institution: errorMessage.includes("institution") && errorMessage,
+              category: errorMessage.includes("category") && errorMessage,
+              subjectsYouAreExpertAt:
+                errorMessage.includes("subjectsYouAreExpertAt") && errorMessage,
+              modeOfTeaching:
+                errorMessage.includes("modeOfTeaching") && errorMessage,
+              availableTimings:
+                errorMessage.includes("availableTimings") && errorMessage,
+              highestQualification:
+                errorMessage.includes("highestQualification") && errorMessage,
+              nationalIdNum:
+                errorMessage.includes("NationalId") && errorMessage,
+            });
           } else {
-            setErrors({ apiError: "An error occurred while submitting the form." });
+            setErrors({
+              apiError: "An error occurred while submitting the form.",
+            });
           }
         } else {
           setErrors({ apiError: "Network error. Please try again later." });
@@ -289,8 +359,8 @@ const TutorRegister = () => {
       }
     }
   };
-  
-    const generateTimings = () => {
+
+  const generateTimings = () => {
     const timings = [];
     const startHour = 0; // 00:00 (12 AM in 24-hour format)
     const endHour = 23; // 23:00 (11 PM in 24-hour format)
@@ -322,19 +392,19 @@ const TutorRegister = () => {
       }
     }
     return timings;
-  }; 
+  };
 
   const handleEmailChange = (e) => {
     const { name, value } = e.target;
-  
+
     // Convert input to lowercase and remove spaces
     const lowercaseValue = value.replace(/\s/g, "").toLowerCase();
-    
+
     setFormData((prevData) => ({
       ...prevData,
       [name]: lowercaseValue,
     }));
-  
+
     // Set an error if any uppercase letters were in the original input
     if (/[A-Z]/.test(value)) {
       setErrors((prevErrors) => ({
@@ -348,7 +418,6 @@ const TutorRegister = () => {
       }));
     }
   };
-  
 
   const handleKeyDown = (e) => {
     if (e.key === " ") {
@@ -414,21 +483,22 @@ const TutorRegister = () => {
       }));
     }
   };
-  
+
   const handleFocus = () => {
     if (!isLocationDetected) {
       detectLocation();
     }
   };
 
-
   return (
-    <div className="flex py-20 justify-center items-center min-h-screen bg-gray-100 mt-2 bg-gradient-to-r from"
+    <div
+      className="flex py-20 justify-center items-center min-h-screen bg-gray-100 mt-2 bg-gradient-to-r from"
       style={{
         backgroundImage: `url(${bgImage})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}> 
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
       <div className="w-[650px] mx-auto p-4">
         <form
           onSubmit={handleSubmit}
@@ -507,7 +577,7 @@ const TutorRegister = () => {
                 <p className="text-red-400 text-base mt-1">{errors.emailId}</p>
               )}
             </div>
-          <div className="w-full sm:w-1/2 px-2 mt-2">
+            <div className="w-full sm:w-1/2 px-2 mt-2">
               <label className="block text-gray-800 text-shadow-default font-bold  mb-1">
                 Mobile Number
               </label>
@@ -595,7 +665,7 @@ const TutorRegister = () => {
                   {errors.phoneNumber}
                 </span>
               )}
-            </div> 
+            </div>
           </div>
           <div className="flex flex-wrap -mx-2 mb-4">
             <div className="w-full sm:w-1/2 px-2">
@@ -747,7 +817,6 @@ const TutorRegister = () => {
               )}
             </div>
 
-         
             <div className="w-full sm:w-1/2 px-2">
               <label className="block text-gray-800 text-shadow-default font-bold">
                 Available Timings
@@ -794,8 +863,6 @@ const TutorRegister = () => {
                 </p>
               )}
             </div>
-
-      
             <div className="w-full sm:w-1/2 px-2">
               <label className="block text-gray-800 font-bold">
                 {formData.nationalIdType} Number
@@ -807,26 +874,25 @@ const TutorRegister = () => {
                 onChange={handleChange}
                 maxLength={formData.nationalIdType === "Aadhar Card" ? 12 : 10}
                 minLength={formData.nationalIdType === "Aadhar Card" ? 12 : 10}
-              
                 className="w-full px-3 outline-none py-2 border rounded mt-2 bg-transparent border-gray-400"
                 placeholder={
                   formData.nationalIdType === "Aadhar Card"
                     ? "Enter 12-digit Aadhar Number"
-                    :formData.nationalIdType === "Pan Card"
+                    : formData.nationalIdType === "Pan Card"
                     ? "Enter 10-character PAN"
-                    :"Enter The Number"
+                    : "Enter The Number"
                 }
-                />
+              />
               {errors.nationalIdNum && (
-                 <p className="text-red-400 text-base mt-1">
+                <p className="text-red-400 text-base mt-1">
                   {errors.nationalIdNum}
                 </p>
               )}
             </div>
           </div>
 
-          <div className="flex flex-wrap -mx-2 mb-4 ">
-            <div className="w-full sm:w-1/2 px-2 ">
+          <div className="flex flex-wrap -mx-2 mb-4">
+            <div className="w-full sm:w-1/2 px-2">
               <label className="block text-gray-800 text-shadow-default font-bold">
                 Category
               </label>
@@ -872,5 +938,4 @@ const TutorRegister = () => {
     </div>
   );
 };
-
 export default TutorRegister;
