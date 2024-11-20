@@ -1,75 +1,62 @@
-import { Pencil, Trash } from 'lucide-react';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Pencil, Trash } from 'lucide-react';
+import DeleteTemplateDialog from './DeleteTemplateDialog';
 
-const EmailTemplateCard = ({ template }) => {
+const EmailTemplateCard = ({ template, onDelete }) => {
 	const navigate = useNavigate();
+
 	useEffect(() => {
-		console.log('template', template);
+		console.log('Template:', template);
 	}, [template]);
 
 	const handleEdit = () => {
 		navigate(`/edit-email-template/${template.id}`, { state: { template } });
 	};
 
+	const renderStatus = () => {
+		if (template?.active) {
+			return (
+				<span className="inline-flex items-center gap-x-1.5 py-1 px-2 rounded text-xs font-medium border-green-300 bg-green-100 text-green-800">
+          Enabled
+        </span>
+			);
+		}
+		return (
+			<span className="inline-flex items-center gap-x-1.5 py-1 px-2 rounded text-xs font-medium border-red-300 bg-red-100 text-red-800">
+        Disabled
+      </span>
+		);
+	};
+
 	return (
-		<div className="bg-white flex flex-col justify-between  border ">
-			<div className=" h-[300px] p-1  flex flex-col justify-between ">
+		<div className="bg-white rounded border flex flex-col justify-between">
+			<div className="h-[300px] p-1 flex flex-col justify-between">
 				<iframe
 					id="frame"
-					className="flex-1 "
+					className="flex-1"
 					scrolling="no"
 					title="Email Template Design"
-					style={{ zoom: 0.5 , }}
+					style={{ zoom: 0.5, borderRadius: '4px' }}
 					srcDoc={template.design.html}
 				></iframe>
 			</div>
-			<div className="px-3 pb-3 pt-1 flex  gap-4 items-start flex-col justify-between ">
-				
-				<div className="flex items-center gap-2 flex-row w-full justify-between">
-					<div className='flex flex-col'>
-					<h1 className="text-md font-semibold leading-tight ">
-						{template.templateName}
-					</h1>
-					<p className="text-xs mt-1 font- leading-tight text-stone-400">
-						Event: {template.eventName}
-					</p>
-						</div>
-					<div className='flex gap-1 flex-row items-center'>
-					{template && template.active && <span className="inline-flex items-center gap-x-1.5 py-1 px-2 rounded text-xs font-  border-green-300 bg-green-100 text-green-800  ">
-								Enabled
-							</span>}
-							{template && !template.active && <span className="inline-flex items-center gap-x-1.5 py-1 px-2 rounded text-xs font-  border-red-300 bg-red-100 text-red-800  ">
-								Disabled
-							</span>}
-						
-							{template && !template.deleted && <span className="inline-flex items-center gap-x-1.5 py-1 px-2 rounded text-xs font-  border-red-300 bg-red-100 text-red-800  ">
-								Deleted
-							</span>}
-					</div>
-					
+
+			<div className="p-2 pt-1 flex flex-col gap-2.5 justify-start">
+				<div className="flex items-center justify-between px-1">
+					<h1 className="text-md font-semibold leading-tight">{template.templateName}</h1>
+					<div className="flex gap-1">{renderStatus()}</div>
 				</div>
 
-				{/* <h1 className="text-sm leading-snug font-">
-          <span className="text-stone-500">User Registration</span>
-        </h1> */}
-
-				{/* <button className="bg-stone-900 border justify-center  text-white flex flex-row items-center gap-2 hover:bg-stone-700 px-3 flex-1 py-2.5 rounded font-medium  text-sm">
-          <Pencil size={16} />
-          Edit Template
-        </button> */}
 				<div className="flex flex-col gap-1.5 w-full">
-					<div className="flex items-center gap-1.5 flex-row  justify-stretch">
-						{/* <button className="bg-stone-1000 border  justify-center  flex flex-row items-center gap-2 hover:bg-stone-100 px-2 flex-1 py-1.5 rounded font-medium  text-sm">
-							<Trash size={14} />
-							Delete
-						</button> */}
+					<div className="flex items-center gap-1.5">
+						<DeleteTemplateDialog templateId={template.id} onDelete={onDelete} />
 						<button
-							className="bg-stone-1000 border justify-center  flex flex-row items-center gap-2 hover:bg-stone-100 px-2 flex-1 py-1.5 rounded font-medium  text-sm"
+							className="bg-stone-1000 border flex items-center gap-2 px-2 py-1.5 rounded font-medium text-sm hover:bg-stone-100 flex-1 justify-center"
 							onClick={handleEdit}
 						>
 							<Pencil size={14} />
-							Edit Template
+							Edit
 						</button>
 					</div>
 				</div>

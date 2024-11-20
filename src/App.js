@@ -23,9 +23,9 @@ import Allposts from './components/Allposts';
 import UserDashboard from './components/UserDashboard';
 import { AuthProvider } from './components/authContext';
 import ProtectedRoute from './components/ProtectedRoutes';
-import AllEmailTemplatesPage from './Pages/EmailTemplates/AllEmailTemplatesPage';
+import AllEmailTemplatesPage from "./pages/EmailTemplates/AllEmailTemplatesPage";
+import EditEmailTemplatePage from "./pages/EmailTemplates/EditEmailTemplatePage";
 // import NavigateEmailTemplate from './components/NavigateEmailTemplate';
-import EditEmailTemplatePage from './Pages/EmailTemplates/EditEmailTemplatePage';
 
 //import RegistrationEmail from './components/Registrationemail';
 

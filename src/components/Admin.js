@@ -81,11 +81,11 @@ const Admin = () => {
           <Link to="/dashboard" className="hover:text-blue-300">Create Posts</Link>
         </li>
         <li>
-          <Link to="/emailtemplate" className='hover:text-blue-300'>EmailTemplate</Link>
+          <Link to="/email-templates" className='hover:text-blue-300'>EmailTemplate</Link>
         </li>
       </ul>
     </div>
-  
+
     {/* Main Content Area */}
     <div className="flex-1 flex flex-col">
       <header className="bg-blue-200 flex items-center h-14 justify-between px-4 py-2">
@@ -110,10 +110,10 @@ const Admin = () => {
           </div>
         </div>
       </header>
-  
+
       <div className="flex flex-col items-center p-4">
         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-  
+
         {/* Tutors and Students Section */}
         <div className="flex flex-col md:flex-row w-full justify-between mb-4">
           {/* Tutor Section */}
@@ -128,7 +128,7 @@ const Admin = () => {
                 className="border border-gray-300 p-2 rounded-lg w-full outline-none"
               />
             </div>
-  
+
             {/* Tutors Table */}
             <div className="overflow-x-auto w-full">
               <table className="min-w-full border-collapse border-4 border-black text-center">
@@ -155,7 +155,7 @@ const Admin = () => {
               </table>
             </div>
           </div>
-  
+
           {/* Student Section */}
           <div className="flex flex-col w-full md:w-1/2 mt-4 md:mt-0">
             <h1 className="text-2xl font-bold text-center">Students</h1>
@@ -168,7 +168,7 @@ const Admin = () => {
                 className="border border-gray-300 rounded-lg p-2 w-full outline-none"
               />
             </div>
-  
+
             {/* Students Table */}
             <div className="overflow-x-auto w-full">
               <table className="min-w-full border-collapse border-4 border-black text-center">
@@ -199,7 +199,7 @@ const Admin = () => {
       </div>
     </div>
   </div>
-  
+
   );
 };
 

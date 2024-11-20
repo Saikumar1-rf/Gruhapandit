@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { softDeleteTemplate } from "../../services/EmailTemplatesService";
-import { Trash } from "lucide-react";
+import {Trash, Trash2} from "lucide-react";
 
 const DeleteTemplateDialog = ({ templateId, onDelete }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,11 +13,9 @@ const DeleteTemplateDialog = ({ templateId, onDelete }) => {
       setLoading(true);
       setApiError(""); // Reset API error
       const response = await softDeleteTemplate(templateId); // Call delete API
-      if (response.status === 200) {
         setLoading(false);
         setIsOpen(false);
-        onDelete(templateId); // Notify parent about deletion
-      }
+        onDelete(); // Notify parent about deletion
     } catch (error) {
       setLoading(false);
       setApiError("Failed to delete template. Please try again."); // Display error
@@ -28,13 +26,13 @@ const DeleteTemplateDialog = ({ templateId, onDelete }) => {
   return (
     <Dialog.Root open={isOpen} modal={true} onOpenChange={setIsOpen}>
       <Dialog.Trigger asChild>
-      <button className="bg-red-600 text-white flex flex-row justify-center items-center gap-2 hover:bg-red-700 px-3 py-2 rounded-md font-medium  text-sm">
-                {/* <Trash size={16} /> */}
-                Delete Template
-              </button>
+         <button className="bg-stone-1000 border  justify-center font-grostek  flex flex-row items-center gap-2 hover:bg-stone-100 px-2 flex-1 py-1.5 rounded font-medium  text-sm">
+							<Trash size={14} />
+							Delete
+						</button>
       </Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Overlay className="bg-black/50 fixed inset-0 data-[state=open]:animate-overlayShow" />
+        <Dialog.Overlay className="bg-black/50 fixed inset-0 font-grostek data-[state=open]:animate-overlayShow" />
         <Dialog.Content className="fixed bg-white p-6 rounded-lg shadow-lg top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px]">
           <Dialog.Title className="text-lg font-semibold mb-4 text-red-600">
             Confirm Deletion

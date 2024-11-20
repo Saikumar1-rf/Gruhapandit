@@ -3,10 +3,13 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-	* {
-		font-family: 'Host Grotesk', serif;
-		font-optical-sizing: auto;
-		/* src: url(''); */
-	}
+
+
+/* Hides scrollbars completely */
+.scrollbar-hide::-webkit-scrollbar {
+	display: none; /* For Chrome, Safari, and Edge */
+}
+.scrollbar-hide {
+	-ms-overflow-style: none; /* For Internet Explorer and Edge */
+	scrollbar-width: none; /* For Firefox */
 }

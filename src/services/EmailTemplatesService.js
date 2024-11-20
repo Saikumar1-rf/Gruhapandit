@@ -76,7 +76,7 @@ export const getEmailTemplateNames = async () => {
 // 5. Soft Delete Template
 export const softDeleteTemplate = async (templateId) => {
 	try {
-		const response = await apiClient.patch(
+		const response = await apiClient.delete(
 			`${API_BASE_URL}/email-template/delete/${templateId}`
 		);
 		return response.data;
