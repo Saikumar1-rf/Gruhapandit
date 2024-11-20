@@ -27,11 +27,10 @@ const AllTemplatesPage = () => {
             const response = await getAllTemplates();
             const filteredTemplates = response.data.filter((template) => !template.deleted);
             setTemplates(filteredTemplates);
-        } catch (err) {
-            setError('Failed to fetch templates. Please try again later.');
-        } finally {
             setLoading(false);
+        } catch (err) {
             setError(true);
+            setLoading(false);
         }
     };
 
@@ -66,20 +65,20 @@ const AllTemplatesPage = () => {
     );
 
     const renderErrorState = () => (
-        <div className="flex flex-1  rounded-lg  flex-col gap-4  justify-center items-center">
+        <div className="flex flex-1 rounded-lg  flex-col gap-4  justify-center items-center">
             <Info size={36} strokeWidth={0.8} className="text-stone-900"/>
             <div className=" text-center">
                 <p className="text-md font-medium text-stone-900">Network Failed</p>
-                <p className="text-xs font-light text-stone-500">Looks like the network request got failed.Please try again.
+                <p className="text-sm font-light text-stone-500">Looks like the network request got failed.Please try
+                    again.
                 </p>
             </div>
             <div className="flex gap-1 flex-row">
-
                 <button
                     onClick={fetchTemplates}
-                    className="bg-white border font-grostek flex flex-row justify-center items-center gap-1.5 hover:bg-stone-50 px-2.5 py-2 rounded font-medium text-xs">
+                    className="bg-white border font-grostek flex flex-row justify-center items-center gap-1.5 hover:bg-stone-50 px-2.5 py-2 rounded font-medium text-sm">
                     <RefreshCcw size={14}/>
-                    Retry Fetching
+                    Retry Fetching Again
                 </button>
             </div>
 
@@ -87,7 +86,7 @@ const AllTemplatesPage = () => {
     );
 
     return (
-        <div className="h-screen w-screen font-grostek overflow-hidden bg-stone-200/80 py-8 flex flex-col gap-4">
+        <div className="h-screen w-screen font-grostek overflow-hidden bg-stone-100 py-8 flex flex-col gap-4">
             {/* Header Section */}
             <div className="flex flex-col shrink-0 gap-4 px-44">
                 <div className="flex flex-row justify-between items-center text-xl font-medium">
@@ -113,8 +112,8 @@ const AllTemplatesPage = () => {
             </div>
 
             {/* Content Section */}
-            {loading && renderLoadingState()}
-            {!loading && error && renderErrorState()}
+            {loading && !error && renderLoadingState()}
+            {!loading && error && templates.length === 0  && renderErrorState()}
             {!loading && templates.length === 0 && !error && renderEmptyState()}
             {!loading && templates.length > 0 && !error && renderTemplates()}
         </div>

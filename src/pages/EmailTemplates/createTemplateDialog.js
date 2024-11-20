@@ -4,7 +4,7 @@
             import { useForm } from "react-hook-form";
             import { createTemplate } from "../../services/EmailTemplatesService";
             import { useNavigate } from "react-router-dom";
-            import {FilePlus, Plus} from "lucide-react";
+            import {FilePlus, Plus, PlusCircle} from "lucide-react";
 
             const CreateTemplateDialog = ({ onCreate }) => {
               const [isOpen, setIsOpen] = useState(false);
@@ -51,8 +51,8 @@
                 <Dialog.Root open={isOpen} modal={true} onOpenChange={setIsOpen}>
                   <Dialog.Trigger asChild>
                     <button className="bg-stone-900 text-white font-grostek flex flex-row justify-center items-center gap-1.5 hover:bg-stone-700 px-3 py-2.5 rounded font-medium text-sm">
-                      <FilePlus size={16}/>
-                      Create Template
+                      <PlusCircle size={16}/>
+                      Create New Template
                     </button>
                   </Dialog.Trigger>
                   <Dialog.Portal>

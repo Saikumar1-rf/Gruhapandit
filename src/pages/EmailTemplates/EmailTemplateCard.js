@@ -30,7 +30,7 @@ const EmailTemplateCard = ({ template, onDelete }) => {
 	};
 
 	return (
-		<div className="bg-white rounded border flex flex-col justify-between">
+		<div className="bg-white rounded border border-stone-200 flex flex-col justify-between">
 			<div className="h-[300px] p-1 flex flex-col justify-between">
 				<iframe
 					id="frame"

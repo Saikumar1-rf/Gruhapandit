@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import {useParams} from "react-router-dom";
 import {
+    getAllTemplates,
     getEventNames,
     getTemplateById,
     updateFullTemplate,
@@ -28,6 +29,7 @@ function EditEmailTemplatePage() {
     const navigate = useNavigate();
     const [savingTemplate, setSavingTemplate] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [apiError,setApiError] = useState(false);
 
 
     const {
@@ -45,15 +47,15 @@ function EditEmailTemplatePage() {
     const watchAllFields = watch();
 
     const fetchTemplates = async () => {
-
+        setLoading(true);
+        setApiError(false);
         try {
-            setLoading(true)
             const templateData = await getTemplateById(templateId);
             reset(templateData.data);
             setLoading(false)
         } catch (err) {
-            setLoading(false)
-            console.error("Error fetching template:", err);
+            setApiError(true);
+            setLoading(false);
         }
     };
 
@@ -85,7 +87,7 @@ function EditEmailTemplatePage() {
     };
 
     const onEditorLoad = async (editor) => {
-        if (getValues().design.json !== '') {
+        if (!errors && getValues().design) {
             try {
                 const parsedJsonDesign = JSON.parse(JSON.parse(getValues().design.json))
                 editor.loadDesign(parsedJsonDesign);
@@ -136,40 +138,41 @@ function EditEmailTemplatePage() {
             <Info size={36} strokeWidth={0.8} className="text-stone-900"/>
             <div className=" text-center">
                 <p className="text-md font-medium text-stone-900">Network Failed</p>
-                <p className="text-xs font-light text-stone-500">Looks like the network request got failed.Please try again.
-                     </p>
+                <p className="text-sm font-light text-stone-500">Looks like the network request got failed.Please try
+                    again.
+                </p>
             </div>
             <div className="flex gap-1 flex-row">
                 <button
                     onClick={() => navigate(-1)}
-                    className="bg-white border font-grostek flex flex-row justify-center items-center gap-1.5 hover:bg-stone-50 px-2.5 py-2 rounded font-medium text-xs">
+                    className="bg-white border font-grostek flex flex-row justify-center items-center gap-1.5 hover:bg-stone-50 px-2.5 py-2 rounded font-medium text-sm">
                     <ChevronLeft size={14}/>
-                    Back Templates
+                    Back To Templates
                 </button>
                 <button
                     onClick={fetchTemplates}
-                    className="bg-white border font-grostek flex flex-row justify-center items-center gap-1.5 hover:bg-stone-50 px-2.5 py-2 rounded font-medium text-xs">
+                    className="bg-white border font-grostek flex flex-row justify-center items-center gap-1.5 hover:bg-stone-50 px-2.5 py-2 rounded font-medium text-sm">
                     <RefreshCcw size={14}/>
-                    Retry Fetching
+                    Retry Fetching Again
                 </button>
             </div>
 
         </div>
     );
-    if (loading) {
+    if (loading && !apiError && errors) {
         return <div className="h-screen w-screen font-grostek overflow-hidden bg-stone-100 flex flex-row">
             {renderLoadingState()}
         </div>
     }
 
-    if (!loading && errors) {
+    if (!loading && apiError && errors) {
         return <div
             className="h-screen w-screen font-grostek overflow-hidden justify-center items-center bg-stone-100 flex flex-row">
             {renderErrorState()}
         </div>
     }
 
-    if (!loading && !errors) {
+    if (!loading && !apiError && !errors) {
         return (
             <>
                 <div className="h-screen w-screen font-grostek overflow-hidden bg-stone-200/80 flex flex-row">
@@ -341,6 +344,20 @@ function EditEmailTemplatePage() {
                                         {errors.deleted &&
                                             <span className="text-sm text-red-500">{errors.deleted.message}</span>}
                                     </div>
+                                    <div className="flex flex-col gap-2">
+                                        <label className="block text-sm font-mediums text-stone-700">Load JSON
+                                            </label>
+                                        <input
+                                            onKeyUp={({target}) => {
+                                                emailEditorRef.current.editor.loadDesign(JSON.parse(target.value));
+                                            }}
+                                            placeholder="Paste Json and tap button below"
+                                            className={`h-10 px-3 bg-stone-1000 border outline-none ring-0 rounded text-stone-800 text-sm ${errors.subject ? "border-red-500" : ""}`}
+                                            type="text"
+                                        />
+
+                                    </div>
+
                                 </div>
 
                                 <div className="flex flex-col  gap-2">
@@ -363,10 +380,11 @@ function EditEmailTemplatePage() {
                                     {/*	Export HTML*/}
                                     {/*</button>*/}
 
-                                    {/*<button className="bg-stone-100 flex justify-center flex-row items-center gap-2 hover:bg-stone-200/60 px-4 py-2.5 rounded font-medium  text-sm">*/}
-                                    {/*	<PaintRoller size={18} />*/}
-                                    {/*	Update Design*/}
-                                    {/*</button>*/}
+                                    <button
+                                        className="bg-stone-100 flex justify-center flex-row items-center gap-2 hover:bg-stone-200/60 px-4 py-2.5 rounded font-medium  text-sm">
+                                        <Braces size={18}/>
+                                       Load From JSON
+                                    </button>
                                     <button
                                         onClick={saveTemplate}
                                         disabled={savingTemplate}
