@@ -33,7 +33,7 @@ const DeleteTemplateDialog = ({ templateId, onDelete }) => {
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="bg-black/50 fixed inset-0 font-grostek data-[state=open]:animate-overlayShow" />
-        <Dialog.Content className="fixed bg-white p-6 rounded-lg shadow-lg top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px]">
+        <Dialog.Content className="fixed bg-white font-grostek p-6 rounded-lg shadow-lg top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px]">
           <Dialog.Title className="text-lg font-semibold mb-4 text-red-600">
             Confirm Deletion
           </Dialog.Title>
