@@ -23,6 +23,9 @@ const Sidebar = () => {
             Create Posts
           </Link>
         </li>
+        <li>
+          <Link to="/email-templates" className='hover:text-cyan-700'>Email Templates</Link>
+        </li>
       </ul>
     </div>
   );
