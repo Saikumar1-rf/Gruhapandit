@@ -31,6 +31,8 @@ const Forgotpass = () => {
 
   const validateEmailId = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
+      // const validateEmailId=(email) => /^(?!\d)[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*@[a-z]+\.(com|net|org|in|edu|gov|mil|us|info|org\.in)$/.test(email);
+
   const handleSendOtp = async () => {
     const errors = {};
     if (!emailId) errors.emailId = "Email is required.";
@@ -143,10 +145,9 @@ const Forgotpass = () => {
               placeholder="Enter your email"
               value={emailId}
               maxLength={40}
-              onChange={(e) =>{ const value=e.target.value;
-                if (!/^\s/.test(value)) {
-                  setEmailId(value);
-                }
+              onChange={(e) => {
+                const value = e.target.value.replace(/\s+/g, ''); // Remove all spaces
+                setEmailId(value);
               }}
               className="w-full px-4 py-2 border rounded-lg"
             />
@@ -204,10 +205,14 @@ const Forgotpass = () => {
                   value={otp}
                   name="otp"
                   // onChange={(e) => setOtp(e.target.value)}
-                  onChange={(e) =>{ const value=e.target.value;
-                    if (!/\s/.test(value)) {
-                      setOtp(value);
-                    }
+                  // onChange={(e) =>{ const value=e.target.value;
+                  //   if (!/\s/.test(value)) {
+                  //     setOtp(value);
+                  //   }
+                  // }}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\s+/g, ''); // Remove all spaces
+                    setOtp(value);
                   }}
                   className="w-full px-4 py-2 border rounded-lg"
                   maxLength={6}
@@ -242,11 +247,16 @@ const Forgotpass = () => {
                     minLength={8}
                     maxLength={15}
                     // onChange={(e) => setPassword(e.target.value)}
-                    onChange={(e) =>{ const value=e.target.value;
-                      if (!/\s/.test(value)) {
-                        setPassword(value);
-                      }
+                    // onChange={(e) =>{ const value=e.target.value;
+                    //   if (!/\s/.test(value)) {
+                    //     setPassword(value);
+                    //   }
+                    // }}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\s+/g, ''); // Remove all spaces
+                      setPassword(value);
                     }}
+                    
                     className="w-full px-4 py-2 border rounded-lg"
                     style={{
                       WebkitTextSecurity: password ? "none" : "disc",

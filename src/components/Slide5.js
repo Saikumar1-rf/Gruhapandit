@@ -4,7 +4,7 @@ import { FaCog } from "react-icons/fa";
 const Slide5 = () => {
   return (
     <>
-      {/* {/ Background Image Section /} */}
+     
       <div
         className="relative bg-cover bg-center h-[1200px] sm:h-[850px] md:h-[1800px] lg:h-[800px] max-h-[1000px] overflow-auto"
         style={{
@@ -14,7 +14,7 @@ const Slide5 = () => {
       >
         <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center text-center px-4 font-serif">
           <h1 className="text-white font-bold text-xl sm:text-3xl md:text-4xl lg:text-5xl mb-5 sm:mb-7 lg:mb-12">
-            Why Choose Gruhapandit Tuitions?
+            Why Choose <span className="text-[#41C9E2] hover:text-blue-900 hover:underline transition duration-300"> Gruhapandit Tuitions? </span>
           </h1>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-white w-full max-w-6xl px-3 sm:px-0 ">
             {[
@@ -65,7 +65,7 @@ const Slide5 = () => {
         </div>
       </div>
 
-      {/* {/ Vision and Mission Section /} */}
+     
       <div className="border border-gray-300 p-5 sm:p-7 md:p-10 rounded-lg mt-6 lg:mt-12 max-w-6xl mx-auto font-serif">
         <h2 className="text-center text-cyan-500 font-bold text-xl sm:text-3xl md:text-4xl mb-5">
           Our Vision & Mission

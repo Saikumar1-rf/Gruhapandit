@@ -21,29 +21,29 @@ const Slide2 = () => {
             <h2 className="text-4xl text-cyan-500 mt-10 font-bold mb-4 font-serif">
               About Us
             </h2>
-            <p className="text-lg leading-relaxed font-bold text-gray-600 font-serif">
-              At <Link to="/login" className="text-blue-800">Gruhapandit Tuitions</Link>, we strive to
+            <p className="text-lg leading-relaxed text-gray-600 font-serif">
+              At <b>Gruhapandit Tuitions</b> , we strive to
               make learning engaging, effective, and accessible for every
               student. Whether you choose
 
-              <Link className="text-red-800"> online tuition or offline tuition</Link>, our
+              <Link className="text-[#41C9E2] hover:text-blue-900 hover:underline transition duration-300"><b> online tuition or offline tuition</b></Link>, our
               goal is to help you reach your academic goals with confidence.
 
               <p className="text-gray-600">
-                Join <Link className="text-black">"Gruhapandit Tuitions"</Link> today and
+                Join <b>"Gruhapandit Tuitions"</b> today and
                 take the first step toward academic excellence!
               </p>
             </p>
-            <p className="text-lg leading-relaxed font-bold mt-4 text-gray-600 font-serif">
-              Join <Link to="/login" className="text-blue-800">Gruhapandit Tuitions</Link> as a Tutor 
+            <p className="text-lg leading-relaxed mt-4 text-gray-600 font-serif">
+              Join <b>Gruhapandit Tuitions</b> as a Tutor 
               Empower Students, Shape Futures!          
               <span className="inline-flex items-center">
                 <FaGraduationCap className="ml-2" />
               </span>
             </p>
-            <p className="text-lg leading-relaxed mt-10 shadow-lg p-6 bg-slate-400 rounded-lg font-bold text-gray-800">
+            <p className="text-lg leading-relaxed mt-10 shadow-lg p-6 bg-slate-400 rounded-lg text-white">
               Are you passionate about teaching and helping students excel
-              academically? <Link to="/login" className="text-blue-800">Gruhapandit Tuitions</Link> is
+              academically? <b>Gruhapandit Tuitions</b> is
               looking for dedicated and experienced tutors to join our growing
               community of educators. Whether you specialize in online teaching
               or prefer offline tuition, we provide the perfect platform for you
@@ -58,8 +58,8 @@ const Slide2 = () => {
         <div className="bg-white shadow-lg rounded-lg p-8 max-w-7xl mt-10 mx-auto">
           <div>
             <h1 className="text-gray-700 font-bold justify-center text-center mb-10 text-4xl font-serif">
-              Why Choose to Teach at
-              <Link to="/login" className="text-blue-800 font-serif"> Gruhapandit Tuitions?</Link>
+              Why Choose to Teach at 
+               <span className="text-[#41C9E2]"> Gruhapandit Tuitions?</span>
             </h1>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
@@ -98,7 +98,7 @@ const Slide2 = () => {
                 As a Gruhapandit tutor, you will have access to tools,
                 resources, and support to help you manage your classes
                 effectively. Whether you're teaching{" "}
-                <Link to="/login"className="text-blue-800  font-serif">online or offline</Link>, we ensure you have
+                <Link to="/login"className="text-[#41C9E2] hover:text-blue-900 font-serif"><b>online or offline</b></Link>, we ensure you have
                 everything you need to succeed.
               </p>
             </div>
@@ -110,4 +110,3 @@ const Slide2 = () => {
 };
 
 export default Slide2;
- 
