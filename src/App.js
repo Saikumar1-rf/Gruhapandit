@@ -1,5 +1,10 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes,useLocation } from 'react-router-dom';
+import {
+	BrowserRouter as Router,
+	Route,
+	Routes,
+	useLocation,
+} from 'react-router-dom';
 import Header from './components/Header';
 import Home from './components/Home';
 import './App.css';
@@ -16,19 +21,24 @@ import Postsdash from './components/Postsdash';
 import CreatePosts from './components/CreatePosts';
 import Allposts from './components/Allposts';
 import UserDashboard from './components/UserDashboard';
-import { AuthProvider } from './components/authContext'; 
-import ProtectedRoute from './components/ProtectedRoutes'; 
+import { AuthProvider } from './components/authContext';
+import ProtectedRoute from './components/ProtectedRoutes';
 import Sidebar from './components/Sidebar';
 import DialogueBox from './components/DialogueBox';
+import AllEmailTemplatesPage from "./pages/EmailTemplates/AllEmailTemplatesPage";
+import EditEmailTemplatePage from "./pages/EmailTemplates/EditEmailTemplatePage";
+// import NavigateEmailTemplate from './components/NavigateEmailTemplate';
 
+//import RegistrationEmail from './components/Registrationemail';
 
 function AppContent() {
   const location = useLocation();
-  const noHeaderPaths = ['/userDashboard','/posts','/allposts','/dashboard'];
+  const noHeaderPaths = ['/userDashboard','/posts','/allposts','/dashboard', '/email-templates'];
 
   return (
         <div className="App">
-      {!noHeaderPaths.includes(location.pathname) && <Header />}
+      {!noHeaderPaths.includes(location.pathname) &&
+				!location.pathname.startsWith('/edit-email-template') && <Header />}
       <div className="content">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -56,6 +66,11 @@ function AppContent() {
               <UserDashboard />
             </ProtectedRoute>
           } />
+          <Route path="/email-templates" element={<AllEmailTemplatesPage />} />
+					<Route
+						path="/edit-email-template/:templateId"
+						element={<EditEmailTemplatePage />}
+					/>l̥
         </Routes>
       </div>
     </div>

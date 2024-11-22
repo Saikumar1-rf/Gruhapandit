@@ -11,7 +11,7 @@ const Sidebar = () => {
         <li>
           <Link to="/posts" className="hover:text-cyan-700">
             Dashboard
-          </Link>
+          </Link> 
         </li>
         <li>
           <Link to="/allposts" className="hover:text-cyan-700">
@@ -22,6 +22,9 @@ const Sidebar = () => {
           <Link to="/dashboard" className="hover:text-cyan-700">
             Create Posts
           </Link>
+        </li>
+        <li>
+          <Link to="/email-templates" className='hover:text-cyan-700'>Email Templates</Link>
         </li>
       </ul>
     </div>

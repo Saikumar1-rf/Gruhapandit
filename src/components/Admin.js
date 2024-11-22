@@ -75,7 +75,7 @@ const Admin = () => {
 
       <div className="flex flex-col items-center p-4">
         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-  
+
         {/* Tutors and Students Section */}
         <div className="flex flex-col md:flex-row w-full justify-between mb-3">
           {/* Tutor Section */}
@@ -90,7 +90,7 @@ const Admin = () => {
                 className="border border-gray-300 p-2 rounded-lg w-full outline-none"
               />
             </div>
-  
+
             {/* Tutors Table */}
             <div className="overflow-x-auto w-full rounded-lg mt-2">
               <table className="min-w-full border-collapse border-4 border-black text-center">
@@ -117,6 +117,7 @@ const Admin = () => {
               </table>
             </div>
           </div>
+
           {/* Student Section */}
           <div className="flex flex-col w-full md:w-1/2 mt-4 md:mt-0">
             <h1 className="text-2xl font-bold text-center">Students</h1>
@@ -129,7 +130,7 @@ const Admin = () => {
                 className="border border-gray-300 rounded-lg p-2 w-full outline-none"
               />
             </div>
-  
+
             {/* Students Table */}
             <div className="overflow-x-auto w-full rounded-lg mt-2">
               <table className="min-w-full border-collapse border-4 border-black text-center">
