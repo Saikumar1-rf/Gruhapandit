@@ -36,6 +36,11 @@ const Footer = () => {
               </a>
             </li>
             <li>
+              <a href="/slide7" className="hover:underline">
+                Gallery
+              </a>
+            </li>
+            <li>
               <a href="/login" className="hover:underline">
                 Login
               </a>
@@ -48,7 +53,7 @@ const Footer = () => {
           <ul className="space-y-2">
             <li className="flex items-center">
               <FaPhone className="mr-2" />
-              <span>+91 9618859004</span>
+              <span>+91 9618853331</span>
             </li>
             <li className="flex items-center">
               <FaEnvelope className="mr-2" />
@@ -56,7 +61,7 @@ const Footer = () => {
                 href="mailto:gruhapandittuitions@gmail.com"
                 className="hover:underline"
               >
-                mailto:gruhapandittuitions@gmail.com
+              gruhapandittuitions@gmail.com
               </a>
             </li>
           </ul>
