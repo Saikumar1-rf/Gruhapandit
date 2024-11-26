@@ -22,7 +22,7 @@ import Sidebar from './components/Sidebar';
 import DialogueBox from './components/DialogueBox';
 import Gallery from './components/Gallery';
 import Slide7 from './components/Slide7';
-import DialogueBox2 from './components/DialogueBox2';
+// import DialogueBox2 from './components/DialogueBox2';
 import Subscription from './components/Subscriptions';
 import CreatePlans from'./components/CreatePlans'
 
@@ -46,7 +46,7 @@ function AppContent() {
           <Route path="/slide7"element={<Slide7/>}></Route>
           {/* <Route path="/subscription"element={<Subscription/>}></Route> */}
           <Route path="/dialoguebox" element={<DialogueBox/>}></Route>
-          <Route path="/dialoguebox2" element={<DialogueBox2/>}></Route>
+          {/* <Route path="/dialoguebox2" element={<DialogueBox2/>}></Route> */}
           {/* <Route path="/createplans" element={<CreatePlans/>}></Route> */}
           <Route path="/register/tutor" element={<TutorRegister />} />
           <Route path="/posts" element={
