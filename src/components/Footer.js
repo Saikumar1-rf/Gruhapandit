@@ -1,12 +1,10 @@
 import React from "react";
 import gruhapandit from "../Asserts/gruhapandit.png";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPhone, faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import {
-  faFacebook,
-  faYoutube,
-  faInstagram,
-} from "@fortawesome/free-brands-svg-icons";
+import { FaPhone, FaEnvelope } from "react-icons/fa";
+import { FaFacebook, FaYoutube, FaInstagram } from "react-icons/fa";
+import { FaSquareXTwitter } from "react-icons/fa6";
+const currentYear = new Date().getFullYear(); // Get the current year dynamically
+
 
 const Footer = () => {
   return (
@@ -49,16 +47,16 @@ const Footer = () => {
           <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
           <ul className="space-y-2">
             <li className="flex items-center">
-              <FontAwesomeIcon icon={faPhone} className="mr-2" />
+              <FaPhone className="mr-2" />
               <span>+91 9618859004</span>
             </li>
             <li className="flex items-center">
-              <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
+              <FaEnvelope className="mr-2" />
               <a
                 href="mailto:gruhapandittuitions@gmail.com"
                 className="hover:underline"
               >
-              gruhapandittuitions@gmail.com
+                mailto:gruhapandittuitions@gmail.com
               </a>
             </li>
           </ul>
@@ -66,37 +64,46 @@ const Footer = () => {
       </div>
 
       <div className="mt-8 text-center">
-  <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
-  <div className="flex justify-center space-x-6">
-    <a
-      href="https://www.facebook.com/people/Gruhapandit-Tuitions/61566845707627/"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-blue-500 hover:text-blue-400 transition transform hover:scale-110"
-    >
-      <FontAwesomeIcon icon={faFacebook} size="2x" />
-    </a>
-    <a
-      href="https://www.youtube.com/@GruhapanditTuitions"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-red-500 hover:text-red-400 transition transform hover:scale-110"
-    >
-      <FontAwesomeIcon icon={faYoutube} size="2x" />
-    </a>
-    <a
-      href="https://www.instagram.com/gruhapandit_tuitions/"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-pink-500 hover:text-pink-400 transition transform hover:scale-110"
-    >
-      <FontAwesomeIcon icon={faInstagram} size="2x" />
-    </a>
-  </div>
-</div>
+        <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
+        <div className="flex justify-center space-x-6">
+          <a
+            href="https://www.facebook.com/people/Gruhapandit-Tuitions/61566845707627/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 hover:text-blue-400 transition transform hover:scale-110"
+          >
+            <FaFacebook size="32" />
+          </a>
+          <a
+            href="https://www.youtube.com/@GruhapanditTuitions"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-red-500 hover:text-red-400 transition transform hover:scale-110"
+          >
+            <FaYoutube size="32" />
+          </a>
+          <a
+            href="https://www.instagram.com/gruhapandit_tuitions/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-pink-500 hover:text-pink-400 transition transform hover:scale-110"
+          >
+            <FaInstagram size="32" />
+          </a>
+          <a
+            href="https://x.com/gruhapandi47996"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-400 hover:text-gray-300 transition transform hover:scale-110"
+          >
+            <FaSquareXTwitter size="32" />
+          </a>
+        </div>
+      </div>
+
       <div className="border-t border-gray-700 mt-8 pt-4">
         <div className="container mx-auto text-center text-gray-400">
-          &copy; 2024 Gruhapandit Tuitions. All rights reserved.
+          &copy; {currentYear} Gruhapandit Tuitions. All rights reserved.
         </div>
       </div>
     </footer>
@@ -104,3 +111,4 @@ const Footer = () => {
 };
 
 export default Footer;
+ 

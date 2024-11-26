@@ -8,6 +8,8 @@ import ProfileDetails from "./ProfileDetails";
 import Slide6 from "./Slide6";
 import gradi from "../Asserts/user3.jpg";
 import gruhapa from "../Asserts/gruhapandit.png";
+import DialogueBox from "./DialogueBox";
+
 
 const TutorDash = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -18,8 +20,11 @@ const TutorDash = () => {
   const [showProfile, setShowProfile] = useState(false);
   // const [isProfileOpen,setIsProfileOpen]=useState(false);
 
+  const [dialogueBoxData, setDialogueBoxData] = useState(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+const userID = localStorage.getItem('userId')
   const handleOpenPolicy = () => {
     setIsModalOpen(true);
   };
@@ -34,6 +39,7 @@ const TutorDash = () => {
   const API_URL =
     "https://tution-application-testenv.onrender.com/tuition-application/userHomePage/";
     // "https://tution-application.onrender.com/tuition-application/userHomePage/"
+
   // Fetch posts
   useEffect(() => {
     const fetchPosts = async () => {
@@ -151,10 +157,24 @@ const TutorDash = () => {
     }
   };
 
+  const handleUploadClick = () => {
+    setIsDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+  };
+  const handleDialogueBoxSubmit = (data) => {
+    setDialogueBoxData(data); // Store the submitted data in the state
+    setIsDialogOpen(false); // Close the dialog after submission
+  };
+  const UserId = localStorage.getItem(userId)
+  console.log(UserId);
+  
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 sticky">
-      <header className="bg-cyan-700 flex items-center h-16 justify-between px-4 md:px-10 py-2 shadow-md sticky top-0 z-50">
-        <img src={gruhapa} alt="Gruha Pandit" className="w-24 md:w-24 filter invert brightness-0" />
+      <header className="bg-cyan-700 flex items-center h-16 justify-between px-4 md:px-10 py-2 shadow-md relative">
+        <img src={gruhapa} alt="Gruha Pandit" className="w-20 md:w-24" />
         <div className="flex items-center space-x-4 text-white ml-auto">
           <FaEnvelope className="w-5 h-5 cursor-pointer" />
           <FaBell className="w-5 h-5 cursor-pointer" />
@@ -173,6 +193,14 @@ const TutorDash = () => {
                   >
                     Profile
                   </li>
+                  {userType === "tutor" && (
+                    <li
+                      className="px-4 py-2 hover:bg-blue-100 cursor-pointer"
+                      onClick={handleUploadClick}
+                    >
+                      Upload NationaId
+                    </li>
+                  )}
                   <li
                     className="px-4 py-2 hover:bg-blue-100 cursor-pointer"
                     onClick={handleOpenPolicy}
@@ -308,8 +336,17 @@ const TutorDash = () => {
           onUpdate={handleProfileUpdate} // Pass the update handler
         />
       )}
+      
+      {isDialogOpen && <DialogueBox 
+          userId = {userID} 
+            category="NATIONAL_ID"
+            onClose={handleCloseDialog}
+             onSubmit={handleDialogueBoxSubmit} 
+            //  outevent={(data) => console.log("Callback Data:", data)}
+             />}
     </div>
   );
 };
 
 export default TutorDash;
+
