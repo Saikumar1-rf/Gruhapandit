@@ -24,9 +24,14 @@ const Sidebar = () => {
           </Link>
         </li>
         <li>
-            <Link to="/gallery" className="hover:text-cyan-700">
+          <Link to="/gallery" className="hover:text-cyan-700">
             Gallery
-            </Link>
+          </Link>
+        </li>
+        <li>
+          <Link to="/email-templates" className="hover:text-cyan-700">
+            Email Templates
+          </Link>
         </li>
         {/* <li>
             <Link to="/subscription" className="hover:text-cyan-700">
