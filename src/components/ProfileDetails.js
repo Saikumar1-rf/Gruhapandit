@@ -180,7 +180,7 @@ const ProfileDetails = ({ userData, userType, onClose, onUpdate }) => {
           "Subjects you are expert at are required.";
       if (!editableData.chargesPerHour) {
       newErrors.chargesPerHour = "Charges per hour are required.";
-    } else if (!/^\d+$/.test(editableData.chargesPerHour)) {
+    } else if (!/^\d+(\.\d+)?$/.test(editableData.chargesPerHour)) {
       newErrors.chargesPerHour = "Charges per hour must be a numeric value.";
     }
 
@@ -397,9 +397,11 @@ const ProfileDetails = ({ userData, userType, onClose, onUpdate }) => {
 
     const url =
       userType === "student"
+      // ? "https://tution-application.onrender.com/tuition-application/student/update"
+      // : "https://tution-application.onrender.com/tuition-application/tutor/update"
         ? "https://tution-application-testenv.onrender.com/tuition-application/student/update"
         : "https://tution-application-testenv.onrender.com/tuition-application/tutor/update";
-
+    
     try {
       const response = await axios.patch(url, editableData, {
         headers: {

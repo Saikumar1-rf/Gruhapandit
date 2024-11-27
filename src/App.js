@@ -23,8 +23,8 @@ import DialogueBox from './components/DialogueBox';
 import Gallery from './components/Gallery';
 import Slide7 from './components/Slide7';
 // import DialogueBox2 from './components/DialogueBox2';
-import Subscription from './components/Subscriptions';
-import CreatePlans from'./components/CreatePlans'
+// import Subscription from './components/Subscriptions';
+// import CreatePlans from'./components/CreatePlans'
 
 
 function AppContent() {

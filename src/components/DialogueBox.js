@@ -13,6 +13,8 @@ const DialogueBox = ({ onClose, onSubmit, category,userId,outevent}) => {
   // const userType = "admin"; 
   const userType= localStorage.getItem('userType')
 
+  const [successMessage, setSuccessMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false); 
   
 
   // Handle input text changes
@@ -29,12 +31,14 @@ const DialogueBox = ({ onClose, onSubmit, category,userId,outevent}) => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
   
     const userType = localStorage.getItem("userType") || "tutor"; // Default to "tutor" if not set
   
     // Validate input fields
     if (!formData.input2 || !formData.file) {
       alert("Please fill in all fields and upload a file.");
+      setIsSubmitting(false);
       return;
     }
 
@@ -60,14 +64,18 @@ const DialogueBox = ({ onClose, onSubmit, category,userId,outevent}) => {
     const authToken = localStorage.getItem("jwtToken"); // Adjust the key name based on how you store it
     if (!authToken) {
       alert("Authentication token is missing. Please log in.");
+      setIsSubmitting(false);
       return;
     }
   
+    
+
     let url = "";
   
     if (userType === "tutor") {
       url = `/tuition-application/documents/upload?userId=${userId}&fileName=${encodeURIComponent(
         formData.input2
+        
       )}&category=${category}`;
     } else if (userType === "admin") {
       url = `/tuition-application/documents/upload-gallery?userId=${userId}&fileName=${encodeURIComponent(
@@ -79,6 +87,7 @@ const DialogueBox = ({ onClose, onSubmit, category,userId,outevent}) => {
       )}`;
     } else {
       console.error("Invalid user type provided.");
+      setIsSubmitting(false);
       return;
     }
   
@@ -94,33 +103,40 @@ const DialogueBox = ({ onClose, onSubmit, category,userId,outevent}) => {
           Authorization: `Bearer ${authToken}`,
         },
       });
-  
       if (response.status === 200) {
-        // Handle successful upload
-        alert("File uploaded successfully!");
-        console.log("Form Data:", formData); 
-        outevent(response.data);
+        // On success, show success message
+        setSuccessMessage("File uploaded successfully!");
+
+        // Call the outer event and reset form
+        if (outevent && typeof outevent === "function") {
+          outevent(response.data);
+        } else {
+          console.error("outevent is not a function or is undefined");
+        }
+        
         onSubmit({ ...formData, category, userId });
 
-          // Clear the form fields
-      setFormData({
-        input2: "",
-        file: null,
-        name: "",
-        subject: "",
-        description: "",
-      });
-        // Close the form after a slight delay
+        setFormData({
+          input2: "",
+          file: null,
+          name: "",
+          subject: "",
+          description: "",
+        });
+
+        // Close the dialog after a short delay (2 seconds)
         setTimeout(() => {
           onClose();
-        }, 100);
+        }, 2000);
       } else {
-        console.error("Invalid user type provided");
+        console.error("File upload failed");
         alert("File upload failed. Please try again.");
+        setIsSubmitting(false);
       }
     } catch (error) {
       console.error("File upload error:", error);
-      // alert("File upload error. Please check your input or try again.");
+      setIsSubmitting(false);
+      alert("An error occurred. Please try again.");
     }
   };
   
@@ -265,12 +281,19 @@ const DialogueBox = ({ onClose, onSubmit, category,userId,outevent}) => {
         </div>
 
         <button
-          type="submit"
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md"
-        >
-          Submit
-        </button>
-      </form>
+            type="submit"
+            className={`bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={isSubmitting} // Disable button while submitting
+          >
+            {isSubmitting ? "Uploading..." : "Submit"}
+          </button>
+        </form>
+      
+        {/* {/ Success Message /} */}
+        {successMessage && (
+          <div className="mt-4 text-green-500">{successMessage}</div>
+        )}
+    
     </div>
   </div>
 );

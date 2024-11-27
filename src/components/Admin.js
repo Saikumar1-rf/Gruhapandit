@@ -104,7 +104,7 @@ const Admin = () => {
                   {filteredTutors.map((tutor, index) => (
                     <tr key={index}>
                       <td className="border border-black px-2 py-2">{tutor.firstName}</td>
-                      <td className="border border-black px-2 py-2">{tutor.subjectsLookingFor}</td>
+                      <td className="border border-black px-2 py-2">{tutor.subjectsYouAreExpertAt}</td>
                       <td className="border border-black px-2 py-2">{tutor.modeOfTeaching}</td>
                       <td className="border border-black px-2 py-2">{tutor.location}</td>
                       <td className="border border-black px-2 py-2">{tutor.availableTimings}</td>
@@ -144,7 +144,7 @@ const Admin = () => {
                     <tr key={index}>
                       <td className="border border-black px-2 py-2">{student.firstName}</td>
                       <td className="border border-black px-2 py-2">{student.subjectsLookingFor}</td>
-                      <td className="border border-black px-2 py-2">{student.modeOfClass}</td>
+                      <td className="border border-black px-2 py-2">{student.modeOfTeaching}</td>
                       <td className="border border-black px-2 py-2">{student.location}</td>
                       <td className="border border-black px-2 py-2">{student.availableTimings}</td>
                     </tr>

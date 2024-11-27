@@ -168,6 +168,23 @@ const userID = localStorage.getItem('userId')
     setDialogueBoxData(data); // Store the submitted data in the state
     setIsDialogOpen(false); // Close the dialog after submission
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Check if the click is outside the dropdown
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false); // Close the dropdown
+      }
+    };
+  
+    // Attach click listener to the document
+    document.addEventListener("click", handleClickOutside);
+  
+    return () => {
+      // Clean up the event listener
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
   const UserId = localStorage.getItem(userId)
   console.log(UserId);
   
@@ -342,7 +359,7 @@ const userID = localStorage.getItem('userId')
             category="NATIONAL_ID"
             onClose={handleCloseDialog}
              onSubmit={handleDialogueBoxSubmit} 
-            //  outevent={(data) => console.log("Callback Data:", data)}
+             outevent={(data) => console.log("Callback Data:", data)}
              />}
     </div>
   );
