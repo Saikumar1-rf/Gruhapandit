@@ -79,11 +79,11 @@ function AppContent() {
           <Route path="/allposts" element={<Allposts />} />
           <Route path="/payment" element={<Payment />} />
           <Route path="/userDashboard" element={<UserDashboard />} />
-          <Route path="/email-templates" element={<AllEmailTemplatesPage />} />
-          <Route
+          {/* <Route path="/email-templates" element={<AllEmailTemplatesPage />} /> */}
+          {/* <Route
             path="/edit-email-template/:templateId"
             element={<EditEmailTemplatePage />}
-          />
+          /> */}
         </Routes>
       </div>
     </div>
