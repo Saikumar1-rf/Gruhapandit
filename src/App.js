@@ -30,7 +30,8 @@ import Slide7 from "./components/Slide7";
 // import DialogueBox2 from './components/DialogueBox2';
 // import Subscription from './components/Subscriptions';
 // import CreatePlans from'./components/CreatePlans'
-
+import AllEmailTemplatesPage from "./pages/EmailTemplates/AllEmailTemplatesPage";
+import EditEmailTemplatePage from "./pages/EmailTemplates/EditEmailTemplatePage";
 
 function AppContent() {
   const location = useLocation();
@@ -79,11 +80,11 @@ function AppContent() {
           <Route path="/allposts" element={<Allposts />} />
           <Route path="/payment" element={<Payment />} />
           <Route path="/userDashboard" element={<UserDashboard />} />
-          {/* <Route path="/email-templates" element={<AllEmailTemplatesPage />} /> */}
-          {/* <Route
+          <Route path="/email-templates" element={<AllEmailTemplatesPage />} />
+          <Route
             path="/edit-email-template/:templateId"
             element={<EditEmailTemplatePage />}
-          /> */}
+          />
         </Routes>
       </div>
     </div>
