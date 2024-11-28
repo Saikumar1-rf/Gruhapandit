@@ -33,10 +33,10 @@ const Sidebar = () => {
             Email Templates
           </Link>
         </li>
-        {/* <li>
+         {/* <li>
             <Link to="/subscription" className="hover:text-cyan-700">
             Create Plans
-            </Link>
+            </Link> 
         </li> */}
       </ul>
     </div>

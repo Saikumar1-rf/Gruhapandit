@@ -59,9 +59,9 @@ function AppContent() {
           <Route path="/create-password" element={<CreatePassword />} />
           <Route path="/register/term" element={<Slide6 />} />
           <Route path="/slide7" element={<Slide7 />}></Route>
-          {/* <Route path="/subscription"element={<Subscription/>}></Route> */}
-          <Route path="/dialoguebox" element={<DialogueBox />}></Route>
-        
+          {/* <Route path="/subscription"element={<Subscription/>}></Route> */}          
+         <Route path="/dialoguebox" element={<DialogueBox />}></Route>
+ 
           {/* <Route path="/createplans" element={<CreatePlans/>}></Route> */}
           <Route path="/register/tutor" element={<TutorRegister />} />
           <Route
