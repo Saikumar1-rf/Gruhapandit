@@ -120,4 +120,6 @@ const AllTemplatesPage = () => {
     );
 };
 
+
+
 export default AllTemplatesPage;

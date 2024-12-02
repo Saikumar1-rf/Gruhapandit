@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { countries } from "./Countries";
 import Select from "react-select";
+import axiosInstance from "./AxiosInstance";
 
 
 const ProfileDetails = ({ userData, userType, onClose, onUpdate }) => {
@@ -64,6 +65,27 @@ const ProfileDetails = ({ userData, userType, onClose, onUpdate }) => {
       setEditableData((prevData)=>({ ...prevData, countryCode: editableData.countryCode || "" }));
     }
   };
+
+  // Fetch National ID file on mount or user change
+  useEffect(() => {
+    const fetchNationalIdFile = async () => {
+      const userId = localStorage.getItem("userId"); // Getting userId from localStorage
+      const category = "NATIONAL_ID" // Assuming userType can be used as category
+      try {
+        const response = await axiosInstance.get(
+          `/tuition-application/documents/get-files-list?userId=${userId}&category=${category}`
+        );
+        const file = response.data[0]; // Assuming the response is an array with the file info
+        setNationalIdFile(file); // Set the file info in the state
+      } catch (error) {
+        console.error("Error fetching National ID file:", error);
+      }
+    };
+  
+    fetchNationalIdFile();
+  }, [userData, userType]);
+  
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -300,6 +322,35 @@ const ProfileDetails = ({ userData, userType, onClose, onUpdate }) => {
 
   const [availableTimings, setTimings] = useState([]);
 
+  const [nationalIdFile, setNationalIdFile] = useState(null);
+
+
+  const renderNationalIdFile = () => {
+    if (nationalIdFile) {
+      const fileName = nationalIdFile.fileName || "National_ID_File.pdf"; // Fallback file name if not provided
+      return (
+        <div className="flex flex-col mb-4">
+          <label className="text-lg font-bold text-gray-700 mb-1">National ID File:</label>
+          <a
+            href={nationalIdFile.fileUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 hover:underline"
+          >
+            {fileName}
+          </a>
+        </div>
+      );
+    } else {
+      return (
+        <div className="flex flex-col mb-4">
+          <label className="text-lg font-bold text-gray-700 mb-1">National ID File:</label>
+          <span className="text-gray-800">No file available</span>
+        </div>
+      );
+    }
+  };
+  
   const generateTimings = () => {
     const timings = [];
     const startHour = 0; // 00:00 (12 AM in 24-hour format)
@@ -379,6 +430,7 @@ const ProfileDetails = ({ userData, userType, onClose, onUpdate }) => {
     { label: "Available Timings", name: "availableTimings" },
     { label: "National ID Type", name: "nationalIdType" },
     { label: "National ID Number", name: "nationalIdNum" },
+    // { label :"National ID File",name:"nationalIdFile"},
   ];
 
   const fieldsToRender = userType === "student" ? studentFields : tutorFields;
@@ -397,10 +449,10 @@ const ProfileDetails = ({ userData, userType, onClose, onUpdate }) => {
 
     const url =
       userType === "student"
-      // ? "https://tution-application.onrender.com/tuition-application/student/update"
-      // : "https://tution-application.onrender.com/tuition-application/tutor/update"
-        ? "https://tution-application-testenv.onrender.com/tuition-application/student/update"
-        : "https://tution-application-testenv.onrender.com/tuition-application/tutor/update";
+      ? "https://tution-application.onrender.com/tuition-application/student/update"
+      : "https://tution-application.onrender.com/tuition-application/tutor/update"
+        // ? "https://tution-application-testenv.onrender.com/tuition-application/student/update"
+        // : "https://tution-application-testenv.onrender.com/tuition-application/tutor/update";
     
     try {
       const response = await axios.patch(url, editableData, {
@@ -433,7 +485,6 @@ const ProfileDetails = ({ userData, userType, onClose, onUpdate }) => {
     }
   };
 
-
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div
@@ -446,6 +497,7 @@ const ProfileDetails = ({ userData, userType, onClose, onUpdate }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
             {leftFields.map((field) => renderField(field.label, field.name))}
+            {userType ===  "tutor" && renderNationalIdFile()}
           </div>
           <div className="space-y-4">
             {rightFields.map((field) => renderField(field.label, field.name))}
@@ -474,6 +526,5 @@ const ProfileDetails = ({ userData, userType, onClose, onUpdate }) => {
     </div>
   );
 };
-
 
 export default ProfileDetails;

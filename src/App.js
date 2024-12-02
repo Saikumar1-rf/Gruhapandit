@@ -28,11 +28,13 @@ import DialogueBox from "./components/DialogueBox";
 import Gallery from "./components/Gallery";
 import Slide7 from "./components/Slide7";
 // import DialogueBox2 from './components/DialogueBox2';
-// import Subscription from './components/Subscriptions';
-// import CreatePlans from'./components/CreatePlans'
+
 import AllEmailTemplatesPage from "./pages/EmailTemplates/AllEmailTemplatesPage";
 import EditEmailTemplatePage from "./pages/EmailTemplates/EditEmailTemplatePage";
-
+import Subscription from "./components/Levelsofsubscription/Subscription";
+import CreateFeatures from "./components/Levelsofsubscription/CreateFeatures";
+import CreatePlan from "./components/Levelsofsubscription/CreatePlan";
+import PricingMain from "./components/Levelsofsubscription/PricingMain";
 function AppContent() {
   const location = useLocation();
   const noHeaderPaths = [
@@ -58,12 +60,12 @@ function AppContent() {
           <Route path="/register/student" element={<StudentRegister />} />
           <Route path="/create-password" element={<CreatePassword />} />
           <Route path="/register/term" element={<Slide6 />} />
-          <Route path="/slide7" element={<Slide7 />}></Route>
-          {/* <Route path="/subscription"element={<Subscription/>}></Route> */}
-          <Route path="/dialoguebox" element={<DialogueBox />}></Route>
-        
-          {/* <Route path="/createplans" element={<CreatePlans/>}></Route> */}
+          <Route path="/slide7" element={<Slide7 />}></Route>        
+         <Route path="/dialoguebox" element={<DialogueBox />}></Route>
           <Route path="/register/tutor" element={<TutorRegister />} />
+          <Route path="/subscription" element={<Subscription/>}/>
+          <Route path="/createfeatures"element={<CreateFeatures/>}></Route>
+          <Route path="/createplan"element={<CreatePlan/>}></Route>
           <Route
             path="/posts"
             element={
@@ -79,6 +81,7 @@ function AppContent() {
           <Route path="/dashboard" element={<CreatePosts />} />
           <Route path="/allposts" element={<Allposts />} />
           <Route path="/payment" element={<Payment />} />
+          <Route path="/pricingmain" element={<PricingMain/>} />
           <Route path="/userDashboard" element={<UserDashboard />} />
           <Route path="/email-templates" element={<AllEmailTemplatesPage />} />
           <Route
