@@ -96,6 +96,20 @@ function Header() {
           </li>
           <li>
             <NavLink
+              to="/pricingmain"
+              className={({ isActive }) =>
+                isActive
+                  ? "text-cyan-500 font-semibold"
+                  : "text-gray-800 hover:text-cyan-500"
+              }
+              onClick={handleLinkClick}
+            >
+              Pricing
+            </NavLink>
+          </li>
+
+          <li>
+            <NavLink
               to="/login"
               className={({ isActive }) =>
                 isActive

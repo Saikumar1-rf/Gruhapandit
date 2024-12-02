@@ -26,11 +26,11 @@ const Slide7 = () => {
             <img
               src={item.imageUrl}  // Directly use the image URL returned by the backend
               alt={item.name}
-              className="w-full h-64 object-cover rounded-md mb-4"
+              className="w-full h-48 object-cover rounded-md mb-4"  // Fixed height, responsive width
             />
-            <h2 className="text-xl font-semibold break-words">{item.name}</h2>
-            <p className="text-gray-600 break-words">{item.subject}</p>
-            <p className="text-gray-500 mt-2 break-words">{item.description}</p>
+            <h2 className="text-xl font-semibold truncate">{item.name}</h2> {/* truncate to handle long text */}
+            <p className="text-gray-600 text-sm">{item.subject}</p> {/* Reduce text size for subject */}
+            <p className="text-gray-500 text-sm mt-2 truncate">{item.description}</p> {/* truncate for description */}
           </div>
         ))}
       </div>
