@@ -54,13 +54,18 @@ const PricingMain = () => {
             <p className="text-gray-600 mb-4">
               <span className="font-semibold text-gray-800">Duration:</span> {plan.duration} months
             </p>
+            
+            {/* Features List with Descriptions */}
             <div className="text-gray-700 mb-4">
               <strong className="text-gray-800">Features:</strong>
               <ul className="list-disc pl-5 mt-2">
                 {plan.features.map((feature) => (
-                  <li key={feature.id} className="flex items-center mt-1 text-gray-600">
+                  <li key={feature.id} className="flex items-start mt-1 text-gray-600">
                     <FaCheckCircle className="text-green-500 mr-2" />
-                    {feature.name}
+                    <div>
+                      <div className="font-semibold">{feature.name}</div>
+                      <div className="text-sm text-gray-500">{feature.description}</div>
+                    </div>
                   </li>
                 ))}
               </ul>
