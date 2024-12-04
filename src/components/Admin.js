@@ -66,49 +66,6 @@ const Admin = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleOpenPolicy = () => {
-    setIsModalOpen(true);
-  };
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-  
-
-  const handleLogout = async () => {
-    try {
-      const token = localStorage.getItem("jwtToken");
-      const usersData = JSON.parse(localStorage.getItem("usersData")); // Get usersData from localStorage
-  
-      if (token && usersData) {
-        await axiosInstance.post(
-          `/tuition-application/authenticate/logout?emailId=${usersData.emailId}`,
-          null,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-      }
-  
-      // Clear local storage and sensitive state
-      localStorage.removeItem("jwtToken");
-      localStorage.removeItem("userId");
-      localStorage.removeItem("userType");
-      localStorage.removeItem("usersData");  // Clear usersData from localStorage if needed
-  
-      // Redirect user to the login page
-      navigate("/", { replace: true });
-    } catch (error) {
-      // Proceed with client-side logout even if server logout fails
-      localStorage.removeItem("jwtToken");
-      localStorage.removeItem("userId");
-      localStorage.removeItem("userType");
-      localStorage.removeItem("usersData");
-  
-      navigate("/", { replace: true });
-    }
-  };
-  
-
   return (
     <div className='flex flex-row'>
       <Sidebar/>
@@ -120,7 +77,7 @@ const Admin = () => {
         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
   
         {/* Tutors and Students Section */}
-        <div className="flex flex-col md:flex-row w-full justify-between mb-4">
+        <div className="flex flex-col md:flex-row w-full justify-between mb-3">
           {/* Tutor Section */}
           <div className="flex flex-col w-full md:w-1/2 mb-4 md:mr-2">
             <h1 className="text-2xl font-bold text-center">Tutors</h1>
@@ -150,7 +107,7 @@ const Admin = () => {
                   {filteredTutors.map((tutor, index) => (
                     <tr key={index}>
                       <td className="border border-black px-2 py-2">{tutor.firstName}</td>
-                      <td className="border border-black px-2 py-2">{tutor.subjectsYouAreExpertAt}</td>
+                      <td className="border border-black px-2 py-2">{tutor.subjectsLookingFor}</td>
                       <td className="border border-black px-2 py-2">{tutor.modeOfTeaching}</td>
                       <td className="border border-black px-2 py-2">{tutor.location}</td>
                       <td className="border border-black px-2 py-2">{tutor.availableTimings}</td>
@@ -190,7 +147,7 @@ const Admin = () => {
                     <tr key={index}>
                       <td className="border border-black px-2 py-2">{student.firstName}</td>
                       <td className="border border-black px-2 py-2">{student.subjectsLookingFor}</td>
-                      <td className="border border-black px-2 py-2">{student.modeOfTeaching}</td>
+                      <td className="border border-black px-2 py-2">{student.modeOfClass}</td>
                       <td className="border border-black px-2 py-2">{student.location}</td>
                       <td className="border border-black px-2 py-2">{student.availableTimings}</td>
                     </tr>
