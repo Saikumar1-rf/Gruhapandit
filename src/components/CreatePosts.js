@@ -4,10 +4,13 @@ import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "./AxiosInstance";
 import Postsdash from "./Postsdash";
 import Sidebar from "./Sidebar";
+import Postsdash from "./Postsdash";
+import Sidebar from "./Sidebar";
 
 const CreatePosts = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [selectedRole, setSelectedRole] = useState("");
+const [successMessage, setSuccessMessage] = useState("");
 const [successMessage, setSuccessMessage] = useState("");
   const [formData, setFormData] = useState({
     firstName: "",
@@ -58,6 +61,7 @@ const [successMessage, setSuccessMessage] = useState("");
   const validate = () => {
     const newErrors = {};
     const nameRegex = /^[A-Za-z](?:[A-Za-z\s]*)$/;
+    const subjectRegex = /^[A-Za-z0-9][A-Za-z0-9\s,.+#]*$/;
     const subjectRegex = /^[A-Za-z0-9][A-Za-z0-9\s,.+#]*$/;
 
     if (!formData.firstName) newErrors.firstName = "Name is required";
@@ -119,6 +123,9 @@ const [successMessage, setSuccessMessage] = useState("");
         }
 
         const response = await axiosInstance.post(url, payload);
+      
+        setSuccessMessage("Data submitted successfully!");
+        setTimeout(() => setSuccessMessage(""), 1000); 
       
         setSuccessMessage("Data submitted successfully!");
         setTimeout(() => setSuccessMessage(""), 1000); 
@@ -197,8 +204,11 @@ const [successMessage, setSuccessMessage] = useState("");
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+  };
 
   return (
+    <div className='flex flex-row'>
+    <Sidebar/>
     <div className='flex flex-row'>
     <Sidebar/>
 
@@ -212,16 +222,28 @@ const [successMessage, setSuccessMessage] = useState("");
     </div>
   </div>
 )}
+          <Postsdash />
 
+{successMessage && (
+  <div className="fixed inset-0 flex items-center justify-center z-50">
+    <div className="bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg text-center">
+      {successMessage}
+    </div>
+  </div>
+)}
+
+          <div className="flex justify-center space-x-4 flex-wrap mb-56 gap-6 mt-5">
           <div className="flex justify-center space-x-4 flex-wrap mb-56 gap-6 mt-5">
             <button
               onClick={() => togglePopup("student")}
+              className="bg-blue-600 text-white py-2 px-4 rounded flex items-center"
               className="bg-blue-600 text-white py-2 px-4 rounded flex items-center"
             >
               <AiTwotoneProfile className="text-2xl mr-2" /> Students
             </button>
             <button
               onClick={() => togglePopup("tutor")}
+              className="bg-blue-600 text-white py-2 px-4 rounded flex items-center"
               className="bg-blue-600 text-white py-2 px-4 rounded flex items-center"
             >
               <AiTwotoneProfile className="text-2xl mr-2" /> Teachers
@@ -230,6 +252,7 @@ const [successMessage, setSuccessMessage] = useState("");
 
           {showPopup && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <div className="w-11/12 sm:w-1/2 max-h-[100vh] h-auto p-4 bg-white shadow-lg border-4 rounded-lg relative overflow-y-auto">
               <div className="w-11/12 sm:w-1/2 max-h-[100vh] h-auto p-4 bg-white shadow-lg border-4 rounded-lg relative overflow-y-auto">
                 <button
                   onClick={() => togglePopup("")}
@@ -365,6 +388,11 @@ const [successMessage, setSuccessMessage] = useState("");
                 >
                   Submit
                 </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
               </div>
             </div>
           )}

@@ -312,7 +312,7 @@ const TutorRegister = () => {
       try {
         const response = await axios.post(
           "https://hrms-repository-gruhabase.onrender.com/tuition-application/tutor/create",
-          // "https://tution-application.onrender.com/tuition-application/tutor/create",
+              // "https://tution-application.onrender.com/tuition-application/tutor/create",
           formData,
           {
             headers: {

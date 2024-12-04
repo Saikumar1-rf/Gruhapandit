@@ -18,17 +18,24 @@ import Allposts from './components/Allposts';
 import UserDashboard from './components/UserDashboard';
 import { AuthProvider } from './components/authContext'; 
 import ProtectedRoute from './components/ProtectedRoutes'; 
-import Sidebar from './components/Sidebar';
-import DialogueBox from './components/DialogueBox';
 
 
 function AppContent() {
   const location = useLocation();
-  const noHeaderPaths = ['/userDashboard','/posts','/allposts','/dashboard'];
+  const noHeaderPaths = [
+    "/userDashboard",
+    "/posts",
+    "/allposts",
+    "/dashboard",
+    "/gallery",
+    "/subscription",
+    "/email-templates",
+  ];
 
   return (
-        <div className="App">
-      {!noHeaderPaths.includes(location.pathname) && <Header />}
+    <div className="App">
+      {!noHeaderPaths.includes(location.pathname) &&
+        !location.pathname.startsWith("/edit-email-template") && <Header />}
       <div className="content">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -38,24 +45,30 @@ function AppContent() {
           <Route path="/register/student" element={<StudentRegister />} />
           <Route path="/create-password" element={<CreatePassword />} />
           <Route path="/register/term" element={<Slide6 />} />
-          <Route path="/dialoguebox" element={<DialogueBox/>}></Route>
           <Route path="/register/tutor" element={<TutorRegister />} />
-          <Route path="/posts" element={
-            <ProtectedRoute>
-              <Admin />
-            </ProtectedRoute>
-          } />
+          <Route path="/subscription" element={<Subscription/>}/>
+          <Route path="/createfeatures"element={<CreateFeatures/>}></Route>
+          <Route path="/createplan"element={<CreatePlan/>}></Route>
+          <Route
+            path="/posts"
+            element={
+              <ProtectedRoute>
+                <Admin />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/postsdash" element={<Postsdash />} />
           <Route path="/slide6" element={<Slide6 />} />
-         <Route path='sidebar' element={<Sidebar/>}/>
           <Route path="/dashboard" element={<CreatePosts />} />
           <Route path="/allposts" element={<Allposts />} />
           <Route path="/payment" element={<Payment />} />
-          <Route path="/userDashboard" element={
-            <ProtectedRoute>
-              <UserDashboard />
-            </ProtectedRoute>
-          } />
+          <Route path="/pricingmain" element={<PricingMain/>} />
+          <Route path="/userDashboard" element={<UserDashboard />} />
+          <Route path="/email-templates" element={<AllEmailTemplatesPage />} />
+          <Route
+            path="/edit-email-template/:templateId"
+            element={<EditEmailTemplatePage />}
+          />
         </Routes>
       </div>
     </div>

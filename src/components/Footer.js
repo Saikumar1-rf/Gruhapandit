@@ -1,4 +1,5 @@
 import React from "react";
+import React from "react";
 import gruhapandit from "../Asserts/gruhapandit.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhone, faEnvelope } from "@fortawesome/free-solid-svg-icons";
@@ -13,11 +14,17 @@ const Footer = () => {
     <footer className="bg-gray-800 text-white py-8">
       <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
         <div className="footer-section flex flex-col items-center md:items-start text-center md:text-left">
+      <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="footer-section flex flex-col items-center md:items-start text-center md:text-left">
           <img
+            className="w-[200px] h-[200px] mb-4 filter invert brightness-0"
             className="w-[200px] h-[200px] mb-4 filter invert brightness-0"
             src={gruhapandit}
             alt="Gruhapandit Logo"
           />
+          <p className="text-gray-400">
+            Providing quality tuitions and educational services to help you
+            achieve academic excellence.
           <p className="text-gray-400">
             Providing quality tuitions and educational services to help you
             achieve academic excellence.
@@ -49,8 +56,8 @@ const Footer = () => {
           <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
           <ul className="space-y-2">
             <li className="flex items-center">
-              <FontAwesomeIcon icon={faPhone} className="mr-2" />
-              <span>+91 9618859004</span>
+              <FaPhone className="mr-2" />
+              <span>+91 9618853331</span>
             </li>
             <li className="flex items-center">
               <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
@@ -96,7 +103,7 @@ const Footer = () => {
 </div>
       <div className="border-t border-gray-700 mt-8 pt-4">
         <div className="container mx-auto text-center text-gray-400">
-          &copy; 2024 Gruhapandit Tuitions. All rights reserved.
+          &copy; {currentYear} Gruhapandit Tuitions. All rights reserved.
         </div>
       </div>
     </footer>
