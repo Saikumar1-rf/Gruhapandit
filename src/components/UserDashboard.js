@@ -80,6 +80,7 @@ const userID = localStorage.getItem('userId')
     };
     fetchUserData();
   }, [userId, userType]);
+
   const toggleDropdown = () => setShowDropdown((prev) => !prev);
 
   const handleLogout = async () => {
@@ -187,9 +188,10 @@ const userID = localStorage.getItem('userId')
   }, []);
   const UserId = localStorage.getItem(userId)
   console.log(UserId);
+
   
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 sticky">
+    <div className="min-h-screen flex flex-col bg-black-50 sticky bg-slate-400">
       <header className="bg-cyan-700 flex items-center h-16 justify-between px-4 md:px-10 py-2 shadow-md relative">
         <img src={gruhapa} alt="Gruha Pandit" className="w-20 md:w-24" />
         <div className="flex items-center space-x-4 text-white ml-auto">
@@ -236,7 +238,6 @@ const userID = localStorage.getItem('userId')
           </div>
         </div>
       </header>
-
       {editMode ? (
         <div className="w-full md:w-3/4 mx-auto mt-10 bg-white p-6 rounded-md shadow-md">
           <h2 className="text-2xl font-semibold text-center mb-6">
@@ -279,14 +280,31 @@ const userID = localStorage.getItem('userId')
         </div>
       ) : (
         <>
-          <main className="w-full md:w-3/5 mx-auto mt-10 p-3 flex justify-center bg-white">
-            <img
+
+<main className="w-full md:w-3/5 mx-auto mt-10 p-6 flex flex-col justify-center bg-white rounded-md shadow-md mb-6 transform hover:scale-105 transition-all duration-300 ease-in-out">
+  {userData.firstName && userData.lastName ? (
+    <div>
+      <h1 className="text-3xl font-semibold text-center text-gray-800 mb-3">
+        Welcome, <span className="text-blue-500"> {userData.firstName} </span>
+        <span className="text-blue-500"> {userData.lastName} </span>
+      </h1>
+      <p className="text-center text-gray-600 text-lg">
+        {userType === "tutor"
+          ? "As a tutor, you can manage your posts and connect with students."
+          : "As a student, you can browse available tutors and post your requirements."}
+      </p>
+    </div>
+  ) : (
+    <p className="text-center text-gray-600 text-lg">Loading user data...</p>
+  )}
+   </main>
+   <div class="flex justify-center items-center p-3">
+          <img
               src={gradi}
               alt="Graduation pic"
-              className="w-full h-48 md:h-56 object-cover rounded-md"
+              className="w-full md:w-auto md:h-60 h-48 object-cover rounded-lg"
             />
-          </main>
-  
+  </div>
           <div className="w-full md:w-3/4 mx-auto mt-6">
             <header className="bg-cyan-700 text-white px-4 py-3 rounded-t-md">
               <h2 className="text-lg font-semibold">Your Required Posts</h2>

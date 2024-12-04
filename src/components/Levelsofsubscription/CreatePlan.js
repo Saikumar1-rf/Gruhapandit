@@ -304,8 +304,9 @@ const CreatePlan = () => {
       )}
 
       <div className="overflow-x-auto mt-6">
+        <div className="max-h-[400px] overflow-y-auto">
         <table className="w-full border text-center">
-          <thead>
+          <thead className=" top-0 bg-gray-200">
             <tr className="bg-gray-200">
               <th className="border px-4 py-2">Name</th>
               <th className="border px-4 py-2">Price</th>
@@ -360,6 +361,7 @@ const CreatePlan = () => {
           </tbody>
         </table>
       </div>
+    </div>
     </div>
   );
 };

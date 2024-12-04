@@ -63,7 +63,7 @@ const Login = () => {
         "https://tution-application-testenv.onrender.com/tuition-application/authenticate/login",
         { emailId, password }
       );
-
+      
       const { jwtToken, userId, userType } = response.data;
       localStorage.setItem("jwtToken", jwtToken);
       localStorage.setItem("userId", userId);
@@ -88,7 +88,7 @@ const Login = () => {
       console.error("Login error:", error);
     }
   };
-
+  
   const handleEmailChange = (e) => {
     const value = e.target.value;
     const formattedValue = value.replace(/\s+/g, "").toLowerCase();
@@ -149,7 +149,7 @@ const Login = () => {
                 </p>
               )}
             </div>
-
+  
             {/* Password */}
             <div className="mb-4 relative">
               <label

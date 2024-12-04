@@ -132,7 +132,7 @@ const CreateFeatures = ({ onFeatureSubmit }) => {
 
       // Automatically close modal and clear popup message after 1 seconds
       setTimeout(() => {
-         // Clear popup message
+        setPopupMessage();
       }, 1000);
     } catch (error) {
       console.error("Error:", error);
@@ -204,7 +204,6 @@ const CreateFeatures = ({ onFeatureSubmit }) => {
                   value={formData.description}
                   onChange={handleInputChange}
                   className="w-full p-2 border rounded-md"
-                  rows="3"
                   required
                 ></textarea>
               </div>
@@ -251,8 +250,9 @@ const CreateFeatures = ({ onFeatureSubmit }) => {
       )}
 
       <div className="overflow-x-auto mt-6">
+        <div className="max-h-[400px] overflow-y-auto">
         <table className="w-full border text-center">
-          <thead>
+          <thead className="top-0 bg-gray-200">
             <tr className="bg-gray-200">
               <th className="border px-4 py-2">Name</th>
               <th className="border px-4 py-2">Description</th>
@@ -289,6 +289,7 @@ const CreateFeatures = ({ onFeatureSubmit }) => {
           </tbody>
         </table>
       </div>
+    </div>
     </div>
   );
 };
