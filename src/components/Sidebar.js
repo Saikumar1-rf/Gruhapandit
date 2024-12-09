@@ -38,6 +38,16 @@ const Sidebar = () => {
             Create Plans
             </Link> 
         </li>
+        <li>
+            <Link to="/slide8" className="hover:text-cyan-700">
+            Reviews
+            </Link> 
+        </li>
+        <li>
+            <Link to="/advertisement" className="hover:text-cyan-700">
+            Advertisement
+            </Link> 
+        </li>
       </ul>
     </div>
   );

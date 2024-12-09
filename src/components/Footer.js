@@ -8,7 +8,7 @@ const currentYear = new Date().getFullYear(); // Get the current year dynamicall
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-800 text-white py-8">
+    <footer className="bg-gray-800 text-white py-6">
       <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
         <div className="footer-section flex flex-col items-center md:items-start text-center md:text-left">
           <img

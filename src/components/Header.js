@@ -107,6 +107,19 @@ function Header() {
               Pricing
             </NavLink>
           </li>
+          {/* <li>
+            <NavLink
+              to="/contactus"
+              className={({ isActive }) =>
+                isActive
+                  ? "text-cyan-500 font-semibold"
+                  : "text-gray-800 hover:text-cyan-500"
+              }
+              onClick={handleLinkClick}
+            >
+              Contact Us
+            </NavLink>
+          </li> */}
 
           <li>
             <NavLink
