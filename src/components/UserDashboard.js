@@ -7,6 +7,17 @@ import ProfileDetails from "./ProfileDetails";
 import Slide6 from "./Slide6";
 import gradi from "../Asserts/user3.jpg";
 import gruhapa from "../Asserts/gruhapandit.png";
+import DialogueBox from "./DialogueBox";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import pandit from "../Asserts/oip.jpg";
+import pandit1 from "../Asserts/Step (3).png";
+import pandit2 from "../Asserts/v68_82.png";
+import ReviewsBox from "../components/Reviews/ReviewsBox";
+import UserFooter from "./UserFooter";
 
 const TutorDash = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -17,8 +28,27 @@ const TutorDash = () => {
   const [showProfile, setShowProfile] = useState(false);
   // const [isProfileOpen,setIsProfileOpen]=useState(false);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [dialogueBoxData, setDialogueBoxData] = useState(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const userID = localStorage.getItem("userId");
+
+  const [isReviewOpen, setIsReviewOpen] = useState(false);
+
+  // Open and close review dialog
+  const handleOpenReview = () => {
+    setIsReviewOpen(true);
+  };
+
+  const handleCloseReview = () => {
+    setIsReviewOpen(false);
+  };
+
+  const handleReviewSubmit = (reviewData) => {
+    console.log("Review Submitted:", reviewData);
+    // You can send the review data to the server here
+  };
   const handleOpenPolicy = () => {
     setIsModalOpen(true);
   };
@@ -48,8 +78,8 @@ const TutorDash = () => {
   }, []);
 
   const API_URL =
-    // "https://hrms-repository-gruhabase.onrender.com/tuition-application/userHomePage/";
-    "https://tution-application.onrender.com/tuition-application/userHomePage/";
+    "https://hrms-repository-gruhabase.onrender.com/tuition-application/userHomePage/";
+    // "https://tution-application.onrender.com/tuition-application/userHomePage/";
 
   // Fetch posts
   useEffect(() => {
@@ -148,67 +178,109 @@ const TutorDash = () => {
     setUserData(updatedData);
   };
 
-  const handleUpdate = async () => {
-    const token = localStorage.getItem("jwtToken");
-    if (!token) {
-      console.error("No token found. Please log in again.");
-      return;
-    }
-    try {
-      const url = userType === "student"
-        ? "/tuition-application/student/update"
-        : "/tuition-application/tutor/update";
- 
-      await axiosInstance.patch(url, userData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      alert(`${userType.charAt(0).toUpperCase() + userType.slice(1)} details updated successfully!`);
-      setEditMode(false);
-    } catch (error) {
-      console.error("Error updating user data:", error);
-    }
+  // const handleUpdate = async () => {
+  //   const token = localStorage.getItem("jwtToken");
+  //   if (!token) {
+  //     console.error("No token found. Please log in again.");
+  //     return;
+  //   }
+  //   try {
+  //     const url =
+  //       userType === "student"
+  //         ? "/tuition-application/student/update"
+  //         : "/tuition-application/tutor/update";
+
+  //     await axiosInstance.patch(url, userData, {
+  //       headers: { Authorization: `Bearer ${token}` },
+  //     });
+  //     alert(
+  //       `${
+  //         userType.charAt(0).toUpperCase() + userType.slice(1)
+  //       } details updated successfully!`
+  //     );
+  //     setEditMode(false);
+  //   } catch (error) {
+  //     console.error("Error updating user data:", error);
+  //   }
+  // };
+
+  const handleUploadClick = () => {
+    setIsDialogOpen(true);
   };
 
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+  };
+  const handleDialogueBoxSubmit = (data) => {
+    setDialogueBoxData(data);
+    setIsDialogOpen(false);
+  };
+  const UserId = localStorage.getItem(userId);
+  console.log(UserId);
+
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 sticky">
-      <header className="bg-cyan-700 flex items-center h-16 justify-between px-4 md:px-10 py-2 shadow-md relative">
-        <img src={gruhapa} alt="Gruha Pandit" className="w-20 md:w-24" />
-        <div className="flex items-center space-x-4 text-white ml-auto">
-          <FaEnvelope className="w-5 h-5 cursor-pointer" />
-          <FaBell className="w-5 h-5 cursor-pointer" />
-          <div
-            className="relative flex items-center space-x-2 cursor-pointer"
-            onClick={toggleDropdown}
-            ref={dropdownRef}
-          >
-            <FaCog className="w-5 h-5" />
-            {showDropdown && (
-              <div className="absolute right-0 top-14 w-40 bg-white shadow-lg rounded-md">
-                <ul className="text-gray-700">
-                  <li
-                    className="px-4 py-2 hover:bg-blue-100 cursor-pointer"
-                    onClick={handleProfileClick}
-                  >
-                    Profile
-                  </li>
-                  <li
-                    className="px-4 py-2 hover:bg-blue-100 cursor-pointer"
-                    onClick={handleOpenPolicy}
-                  >
-                    Policy
-                  </li>
-                  <li
-                    className="px-4 py-2 hover:bg-red-500 cursor-pointer"
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </li>
-                </ul>
-              </div>
-            )}
+    <>
+      <div className="min-h-screen flex flex-col bg-gray-50">
+        <header className="bg-cyan-700 flex items-center h-16 justify-between px-4 md:px-10 py-2 shadow-md sticky top-0 z-50">
+          <img
+            src={gruhapa}
+            alt="Gruha Pandit"
+            className="w-20 md:w-24 filter invert brightness-0"
+          />
+          <div className="flex items-center space-x-4 text-white ml-auto">
+            <FaEnvelope className="w-5 h-5 cursor-pointer" />
+            <FaBell className="w-5 h-5 cursor-pointer" />
+            <div
+              className="relative flex items-center space-x-2 cursor-pointer"
+              onClick={toggleDropdown}
+              ref={dropdownRef}
+            >
+              <FaCog className="w-5 h-5" />
+              {showDropdown && (
+                <div
+                  className="absolute right-0 top-14 w-40 bg-white shadow-lg rounded-md z-50"
+                  ref={dropdownMenuRef}
+                >
+                  <ul className="text-gray-700">
+                    <li
+                      className="px-4 py-2 hover:bg-blue-100 cursor-pointer"
+                      onClick={handleProfileClick}
+                    >
+                      Profile
+                    </li>
+                    {userType === "tutor" && (
+                      <li
+                        className="px-4 py-2 hover:bg-blue-100 cursor-pointer z-50"
+                        onClick={handleUploadClick}
+                      >
+                        Upload NationaId
+                      </li>
+                    )}
+
+                    <li
+                      className="px-4 py-2 hover:bg-blue-100 cursor-pointer"
+                      onClick={handleOpenReview}
+                    >
+                      Review
+                    </li>
+                    <li
+                      className="px-4 py-2 hover:bg-blue-100 cursor-pointer"
+                      onClick={handleOpenPolicy}
+                    >
+                      Policy
+                    </li>
+                    <li
+                      className="px-4 py-2 hover:bg-red-500 cursor-pointer"
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
         {editMode ? (
           <div className="w-full md:w-3/4 mx-auto mt-10 bg-white p-6 rounded-md shadow-md">
@@ -511,19 +583,35 @@ const TutorDash = () => {
               <Slide6 />
             </div>
           </div>
-        </div>
-      )}
-  
-      {/* Profile Modal */}
-      {showProfile && (
-        <ProfileDetails
-          userData={userData}
-          userType={userType}
-          onClose={handleCloseProfile}
-          onUpdate={handleProfileUpdate} // Pass the update handler
-        />
-      )}
-    </div>
+        )}
+
+        {isReviewOpen && (
+          <ReviewsBox
+            userType={userType}
+            onClose={handleCloseReview}
+            onSubmit={handleReviewSubmit}
+          />
+        )}
+
+        {showProfile && (
+          <ProfileDetails
+            userData={userData}
+            userType={userType}
+            onClose={handleCloseProfile}
+            onUpdate={handleProfileUpdate}
+          />
+        )}
+        {isDialogOpen && (
+          <DialogueBox
+            userId={userID}
+            category="NATIONAL_ID"
+            onClose={handleCloseDialog}
+            onSubmit={handleDialogueBoxSubmit}
+            //  outevent={(data) => console.log("Callback Data:", data)}
+          />
+        )}
+      </div>
+    </>
   );
 };
 

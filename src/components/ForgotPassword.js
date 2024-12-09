@@ -46,7 +46,7 @@ const Forgotpass = () => {
       try {
         const response = await axios.post(
           // `https://tution-application.onrender.com/tuition-application/authenticate/forgotPassword?emailId=${emailId}`
-         `https://tution-application-testenv.onrender.com/tuition-application/authenticate/forgotPassword?emailId=${emailId}`
+         `https://hrms-repository-gruhabase.onrender.com/tuition-application/authenticate/forgotPassword?emailId=${emailId}`
         );
         setOtpSent(true);
         setTimer(60);
@@ -62,8 +62,8 @@ const Forgotpass = () => {
   const handleResendOtp = async () => {
     try {
       await axios.post(
-         `https://tution-application-testenv.onrender.com/tuition-application/authenticate/forgotPassword?emailId=${emailId}`
-        // `https://tution-application.onrender.com/tuition-application/authenticate/forgotPassword?emailId=${emailId}`
+        //  `https://tution-application-testenv.onrender.com/tuition-application/authenticate/forgotPassword?emailId=${emailId}`
+        `https://hrms-repository-gruhabase.onrender.com/tuition-application/authenticate/forgotPassword?emailId=${emailId}`
       );
       setTimer(60); // Restart the timer
       setCanResendOtp(false); // Disable resend button
@@ -88,7 +88,7 @@ const Forgotpass = () => {
     }
     try {
       // const url = `https://tution-application.onrender.com/tuition-application/authenticate/resetPassword?emailId=${emailId}&password=${password}&otp=${otp}`;
-      const url = `https://tution-application-testenv.onrender.com/tuition-application/authenticate/resetPassword?emailId=${emailId}&password=${password}&otp=${otp}`;
+      const url = `https://hrms-repository-gruhabase.onrender.com/tuition-application/authenticate/resetPassword?emailId=${emailId}&password=${password}&otp=${otp}`;
 
       await axios.patch(
         url,
