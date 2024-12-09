@@ -236,7 +236,6 @@ const TutorRegister = () => {
     if (!formData.availableTimings)
       errors.availableTimings = "Available Timings is required";
     if (!formData.category) errors.category = "Category is required";
-
     return errors;
   };
 
