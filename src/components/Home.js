@@ -9,6 +9,7 @@ import Footer from './Footer';
 import Header from './Header';
 
 
+
 function Home() {
   return (
     <div>
@@ -19,6 +20,7 @@ function Home() {
       <Slide4 />
       <Slide5 />
       {/* <Slide6 /> */}
+      {/* <Slide8/> */}
       <Footer />
 
     </div>

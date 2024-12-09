@@ -45,8 +45,8 @@ const Forgotpass = () => {
       setErrors({});
       try {
         const response = await axios.post(
-          `https://hrms-repository-gruhabase.onrender.com/tuition-application/authenticate/forgotPassword?emailId=${emailId}`
-        // `https://tution-application.onrender.com/tuition-application/authenticate/forgotPassword?emailId=${emailId}`
+          // `https://tution-application.onrender.com/tuition-application/authenticate/forgotPassword?emailId=${emailId}`
+         `https://tution-application-testenv.onrender.com/tuition-application/authenticate/forgotPassword?emailId=${emailId}`
         );
         setOtpSent(true);
         setTimer(60);
@@ -62,7 +62,7 @@ const Forgotpass = () => {
   const handleResendOtp = async () => {
     try {
       await axios.post(
-        `https://hrms-repository-gruhabase.onrender.com/tuition-application/authenticate/forgotPassword?emailId=${emailId}`
+         `https://tution-application-testenv.onrender.com/tuition-application/authenticate/forgotPassword?emailId=${emailId}`
         // `https://tution-application.onrender.com/tuition-application/authenticate/forgotPassword?emailId=${emailId}`
       );
       setTimer(60); // Restart the timer
@@ -86,10 +86,9 @@ const Forgotpass = () => {
       setErrors(errors);
       return;
     }
-
     try {
       // const url = `https://tution-application.onrender.com/tuition-application/authenticate/resetPassword?emailId=${emailId}&password=${password}&otp=${otp}`;
-      const url = `https://hrms-repository-gruhabase.onrender.com/tuition-application/authenticate/resetPassword?emailId=${emailId}&password=${password}&otp=${otp}`;
+      const url = `https://tution-application-testenv.onrender.com/tuition-application/authenticate/resetPassword?emailId=${emailId}&password=${password}&otp=${otp}`;
 
       await axios.patch(
         url,
@@ -205,14 +204,10 @@ const Forgotpass = () => {
                   value={otp}
                   name="otp"
                   // onChange={(e) => setOtp(e.target.value)}
-                  // onChange={(e) =>{ const value=e.target.value;
-                  //   if (!/\s/.test(value)) {
-                  //     setOtp(value);
-                  //   }
-                  // }}
-                  onChange={(e) => {
-                    const value = e.target.value.replace(/\s+/g, ''); // Remove all spaces
-                    setOtp(value);
+                  onChange={(e) =>{ const value=e.target.value;
+                    if (!/\s/.test(value)) {
+                      setOtp(value);
+                    }
                   }}
                   className="w-full px-4 py-2 border rounded-lg"
                   maxLength={6}
@@ -247,14 +242,10 @@ const Forgotpass = () => {
                     minLength={8}
                     maxLength={15}
                     // onChange={(e) => setPassword(e.target.value)}
-                    // onChange={(e) =>{ const value=e.target.value;
-                    //   if (!/\s/.test(value)) {
-                    //     setPassword(value);
-                    //   }
-                    // }}
-                    onChange={(e) => {
-                      const value = e.target.value.replace(/\s+/g, ''); // Remove all spaces
-                      setPassword(value);
+                    onChange={(e) =>{ const value=e.target.value;
+                      if (!/\s/.test(value)) {
+                        setPassword(value);
+                      }
                     }}
                     
                     className="w-full px-4 py-2 border rounded-lg"

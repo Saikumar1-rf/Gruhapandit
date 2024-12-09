@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { AiTwotoneProfile } from "react-icons/ai";
+import { FaEnvelope, FaBell } from "react-icons/fa";
+import { IoSettings } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "./AxiosInstance";
 import Postsdash from "./Postsdash";
@@ -41,12 +43,9 @@ const [successMessage, setSuccessMessage] = useState("");
   const handleInputChange = (e) => {
     const { id, value } = e.target;
 
-    // Prevent the first character from being a space
-    const trimmedValue = value.startsWith(" ") ? value.trimStart() : value;
-
     setFormData((prevData) => ({
       ...prevData,
-      [id]: trimmedValue,
+      [id]: value.trimStart(),
     }));
 
     setErrors((prevErrors) => ({
@@ -99,7 +98,7 @@ const [successMessage, setSuccessMessage] = useState("");
         if (selectedRole === "student") {
           url =
             "https://hrms-repository-gruhabase.onrender.com/tuition-application/studentAdvertisement/create";
-            // "https://tution-application.onrender.com/tuition-application/studentAdvertisement/create";
+          // "https://tution-application.onrender.com/tuition-application/studentAdvertisement/create";
           payload = {
             firstName: formData.firstName,
             subjectsLookingFor: formData.subjectsLookingFor,
@@ -109,7 +108,7 @@ const [successMessage, setSuccessMessage] = useState("");
         } else if (selectedRole === "tutor") {
           url =
             "https://hrms-repository-gruhabase.onrender.com/tuition-application/tutorAdvertisement/create";
-            // "https://tution-application.onrender.com/tuition-application/tutorAdvertisement/create";
+          // "https://tution-application.onrender.com/tuition-application/tutorAdvertisement/create"
           payload = {
             firstName: formData.firstName,
             subjectsYouAreExpertAt: formData.subjectsYouAreExpertAt,
@@ -119,9 +118,7 @@ const [successMessage, setSuccessMessage] = useState("");
         }
 
         const response = await axiosInstance.post(url, payload);
-      
-        setSuccessMessage("Data submitted successfully!");
-        setTimeout(() => setSuccessMessage(""), 1000); 
+        console.log("Form submitted successfully:", response.data);
         togglePopup("");
       } catch (error) {
         console.error("Error submitting the form:", error);
@@ -144,8 +141,6 @@ const [successMessage, setSuccessMessage] = useState("");
 
     while (hour < endHour || (hour === endHour && minute === 15)) {
       const startTime = formatTime(hour, minute);
-
-      // Increment time by 45 minutes to get the end time of the slot
       let endHour = hour;
       let endMinute = minute + interval;
 
@@ -199,30 +194,90 @@ const [successMessage, setSuccessMessage] = useState("");
   };
 
   return (
-    <div className='flex flex-row'>
-    <Sidebar/>
+    <div>
+      <div className="h-screen flex sticky">
+        <div
+          className="bg-gray-200 w-2/5
+        
+        sm:w-1/5 min-h-screen text-black"
+        >
+          <div className="p-4">
+            <h2 className="text-xl sm:text-2xl font-bold mb-6">
+              Admin Dashboard
+            </h2>
+            <ul className="space-y-4">
+              <li>
+                <Link
+                  to="/posts"
+                  className="hover:text-blue-300 text-sm sm:text-base"
+                >
+                  Dashboard
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/allposts"
+                  className="hover:text-blue-300 text-sm sm:text-base"
+                >
+                  All Posts
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/dashboard"
+                  className="hover:text-blue-300 text-sm sm:text-base"
+                >
+                  Create Posts
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
 
         <div className="flex-1 flex flex-col">
-          <Postsdash />
+          <header className="bg-blue-200 flex items-center h-14 justify-end px-4 sm:px-10 py-2">
+            {/* <h1 className="text-black text-lg sm:text-xl font-bold">
+              Dashboard
+            </h1> */}
+            <div className="flex items-center space-x-4">
+              <FaEnvelope className="text-black w-5 h-5" />
+              <FaBell className="text-black w-5 h-5" />
+              <div className="relative flex items-center" ref={dropdownRef}>
+                <IoSettings
+                  className="text-black-400 h-5 w-5 cursor-pointer"
+                  onClick={toggleDropdown}
+                />
+                {isOpen && (
+                  <div className="absolute right-0 mt-28 w-48 bg-white rounded-md shadow-lg z-10">
+                    <li
+                      className="block px-4 py-2 hover:bg-blue-100"
+                      onClick={handleOpenPolicy}
+                    >
+                      Policy
+                    </li>
+                    <Link to="/"
+                      className="block px-4 py-2 hover:bg-blue-100"
+                      onClick={handleLogout}
 
-{successMessage && (
-  <div className="fixed inset-0 flex items-center justify-center z-50">
-    <div className="bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg text-center">
-      {successMessage}
-    </div>
-  </div>
-)}
+                    >
+                      Logout
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </div>
+          </header>
 
-          <div className="flex justify-center space-x-4 flex-wrap mb-56 gap-6 mt-5">
+          <div className="flex justify-center mt-8 space-x-4 flex-wrap">
             <button
               onClick={() => togglePopup("student")}
-              className="bg-blue-600 text-white py-2 px-4 rounded flex items-center"
+              className="bg-blue-600 text-white py-2 px-4 rounded flex items-center mb-2"
             >
               <AiTwotoneProfile className="text-2xl mr-2" /> Students
             </button>
             <button
               onClick={() => togglePopup("tutor")}
-              className="bg-blue-600 text-white py-2 px-4 rounded flex items-center"
+              className="bg-blue-600 text-white py-2 px-4 rounded flex items-center mb-2"
             >
               <AiTwotoneProfile className="text-2xl mr-2" /> Teachers
             </button>
@@ -230,7 +285,7 @@ const [successMessage, setSuccessMessage] = useState("");
 
           {showPopup && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-              <div className="w-11/12 sm:w-1/2 max-h-[100vh] h-auto p-4 bg-white shadow-lg border-4 rounded-lg relative overflow-y-auto">
+              <div className="w-11/12 sm:w-1/2 max-h-[80vh] h-auto p-4 bg-white shadow-lg border-4 rounded-lg relative overflow-y-auto">
                 <button
                   onClick={() => togglePopup("")}
                   className="absolute top-2 right-2 border-2 border-black px-2"
@@ -369,7 +424,22 @@ const [successMessage, setSuccessMessage] = useState("");
             </div>
           )}
         </div>
+
+        {isModalOpen && (
+        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 ">
+          <div className="relative bg-white shadow-lg rounded-lg max-w-4xl w-full mx-auto h-[90vh] overflow-y-auto p-8">
+            <button
+              className="absolute top-3 right-3 text-red-700 font-bold hover:text-red-500 "
+              onClick={handleCloseModal}
+            >
+              X
+            </button>
+            <Slide6/>
+          </div>
+        </div>
+      )}
       </div>
+    </div>
   );
 };
 

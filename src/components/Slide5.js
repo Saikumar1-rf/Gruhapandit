@@ -66,7 +66,7 @@ const Slide5 = () => {
       </div>
 
      
-      <div className="border border-gray-300 p-5 sm:p-7 md:p-10 rounded-lg mt-6 lg:mt-12 max-w-6xl mx-auto font-serif">
+      <div className="border border-gray-300 p-5 sm:p-7 md:p-10 rounded-lg mt-6 lg:mt-12 max-w-6xl mx-auto font-serif mb-7">
         <h2 className="text-center text-cyan-500 font-bold text-xl sm:text-3xl md:text-4xl mb-5">
           Our Vision & Mission
         </h2>

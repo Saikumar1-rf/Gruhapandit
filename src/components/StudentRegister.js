@@ -203,7 +203,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
     if (Object.keys(newErrors).length === 0) {
       setIsSubmitting(true); // Set submitting state
       try {
-        // Create FormData to handle file and other data
+      
         const formDataToSend = new FormData();
         formDataToSend.append("firstName", formData.firstName);
         formDataToSend.append("lastName", formData.lastName);
@@ -227,7 +227,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
         // formDataToSend.append("file", formData.file); // Add the file if needed
         
         const response = await axios.post(
-          "https://hrms-repository-gruhabase.onrender.com/tuition-application/student/create",
+          "https://tution-application-testenv.onrender.com/tuition-application/student/create",
           // "https://tution-application.onrender.com/tuition-application/student/create",
           formDataToSend,
           {

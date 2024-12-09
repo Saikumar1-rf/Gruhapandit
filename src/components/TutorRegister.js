@@ -295,10 +295,6 @@ const TutorRegister = () => {
       errors.availableTimings = "Available Timings is required";
     if (!formData.category) errors.category = "Category is required";
 
-    if (!formData[`${formData.nationalIdType}File`]) {
-      errors[`${formData.nationalIdType}File`] = `${formData.nationalIdType} document is required`;
-    }
-
     return errors;
   };
 
@@ -312,7 +308,7 @@ const TutorRegister = () => {
       try {
         const response = await axios.post(
           "https://hrms-repository-gruhabase.onrender.com/tuition-application/tutor/create",
-          // "https://tution-application.onrender.com/tuition-application/tutor/create",
+              // "https://tution-application.onrender.com/tuition-application/tutor/create",
           formData,
           {
             headers: {
