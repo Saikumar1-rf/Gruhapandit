@@ -63,12 +63,11 @@ const Login = () => {
         "https://tution-application-testenv.onrender.com/tuition-application/authenticate/login",
         { emailId, password }
       );
-      
+
       const { jwtToken, userId, userType } = response.data;
       localStorage.setItem("jwtToken", jwtToken);
       localStorage.setItem("userId", userId);
       localStorage.setItem("userType", userType);
-
       login();
       navigate(userType === "admin" ? "/posts" : "/userDashboard");
     } catch (error) {

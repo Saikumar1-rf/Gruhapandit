@@ -27,14 +27,18 @@ import Sidebar from "./components/Sidebar";
 import DialogueBox from "./components/DialogueBox";
 import Gallery from "./components/Gallery";
 import Slide7 from "./components/Slide7";
-// import DialogueBox2 from './components/DialogueBox2';
-
 import AllEmailTemplatesPage from "./pages/EmailTemplates/AllEmailTemplatesPage";
 import EditEmailTemplatePage from "./pages/EmailTemplates/EditEmailTemplatePage";
 import Subscription from "./components/Levelsofsubscription/Subscription";
 import CreateFeatures from "./components/Levelsofsubscription/CreateFeatures";
 import CreatePlan from "./components/Levelsofsubscription/CreatePlan";
 import PricingMain from "./components/Levelsofsubscription/PricingMain";
+import ReviewsBox from "./components/Reviews/ReviewsBox";
+import UserFooter from "./components/UserFooter";
+import Advertisement from "./components/Advertisement";
+import Slide8 from "./components/Reviews/Slide8";
+// import ContactUs from "./components/ContactUs";
+
 function AppContent() {
   const location = useLocation();
   const noHeaderPaths = [
@@ -45,6 +49,8 @@ function AppContent() {
     "/gallery",
     "/subscription",
     "/email-templates",
+    "/slide8",
+    "/advertisement"
   ];
 
   return (
@@ -65,7 +71,12 @@ function AppContent() {
           <Route path="/register/tutor" element={<TutorRegister />} />
           <Route path="/subscription" element={<Subscription/>}/>
           <Route path="/createfeatures"element={<CreateFeatures/>}></Route>
+          <Route path="/reviewsbox"element={<ReviewsBox/>}></Route>
           <Route path="/createplan"element={<CreatePlan/>}></Route>
+          <Route path="/userfooter" element={<UserFooter/>}></Route>
+          {/* <Route path="/contactus" element={<ContactUs/>}></Route> */}
+          <Route path="/advertisement" element={<Advertisement/>}></Route>
+          <Route path="/slide8" element={<Slide8/>}></Route>
           <Route
             path="/posts"
             element={

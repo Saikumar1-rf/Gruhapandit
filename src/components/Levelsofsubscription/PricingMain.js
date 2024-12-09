@@ -26,7 +26,7 @@ const PricingMain = () => {
   }, []);
 
   if (loading) {
-    return <div className="text-center p-4">Loading...</div>;
+    return <div className="text-center p-4 mt-20">Loading...</div>;
   }
 
   if (error) {

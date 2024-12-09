@@ -8,7 +8,7 @@ const DialogueBox = ({ onClose, onSubmit, category,userId,outevent}) => {
     name: "",
     subject:"",
     description:"",
-  });
+  }); 
 
   // const userType = "admin"; 
   const userType= localStorage.getItem('userType')
@@ -141,7 +141,7 @@ const DialogueBox = ({ onClose, onSubmit, category,userId,outevent}) => {
   };
   
   return (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
     <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-bold">Upload Details</h2>

@@ -18,6 +18,7 @@ const SubscriptionPlans = () => {
       <h1 className="text-2xl font-bold text-center mb-6">
         Subscription Plans
       </h1>
+      
 
       <div className="flex justify-center border-b mb-4">
         <button

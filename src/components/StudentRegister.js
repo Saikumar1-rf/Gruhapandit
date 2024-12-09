@@ -203,7 +203,7 @@ const StudentRegister = ({ setIsSubmitted }) => {
     if (Object.keys(newErrors).length === 0) {
       setIsSubmitting(true); // Set submitting state
       try {
-        // Create FormData to handle file and other data
+      
         const formDataToSend = new FormData();
         formDataToSend.append("firstName", formData.firstName);
         formDataToSend.append("lastName", formData.lastName);
