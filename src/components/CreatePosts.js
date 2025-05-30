@@ -257,7 +257,7 @@ const [successMessage, setSuccessMessage] = useState("");
                     </li>
                     <Link to="/"
                       className="block px-4 py-2 hover:bg-blue-100"
-                      onClick={handleLogout}
+                      // onClick={handleLogout}
 
                     >
                       Logout
@@ -434,7 +434,7 @@ const [successMessage, setSuccessMessage] = useState("");
             >
               X
             </button>
-            <Slide6/>
+            {/* <Slide6/> */}
           </div>
         </div>
       )}
